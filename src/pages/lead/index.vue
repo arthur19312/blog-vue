@@ -1,38 +1,85 @@
 <template>
-  lead view
+  <div class="container">
+    <div class="left-slider slider" @click="slide(-1)"></div>
+    <div class="right-slider slider" @click="slide(1)"></div>
+
+    <div>
+      <img src="imgSrc" class="lead-img" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent } from "vue";
 export default defineComponent({
-  name: 'lead',
-  props: {
-    msg: {
-      type: String,
-      required: true
-    }
+  name: "lead",
+  data() {
+    return {
+      index: 1,
+    };
   },
-  setup: () => {
-    const count = ref(0)
-    return { count }
-  }
-})
+  methods: {
+    slide(step: number): void {
+      this.index += step;
+    },
+  },
+  setup: () => {},
+  computed: {
+    imgSrc: function (): string {
+      return "@assets/img/home/" + this.index + ".jpg";
+    },
+  },
+});
 </script>
 
 <style scoped>
-a {
-  color: #42b983;
+.container {
+  position: relative;
+}
+.slider {
+  position: absolute;
+  z-index: 3;
+  opacity: 0;
+  height: 100%;
+  display: block;
+  transition: all 0.2s ease;
 }
 
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
+.slider:hover {
+  opacity: 1;
 }
 
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
+.left-slider {
+  left: 0%;
+  width: 30%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 80%
+  );
+}
+
+.right-slider {
+  right: 40%;
+  width: 30%;
+  background: linear-gradient(
+    90deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+}
+
+.lead-img {
+  width: 60%;
+  position: absolute;
+  top: 0;
+  left: 0%;
+  transition: 0.8s;
+}
+
+.home-img {
+  opacity: 0;
+  visibility: hidden;
+  z-index: 0;
 }
 </style>

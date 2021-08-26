@@ -15,7 +15,7 @@
     {
       "icon_id": "15828926",
       "name": "笑脸",
-      "font_class": "smile",
+      "font_class": "kaomoji",
       "unicode": "e606",
       "unicode_decimal": 58886
     },
@@ -146,13 +146,6 @@
       "unicode_decimal": 58891
     },
     {
-      "icon_id": "4185999",
-      "name": "书",
-      "font_class": "diary",
-      "unicode": "e625",
-      "unicode_decimal": 58917
-    },
-    {
       "icon_id": "1181181",
       "name": "工具",
       "font_class": "tool",
@@ -176,7 +169,7 @@
     {
       "icon_id": "11683669",
       "name": "相册-照片",
-      "font_class": "potfolio",
+      "font_class": "diary",
       "unicode": "e607",
       "unicode_decimal": 58887
     }
