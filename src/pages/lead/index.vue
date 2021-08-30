@@ -1,46 +1,83 @@
 <template>
-  <div class="container">
-    <div class="left-slider slider" @click="slide(-1)"></div>
-    <div class="right-slider slider" @click="slide(1)"></div>
-
-    <div>
-      <img src="imgSrc" class="lead-img" />
+  <div class="container" :style="{ height }">
+    <div class="rotate">{{ "0" + (index + 1) }}</div>
+    <div class="img-container">
+      <div
+        class="left-slider slider"
+        @click="slide(-1)"
+        :style="{ height }"
+      ></div>
+      <div
+        class="right-slider slider"
+        @click="slide(1)"
+        :style="{ height }"
+      ></div>
+      <img :src="imgSrc" class="lead-img" ref="leadImg" @load="updateHeight" />
     </div>
+
+    <div class="rotate-reverse">2021/06/03</div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { defineComponent } from "vue";
 export default defineComponent({
   name: "lead",
   data() {
     return {
-      index: 1,
+      index: 0,
+      height: "600px",
     };
   },
   methods: {
     slide(step: number): void {
-      this.index += step;
+      this.index = (this.index + step) % 8;
+    },
+    updateHeight() {
+      this.$nextTick(() => {
+        this.height = this.$refs.leadImg.offsetHeight + "px";
+      });
     },
   },
-  setup: () => {},
   computed: {
     imgSrc: function (): string {
-      return "@assets/img/home/" + this.index + ".jpg";
+      return "/src/assets/img/home/" + (this.index + 1) + ".jpg";
     },
+  },
+  mounted() {
+    this.updateHeight();
   },
 });
 </script>
 
 <style scoped>
 .container {
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  letter-spacing: 4px;
+}
+.rotate,
+.rotate-reverse {
+  writing-mode: vertical-lr;
+  writing-mode: tb-lr;
+  padding: 0 1rem;
+  color: gray;
+}
+.rotate {
+  text-align: start;
+  font-size: 1.1rem;
+}
+.rotate-reverse {
+  text-align: end;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 .slider {
   position: absolute;
   z-index: 3;
   opacity: 0;
-  height: 100%;
+  height: 80%;
   display: block;
   transition: all 0.2s ease;
 }
@@ -51,7 +88,7 @@ export default defineComponent({
 
 .left-slider {
   left: 0%;
-  width: 30%;
+  width: 50%;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.4) 0%,
@@ -60,8 +97,8 @@ export default defineComponent({
 }
 
 .right-slider {
-  right: 40%;
-  width: 30%;
+  left: 50%;
+  width: 50%;
   background: linear-gradient(
     90deg,
     transparent 20%,
@@ -69,17 +106,24 @@ export default defineComponent({
   );
 }
 
+.img-container {
+  width: 50rem;
+  position: relative;
+}
+
 .lead-img {
-  width: 60%;
   position: absolute;
+  width: 100%;
+  z-index: 2;
   top: 0;
   left: 0%;
   transition: 0.8s;
+  display: block;
 }
-
+/*
 .home-img {
   opacity: 0;
   visibility: hidden;
   z-index: 0;
-}
+}*/
 </style>

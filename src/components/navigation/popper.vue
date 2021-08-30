@@ -45,7 +45,7 @@ export default {
 }
 
 .popper-iconfont {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   margin-right: 0.8rem;
   position: relative;
   top: 0.35rem;

@@ -1,6 +1,6 @@
 <template>
-  <Navigation class="navigation" />
-  <router-view />
+  <Navigation @displayContent="displayContent($event)" />
+  <Content :style="{ display: displayFlag ? 'flex' : 'none' }" />
 </template>
 
 <script lang="ts">
@@ -8,6 +8,16 @@ import { defineComponent, onMounted } from "vue";
 
 export default defineComponent({
   name: "App",
+  data() {
+    return {
+      displayFlag: true,
+    };
+  },
+  methods: {
+    displayContent(flag: boolean) {
+      this.displayFlag = flag;
+    },
+  },
 });
 </script>
 
@@ -19,8 +29,6 @@ export default defineComponent({
   text-align: center;
   color: #2c3e50;
 
-  display: flex;
-  flex-direction: row;
   padding: 4rem;
 }
 
@@ -33,9 +41,5 @@ body {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-.navigation {
-  width: 16rem;
 }
 </style>
