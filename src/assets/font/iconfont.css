@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 1794054 */
-  src: url('iconfont.woff2?t=1630321972803') format('woff2'),
-       url('iconfont.woff?t=1630321972803') format('woff'),
-       url('iconfont.ttf?t=1630321972803') format('truetype');
+  src: url('iconfont.woff2?t=1630415052213') format('woff2'),
+       url('iconfont.woff?t=1630415052213') format('woff'),
+       url('iconfont.ttf?t=1630415052213') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-steam:before {
+  content: "\e686";
 }
 
 .icon-weibo:before {

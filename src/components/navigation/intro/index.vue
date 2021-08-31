@@ -9,6 +9,7 @@
         :className="item.className"
         :color="item.color"
         :href="item.href"
+        :scale="item.scale"
       />
     </div>
   </div>
@@ -31,9 +32,16 @@ export default {
           className: "github-fill",
           color: "#6c3597",
           href: "https://github.com/arthur19312",
+          scale: "1.25rem",
         },
-        { className: "qq", color: "#ebad3e", href: "" },
-        { className: "weibo", color: "#d06730", href: "" },
+        { className: "qq", color: "#ebad3e", href: "?qq=413389361" },
+        { className: "weibo", color: "#d06730", href: "?weibo=ARTHUR19312" },
+        {
+          className: "steam",
+          color: "#224a79",
+          href: "https://steamcommunity.com/profiles/76561198454211888",
+          scale: "1.25rem",
+        },
       ],
     };
   },

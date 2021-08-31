@@ -5,7 +5,10 @@
       :class="iconName"
       @mouseenter="hoverIn"
       @mouseleave="hoverOut"
-      :style="{ color: hoverFlag ? color : '#aaa' }"
+      :style="{
+        color: hoverFlag ? color : '#aaa',
+        fontSize: scale ? scale : '1.2rem',
+      }"
     />
   </a>
 </template>
@@ -28,6 +31,11 @@ export default {
       required: true,
       default: "",
     },
+    scale: {
+      type: String,
+      required: false,
+      default: "1.2rem",
+    },
   },
   data() {
     return {
@@ -46,6 +54,9 @@ export default {
     iconName() {
       return "icon-" + this.className;
     },
+  },
+  mounted() {
+    console.log(this.scale + this.className);
   },
 };
 </script>

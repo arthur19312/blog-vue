@@ -55,7 +55,7 @@ export default {
   text-align: center;
 
   img {
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     width: 100%;
     height: auto;
   }
