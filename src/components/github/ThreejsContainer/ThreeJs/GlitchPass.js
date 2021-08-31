@@ -56,7 +56,7 @@ class GlitchPass extends Pass {
 
 		} else if ( this.curF % this.randX < this.randX / 5 ) {
 
-			this.uniforms[ 'amount' ].value = Math.random() / 90;
+			this.uniforms[ 'amount' ].value = Math.random() / 990;
 			this.uniforms[ 'angle' ].value = MathUtils.randFloat( - Math.PI, Math.PI );
 			this.uniforms[ 'distortion_x' ].value = MathUtils.randFloat( 0, 1 );
 			this.uniforms[ 'distortion_y' ].value = MathUtils.randFloat( 0, 1 );
@@ -69,7 +69,8 @@ class GlitchPass extends Pass {
 
 		}
 
-		this.curF ++;
+        this.curF += 1;
+        
 
 		if ( this.renderToScreen ) {
 

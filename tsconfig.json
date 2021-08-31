@@ -4,11 +4,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,

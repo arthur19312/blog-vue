@@ -2,18 +2,18 @@
   <a target="_blank" :href="gitUrl(url)">
     <div id="canvasContainer" ref="threeContainer"></div
   ></a>
-  <div class="git-item" style="margin-left: 1.5rem">
+  <div class="git-item" style="margin-left: 1rem">
     <div>
       <img
         src="/src/assets/img/github/1.png"
-        style="width: 15rem; height: 8rem; margin-bottom: 1rem; cursor: pointer"
+        class="switch-button"
         @click="switchIndex(1)"
       />
     </div>
     <div>
       <img
         src="/src/assets/img/github/2.png"
-        style="width: 15rem; height: 8rem; margin-bottom: 1rem; cursor: pointer"
+        class="switch-button"
         @click="switchIndex(2)"
       />
     </div>
@@ -56,4 +56,10 @@ export default {
 </script>
 
 <style scoped>
+.switch-button {
+  width: 9rem;
+  height: 5rem;
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+}
 </style>

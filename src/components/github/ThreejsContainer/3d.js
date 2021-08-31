@@ -7,7 +7,7 @@ import {AfterimagePass} from './ThreeJs/AfterimagePass'
 
 let index =0
 
-let count=0;
+let count=1000;
 
 const CanvasSizeX = 600,CanvasSizeY = 480;
 
@@ -28,7 +28,7 @@ let loader = new ObjectLoader();
 let aniId;
 let light1, light2, light3;
 let deg = Math.PI / 2;
-let glitchPass = new GlitchPass();
+//let glitchPass = new GlitchPass();
 
 
 display1();
@@ -70,38 +70,27 @@ function display1() {
 		composer = new EffectComposer(renderer);
 		composer.addPass(renderPass);
 			
-		composer.addPass( glitchPass);
-		startGlitch();
+		//composer.addPass( glitchPass);
+		//startGlitch();
 		animate1();
 	}
 
 }
 
 function startGlitch(){
-	count=0;
+	count=1000;
 }
 
 function animate1() {
 	
 	aniId = requestAnimationFrame(animate1);
 
-	camera.rotation.y += 0.007;
+	camera.rotation.y += 0.01;
 
-	camera.position.x = 200 * Math.sin(camera.rotation.y * 1);
-	camera.position.z = 200 * Math.cos(camera.rotation.y * 1);
+	camera.position.x = 250 * Math.sin(camera.rotation.y * 1);
+	camera.position.z = 250 * Math.cos(camera.rotation.y * 1);
 
 	//renderer.render(scene, camera);
-	
-	count=(++count)%2000;
-	if(count == 300){
-		composer.removePass( glitchPass );
-	}
-	if(count == 100){
-		if(composer.passes.indexOf(glitchPass)<0){
-			composer.addPass( glitchPass );
-		}
-	}
-	
 	
 	composer.render()
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="git-content">
+  <div class="git-content" id="gitContent">
     <ThreejsContainer />
     <div class="git-item" v-for="item in imgProjects" :key="item.imgUrl">
       <a
@@ -11,18 +11,13 @@
     </div>
 
     <div class="git-item">
-      <a href="#">
-        <img :src="imgUrlRes('kly.png')" style="width: 64rem" />
-      </a>
-    </div>
-    <div class="git-item" style="width: 10rem">
-      <div style="width: 10rem"></div>
+      <img :src="imgUrlRes('kly.png')" style="width: 48rem" />
     </div>
   </div>
 </template>
 
 <script>
-import ThreejsContainer from "@/components/github/ThreejsContainer.vue";
+import ThreejsContainer from "@/components/github/ThreejsContainer/index.vue";
 export default {
   components: { ThreejsContainer },
   name: "github",
@@ -31,9 +26,9 @@ export default {
       contentHeight: "600px",
       imgProjects: [
         {
-          gitUrl: "BriefTranslation-EncounterWithTibe",
+          gitUrl: "BriefTranslation-EncounterWithTiber",
           imgUrl: "ewt.jpg",
-          width: "48rem",
+          width: "42rem",
         },
         { gitUrl: "blockcloud", imgUrl: "bc.png", width: "48rem" },
       ],
@@ -61,11 +56,13 @@ export default {
 .git-content {
   display: flex;
   flex-direction: row;
-  overflow: hidden;
+  overflow: scroll;
   transform: translateX(0);
+  padding: 2rem 0;
+  margin-right: 4rem;
 
   .git-item {
-    margin-left: 10rem;
+    margin-left: 6rem;
     font-size: 0;
     img {
       cursor: pointer;

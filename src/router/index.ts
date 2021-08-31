@@ -17,7 +17,8 @@ export const routes = [
 	},
   {
 		path: "/diary",
-		component: diary
+		component: diary,
+		alias:['/travel','/travels','/diaries']
 	},
 	
 ]
