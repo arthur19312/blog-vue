@@ -1,6 +1,5 @@
 <template>
   <div class="container" :style="{ height }">
-    <div class="rotate">{{ "0" + (index + 1) }}</div>
     <div class="img-container">
       <div
         class="left-slider slider"
@@ -19,7 +18,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "lead",
@@ -30,17 +29,21 @@ export default defineComponent({
     };
   },
   methods: {
-    slide(step: number): void {
+    slide(step) {
       this.index = (this.index + step) % 8;
     },
     updateHeight() {
       this.$nextTick(() => {
         this.height = this.$refs.leadImg.offsetHeight + "px";
+        this.provideHeight();
       });
+    },
+    provideHeight() {
+      this.$emit("mainContentHeight", this.height);
     },
   },
   computed: {
-    imgSrc: function (): string {
+    imgSrc: function () {
       return "/src/assets/img/home/" + (this.index + 1) + ".jpg";
     },
   },
@@ -57,16 +60,11 @@ export default defineComponent({
   height: 100%;
   letter-spacing: 4px;
 }
-.rotate,
 .rotate-reverse {
   writing-mode: vertical-lr;
   writing-mode: tb-lr;
   padding: 0 1rem;
   color: gray;
-}
-.rotate {
-  text-align: start;
-  font-size: 1.1rem;
 }
 .rotate-reverse {
   text-align: end;

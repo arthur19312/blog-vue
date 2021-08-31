@@ -1,6 +1,6 @@
 <template>
   <div class="nav-container">
-    <Bachar @openMenu="openMenu" @closeMenu="closeMenu" />
+    <Bachar @openMenu="openMenu" @closeMenu="closeMenu" ref="bachar" />
   </div>
   <div class="menu" :class="{ open: openFlag }">
     <div class="menu-container">
@@ -10,6 +10,7 @@
           class="link"
           v-for="item in links"
           :key="item.name"
+          @click="closeBachar"
         >
           <div class="list-item">{{ item.name }}</div>
         </router-link>
@@ -19,7 +20,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Bachar from "@/components/navigation/bachar.vue";
 import Intro from "@/components/navigation/intro/index.vue";
 export default {
@@ -44,6 +45,10 @@ export default {
       this.openFlag = false;
       this.$emit("displayContent", true);
     },
+    closeBachar() {
+      this.closeMenu();
+      this.$refs.bachar.closeBachar();
+    },
   },
 };
 </script>
@@ -52,8 +57,8 @@ export default {
 .nav-container {
   position: absolute;
   z-index: 4;
-  right: 6rem;
-  top: 2rem;
+  right: 14rem;
+  top: 3rem;
 }
 
 .menu {
@@ -64,9 +69,9 @@ export default {
   width: 100%;
   height: 100%;
   background-color: white;
-
-  transition: 0.2s all ease;
   opacity: 0;
+  pointer-events: none;
+  transition: 0.3s all ease;
 
   .menu-container {
     display: flex;
@@ -83,6 +88,7 @@ export default {
 
 .open {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .link {

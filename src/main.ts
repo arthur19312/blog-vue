@@ -16,3 +16,5 @@ app.component('Navigation',Navigation)
 app.component('Content',Content)
 
 app.mount('#app')
+
+export default app;

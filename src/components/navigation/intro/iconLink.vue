@@ -1,5 +1,5 @@
 <template>
-  <a :href="href" class="a-link">
+  <a :href="href" target="_blank" class="a-link">
     <span
       class="iconfont"
       :class="iconName"
@@ -59,6 +59,6 @@ export default {
   margin-right: 1rem;
   font-size: 1.2rem;
   color: #aaa;
-  transition: all 0.2s ease;
+  transition: ease 0.2s color;
 }
 </style>

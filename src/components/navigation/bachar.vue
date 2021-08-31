@@ -31,6 +31,10 @@ export default {
         this.$emit("openMenu");
       }
     },
+    closeBachar() {
+      this.hoverFlag = false;
+      this.openFlag = false;
+    },
     handleMouseIn() {
       if (!this.openFlag) {
         this.hoverFlag = true;
@@ -54,7 +58,7 @@ export default {
 }
 
 .bachar-container {
-  padding: 2rem 3rem;
+  padding: 2rem;
   cursor: pointer;
   transition: 0.2s all ease;
   &:hover {
