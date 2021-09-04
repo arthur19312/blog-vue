@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     imgUrlRes(url) {
-      return "/src/assets/img/github/" + url;
+      return "assets/img/github/" + url;
     },
     updateHeight(height) {
       this.contentHeight = height.split("px")[0];

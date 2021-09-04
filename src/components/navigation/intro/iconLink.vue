@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import {defineComponent} from 'vue'
+export default defineComponent({
   props: {
     className: {
       type: String,
@@ -58,7 +59,7 @@ export default {
   mounted() {
     console.log(this.scale + this.className);
   },
-};
+});
 </script>
 
 <style scoped>

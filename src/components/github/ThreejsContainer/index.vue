@@ -5,14 +5,14 @@
   <div class="git-item" style="margin-left: 1rem">
     <div>
       <img
-        src="/src/assets/img/github/1.png"
+        src="../../../assets/img/github/1.png"
         class="switch-button"
         @click="switchIndex(1)"
       />
     </div>
     <div>
       <img
-        src="/src/assets/img/github/2.png"
+        src="../../../assets/img/github/2.png"
         class="switch-button"
         @click="switchIndex(2)"
       />

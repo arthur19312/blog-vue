@@ -51,7 +51,7 @@ function display1() {
 
     loader.load(
       // resource URL
-      "/src/assets/scene/scene1.json",
+      "assets/scene/scene1.json",
       // onLoad callback
       // Here the loaded data is assumed to be an object
       function (obj) {
@@ -122,7 +122,7 @@ function display2() {
 
     loader.load(
       // resource URL
-      "/src/assets/scene/scene2.json",
+      "assets/scene/scene2.json",
       // onLoad callback
       // Here the loaded data is assumed to be an object
       function (obj) {

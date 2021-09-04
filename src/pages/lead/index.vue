@@ -44,7 +44,7 @@ export default defineComponent({
   },
   computed: {
     imgSrc: function () {
-      return "/src/assets/img/home/" + (this.index + 1) + ".jpg";
+      return "/assets/img/home/" + (this.index + 1) + ".jpg";
     },
   },
   mounted() {
