@@ -7,7 +7,7 @@ import copy from 'rollup-plugin-copy'
 export default defineConfig({
   plugins: [vue(),copy({
 	  targets: [
-		  { src: './src/assets/*', dest: './public' },
+		  { src: './src/assets/*', dest: './public/assets' },
 	  ]
   })],
   resolve: {
