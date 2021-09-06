@@ -7,15 +7,12 @@ import {
   Fog,
   Vector2,
 } from "./ThreeJs/three.module";
-import { GlitchPass } from "./ThreeJs/GlitchPass";
 import { UnrealBloomPass } from "./ThreeJs/UnrealBloomPass";
 import { RenderPass } from "./ThreeJs/RenderPass";
 import { EffectComposer } from "./ThreeJs/EffectComposer";
 import { AfterimagePass } from "./ThreeJs/AfterimagePass";
 
 let index = 0;
-
-let count = 1000;
 
 const CanvasSizeX = 600,
   CanvasSizeY = 480;
@@ -51,7 +48,7 @@ function display1() {
 
     loader.load(
       // resource URL
-      "/src/assets/scene/scene1.json",
+      "assets/scene/scene1.json",
       // onLoad callback
       // Here the loaded data is assumed to be an object
       function (obj) {
@@ -73,13 +70,8 @@ function display1() {
     composer = new EffectComposer(renderer);
     composer.addPass(renderPass);
     //composer.addPass( glitchPass);
-    //startGlitch();
     animate1();
   }
-}
-
-function startGlitch() {
-  count = 1000;
 }
 
 function animate1() {
@@ -122,7 +114,7 @@ function display2() {
 
     loader.load(
       // resource URL
-      "/src/assets/scene/scene2.json",
+      "assets/scene/scene2.json",
       // onLoad callback
       // Here the loaded data is assumed to be an object
       function (obj) {

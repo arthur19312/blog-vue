@@ -13,7 +13,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   data() {
     return {
       openFlag: false,
@@ -44,7 +46,7 @@ export default {
       this.hoverFlag = false;
     },
   },
-};
+});
 </script>
 
 <style lang="less" scoped>
@@ -61,6 +63,7 @@ export default {
   padding: 2rem;
   cursor: pointer;
   transition: 0.2s all ease;
+
   &:hover {
     .cross {
       background-color: #444;
@@ -76,9 +79,11 @@ export default {
   .cross-1 {
     transform: rotate(45deg);
   }
+
   .cross-2 {
     opacity: 0;
   }
+
   .cross-3 {
     transform: rotate(-45deg);
   }

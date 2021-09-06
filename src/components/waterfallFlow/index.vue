@@ -107,10 +107,10 @@ export default {
 <style lang="less" scoped>
 .main {
   width: 100%;
-  margin: auto;
   display: flex;
   flex-direction: row;
   height: auto;
+  margin-right: 2rem;
 }
 .masonary {
   width: 50%;
@@ -126,7 +126,11 @@ export default {
 }
 .item-1,
 .item-4 {
-  padding-top: 4rem;
+  padding-top: 1.5rem;
+}
+.item-2,
+.item-3 {
+  padding-top: 0rem;
 }
 
 @media only screen and (max-width: 1350px) {
@@ -139,6 +143,8 @@ export default {
     margin-left: 1rem;
   }
   .item-1,
+  .item-2,
+  .item-3,
   .item-4 {
     padding-top: 0;
   }

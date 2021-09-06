@@ -12,7 +12,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import {defineComponent} from 'vue'
+export default defineComponent({
   props: {
     title: {
       type: String,
@@ -35,7 +36,7 @@ export default {
   },
 
   setup(props) {},
-};
+});
 </script>
 
 <style scoped>

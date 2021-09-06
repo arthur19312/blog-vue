@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     imgUrlRes(url) {
-      return "/src/assets/img/github/" + url;
+      return "assets/img/github/" + url;
     },
     updateHeight(height) {
       this.contentHeight = height.split("px")[0];
@@ -59,10 +59,10 @@ export default {
   overflow: scroll;
   transform: translateX(0);
   padding: 2rem 0;
-  margin-right: 4rem;
+  margin-right: 2rem;
 
   .git-item {
-    margin-left: 6rem;
+    margin-left: 4rem;
     font-size: 0;
     img {
       cursor: pointer;

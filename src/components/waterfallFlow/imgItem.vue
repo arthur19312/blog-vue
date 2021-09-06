@@ -12,7 +12,7 @@ export default {
   props: {
     imgName: {
       required: true,
-      default: [],
+      default: "",
     },
     date: {
       required: true,
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     imgUrl(url: string) {
-      return "/src/assets/img/potfolio/" + url;
+      return "assets/img/potfolio/" + url;
     },
     formatDate(date: string) {
       let [yyyy, mm, dd] = date.split("/");
