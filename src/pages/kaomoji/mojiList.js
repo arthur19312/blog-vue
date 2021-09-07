@@ -173,6 +173,7 @@ const mojiList = [
   "φ(°ρ°*)メ",
   "ψ(。。)​",
   "＿〆(。。)",
+  "(o_ _)o",
 ];
 
 export default mojiList;

@@ -13,7 +13,7 @@ export default {
 
 <style scoped>
 .content-container {
-  padding: 4rem;
+  padding: 4rem 4rem 0 4rem;
   display: flex;
   justify-content: center;
   align-content: center;
