@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
   props: {
     className: {
@@ -55,9 +55,6 @@ export default defineComponent({
     iconName() {
       return "icon-" + this.className;
     },
-  },
-  mounted() {
-    console.log(this.scale + this.className);
   },
 });
 </script>

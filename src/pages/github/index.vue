@@ -40,7 +40,6 @@ export default {
     },
     updateHeight(height) {
       this.contentHeight = height.split("px")[0];
-      console.log(this.contentHeight);
     },
   },
   computed: {},
