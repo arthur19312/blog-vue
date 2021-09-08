@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @mouseleave.stop="clearPop">
     <div class="kaomoji-container">
       <KaomojiItem
         v-for="item in mojiList"
@@ -55,6 +55,9 @@ export default {
     },
     popIn() {
       //this.$refs.popItem.style.opacity = 0;
+    },
+    clearPop(){
+      this.$refs.popItem.style.opacity = 0;
     },
 
     popClick() {
