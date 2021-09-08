@@ -1,22 +1,28 @@
 <template>
-  <div class="kaomoji-container">
-    <KaomojiItem
-      v-for="item in mojiList"
-      :key="item"
-      :text="item"
-      @popout="popOut"
-      @popin="popIn"
-    />
-    <!-- 弹出层 -->
-    <div class="pop-container" ref="popCtn">
-      <div class="pop-item" ref="popItem" @click="copyContent">
-        {{ popText }}
-      </div>
-      <span class="global-msg-tip" ref="popCopy">Copied!</span>
+  <div>
+    <div class="kaomoji-container">
+      <KaomojiItem
+        v-for="item in mojiList"
+        :key="item"
+        :text="item"
+        @popout="popOut"
+        @popin="popIn"
+      />
     </div>
+    <!-- 弹出层 -->
+    <div class="pop-item" ref="popItem" @click="popClick">
+      {{ popText }}
+    </div>
+    <div class="tip-container" v-for="tip in tipList" :key="tip">
+      <span
+        class="tip"
+        :style="{ marginLeft: tip.offsetX, marginTop: tip.offsetY }"
+        >Copied!</span
+      >
+    </div>
+    <!--复制功能-->
+    <input id="copy_content" type="text" value="" />
   </div>
-  <!--复制功能-->
-  <input id="copy_content" type="text" value="" />
 </template>
 
 <script>
@@ -29,20 +35,31 @@ export default {
     return {
       mojiList,
       popText: "",
+
+      tipOffsetX: 0,
+      tipOffsetY: 0,
+      //tip:{X,Y}
+      tipList: new Set(),
     };
   },
   methods: {
     popOut({ text, XCenter, YCenter, width, height }) {
       this.popText = text;
-      let item = this.$refs.popCtn;
-      item.style.opacity = 1;
-      item.style.marginLeft = XCenter - width / 2 - 14 + "px";
-      item.style.marginTop = YCenter - height / 2 - 14 + "px";
+      this.tipOffsetX = XCenter + width / 2 + 8 + "px";
+      this.tipOffsetY = YCenter - height / 2 - 56 + "px";
 
-      this.$refs.popItem.style.pointerEvents = "all";
+      let item = this.$refs.popItem;
+      item.style.opacity = 1;
+      item.style.left = XCenter - width / 2 - 14 + "px";
+      item.style.top = YCenter - height / 2 - 14 + "px";
     },
     popIn() {
       //this.$refs.popItem.style.opacity = 0;
+    },
+
+    popClick() {
+      this.copyContent();
+      this.showToast();
     },
 
     copyContent() {
@@ -58,21 +75,14 @@ export default {
       document.execCommand("Copy");
 
       console.log("copied");
-      //提示已复制
-      this.showToast();
     },
 
     showToast() {
-      console.log("shoe");
-      //消息弹出框
-      var tip = this.$refs.popCopy;
-      setTimeout(function () {
-        tip.style.opacity = 1;
-      }, 10);
-
-      setTimeout(function () {
-        tip.style.opacity = 0;
-      }, 500);
+      let tip = { offsetX: this.tipOffsetX, offsetY: this.tipOffsetY };
+      this.tipList.add(tip);
+      setTimeout(() => {
+        this.tipList.delete(tip);
+      }, 1200);
     },
   },
 };
@@ -85,18 +95,6 @@ export default {
 
   margin-top: 1rem;
 }
-.pop-container {
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  top: 0;
-  pointer-events: none;
-
-  display: flex;
-  flex-direction: row;
-  width: fit-content;
-  height: fit-content;
-}
 .pop-item {
   background-color: #feffff;
   padding: 14px 10px;
@@ -105,6 +103,8 @@ export default {
   border: 2px lightskyblue solid;
   border-radius: 0.8rem;
   cursor: pointer;
+  opacity: 0;
+  position: absolute;
 }
 
 #copy_content {
@@ -115,21 +115,34 @@ export default {
   z-index: -10;
 }
 
-.global-msg-tip {
+.tip-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  animation: tip-disappear 1s 0.3s;
+}
+
+@keyframes tip-disappear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.tip {
   background-color: lightskyblue;
   border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0 1rem;
-  height: 2rem;
-  line-height: 2rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0 0.8rem;
+  height: 2.2rem;
+  line-height: 2.2rem;
   color: white;
-  opacity: 0;
-  transition: all 0.3s ease;
 
-  position: relative;
-  top: -2rem;
-  left: 0.5rem;
+  position: absolute;
 
   &::before {
     content: "";
