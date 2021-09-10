@@ -1,17 +1,19 @@
 <template>
-  <div class="git-content" id="gitContent">
-    <ThreejsContainer />
-    <div class="git-item" v-for="item in imgProjects" :key="item.imgUrl">
-      <a
-        :href="'https://github.com/arthur19312/' + item.gitUrl"
-        target="_blank"
-      >
-        <img :src="imgUrlRes(item.imgUrl)" :style="{ width: item.width }" />
-      </a>
-    </div>
+  <div class="scroll-container">
+    <div class="git-content" id="gitContent">
+      <ThreejsContainer />
+      <div class="git-item" v-for="item in imgProjects" :key="item.imgUrl">
+        <a
+          :href="'https://github.com/arthur19312/' + item.gitUrl"
+          target="_blank"
+        >
+          <img :src="imgUrlRes(item.imgUrl)" :style="{ width: item.width }" />
+        </a>
+      </div>
 
-    <div class="git-item">
-      <img :src="imgUrlRes('kly.png')" style="width: 48rem" />
+      <div class="git-item">
+        <img :src="imgUrlRes('kly.png')" style="width: 48rem" />
+      </div>
     </div>
   </div>
 </template>
@@ -52,17 +54,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.scroll-container {
+  height: 600px;
+  overflow: hidden;
+}
 .git-content {
   display: flex;
   flex-direction: row;
-  overflow: scroll;
+  overflow-x: scroll;
+  height: 620px;
   transform: translateX(0);
   padding: 2rem 0;
-  margin-right: 2rem;
+  margin-right: 3rem;
 
   .git-item {
     margin-left: 4rem;
     font-size: 0;
+
     img {
       cursor: pointer;
     }

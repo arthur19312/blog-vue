@@ -13,8 +13,6 @@
       ></div>
       <img :src="imgSrc" class="lead-img" ref="leadImg" @load="updateHeight" />
     </div>
-
-    <div class="rotate-reverse">2021/06/03</div>
   </div>
 </template>
 
@@ -30,7 +28,7 @@ export default defineComponent({
   },
   methods: {
     slide(step) {
-      this.index = (this.index + step) % 8;
+      this.index = (this.index + step + 8) % 8;
     },
     updateHeight() {
       this.$nextTick(() => {
@@ -65,8 +63,6 @@ export default defineComponent({
   writing-mode: tb-lr;
   padding: 0 1rem;
   color: gray;
-}
-.rotate-reverse {
   text-align: end;
   font-style: italic;
   font-size: 0.9rem;
