@@ -2,7 +2,9 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 const lead = () => import("@/pages/lead/index.vue");
 const github = () => import("@/pages/github/index.vue");
+const article = () => import("@/pages/article/index.vue");
 const diary = () => import("@/pages/diary/index.vue");
+const music = () => import("@/pages/music/index.vue");
 const kaomoji = () => import("@/pages/kaomoji/index.vue");
 
 export const routes = [
@@ -17,9 +19,19 @@ export const routes = [
     alias: ["/git"],
   },
   {
+    path: "/article",
+    component: article,
+    alias: ["/articles"],
+  },
+  {
     path: "/diary",
     component: diary,
     alias: ["/travel", "/travels", "/diaries"],
+  },
+  {
+    path: "/music",
+    component: music,
+    alias: ["/dj", "/cloudmusic", "/player", "/music-player"],
   },
   {
     path: "/kaomoji",

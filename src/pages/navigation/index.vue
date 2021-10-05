@@ -31,7 +31,9 @@ export default {
       links: [
         { name: "potfolio" },
         { name: "github" },
+        { name: "article" },
         { name: "travels" },
+        { name: "music" },
         { name: "kaomoji" },
       ],
     };
