@@ -1,6 +1,6 @@
 const s = sketch => {
     //要取得多少个不同频率的音量数据
-    const BINS = 512
+    const BINS = 256
     //要显示多少个不同频率的音量数据
     const NUM = 90
     //线的最长和最短
@@ -50,38 +50,42 @@ const s = sketch => {
         let imgDom = document.getElementsByClassName('cover')[0]
         sketch.loadImage(imgDom.src, onImgLoaded)
     }
-    sketch.palindromeArray = (array)=>{
+    sketch.palindromeArray = (array) => {
         return array.concat(array.slice().reverse())
     }
 
     sketch.draw = () => {
-        sketch.clear()
+        sketch.background(255,255,255,80)
         sketch.translate(sketch.width / 2, sketch.height / 2)
         //取得不同频率下的音量
         let spectrum = fft.analyze()
+        let waveform = fft.waveform()
         //绘制块：低频
         sketch.push()
         let blockColor = sketch.color(COLOR_BLOCK)
-        sketch.noFill()
-        sketch.stroke(blockColor)
-        sketch.strokeWeight(2)
-        let blockArr = sketch.palindromeArray(spectrum.slice(0,18))
+        sketch.noStroke()
+        sketch.fill(blockColor)
+        let blockArr = sketch.palindromeArray(spectrum.slice(0, 8))
+        sketch.beginShape()
         for (let i = 0; i < blockArr.length; i++) {
-            let LENGTH = sketch.map(blockArr[i], 0, 255, MIN_LENGTH_BLOCK, MAX_LENGTH_BLOCK)
-            sketch.rect(0, LENGTH/2, WIDTH_BLOCK,LENGTH)
-            sketch.rotate(10)
+            let RADIUS = sketch.map(blockArr[i], 0, 255, 100, 108)
+            let angle = sketch.map(i, 0, blockArr.length, 0, 360)
+            let x = RADIUS * sketch.cos(angle)
+            let y = RADIUS * sketch.sin(angle)
+            sketch.curveVertex(x, y)
         }
+        sketch.endShape(sketch.CLOSE)
         sketch.pop()
         //绘制面：中频
         sketch.push()
         sketch.noFill()
         let waveColor = sketch.color(COLOR_WAVE)
         sketch.stroke(waveColor)
-        let waveArr1 = sketch.palindromeArray(spectrum.slice(16,72))
-        let waveArr2 = sketch.palindromeArray(spectrum.slice(72,128))
+        let waveArr1 = sketch.palindromeArray(spectrum.slice(8, 64))
+        let waveArr2 = sketch.palindromeArray(spectrum.slice(64, 128))
         sketch.beginShape()
         for (let i = 0; i < waveArr1.length; i++) {
-            let RADIUS = sketch.map(waveArr1[i], 0, 255, MIN_LENGTH_WAVE, MAX_LENGTH_WAVE)
+            let RADIUS = sketch.map(waveArr1[i], 0, 255, 100, 160)
             let angle = sketch.map(i, 0, waveArr1.length, 0, 360)
             let x = RADIUS * sketch.cos(angle)
             let y = RADIUS * sketch.sin(angle)
@@ -90,7 +94,7 @@ const s = sketch => {
         sketch.endShape(sketch.CLOSE)
         sketch.beginShape()
         for (let i = 0; i < waveArr2.length; i++) {
-            let RADIUS = sketch.map(waveArr2[i], 0, 255, MIN_LENGTH_WAVE, MAX_LENGTH_WAVE)
+            let RADIUS = sketch.map(waveArr2[i], 0, 255, 100, 250)
             let angle = sketch.map(i, 0, waveArr2.length, 0, 360)
             let x = RADIUS * sketch.cos(angle)
             let y = RADIUS * sketch.sin(angle)
@@ -102,14 +106,29 @@ const s = sketch => {
         sketch.push()
         let lineColor = sketch.color(COLOR_LINE)
         sketch.stroke(lineColor)
-        sketch.strokeWeight(1)
-        let lineArr = sketch.palindromeArray(spectrum.slice(128,256))
+        sketch.strokeWeight(2)
+        let tmp  = spectrum.slice(128, 256)
+        let zeroIndex = tmp.indexOf(0)
+        let lineArr = sketch.palindromeArray(tmp.slice(0,zeroIndex+1))
         for (let i = 0; i < lineArr.length; i++) {
-            let LINE = sketch.map(lineArr[i], 0, 255, MIN_LENGTH_LINE, MAX_LENGTH_LINE)
-            sketch.line(0,0,0,LINE)
-            sketch.rotate(11)
+            let line = sketch.map(lineArr[i], 0, 255, 0, 2)
+            sketch.line(0, 270-line, 0, 270+line)
+            sketch.rotate(360/lineArr.length)
         }
         sketch.pop()
+
+        //时域波形
+        sketch.stroke(COLOR_WAVE)
+        sketch.noFill()
+        sketch.beginShape()
+        for (let i = 0; i < waveform.length; i += 4) {
+            let RADIUS = sketch.map(Math.abs((waveform[i] + waveform[i + 1] + waveform[i + 2] + waveform[i + 3]) / 4), 0, 1, 0, 180) + 100
+            let angle = sketch.map(i, 0, waveform.length, 0, 360)
+            let x = RADIUS * sketch.cos(angle)
+            let y = RADIUS * sketch.sin(angle)
+            sketch.curveVertex(x, y)
+        }
+        sketch.endShape(sketch.CLOSE)
     }
     //这个方法是用来处理谷歌浏览器不让自动播放的政策的，用户没给手势AudioContext用不了
     sketch.resumeContext = () => {
@@ -117,10 +136,10 @@ const s = sketch => {
     }
     function onImgLoaded(img) {
         img.loadPixels()
-        let [waveColor,blockColor,lineColor] = getMainColors(img)
-        COLOR_BLOCK = [blockColor.r,blockColor.g,blockColor.b,60]
-        COLOR_WAVE = [waveColor.r,waveColor.g,waveColor.b,120]
-        COLOR_LINE = [lineColor.r,lineColor.g,lineColor.b,30]
+        let [waveColor, blockColor, lineColor] = getMainColors(img)
+        COLOR_BLOCK = [blockColor.r, blockColor.g, blockColor.b, 40]
+        COLOR_WAVE = [waveColor.r, waveColor.g, waveColor.b, 120]
+        COLOR_LINE = [lineColor.r, lineColor.g, lineColor.b, 30]
         console.log(COLOR_BLOCK)
         console.log(COLOR_WAVE)
         console.log(COLOR_LINE)
@@ -156,9 +175,9 @@ const s = sketch => {
                 tmp.g += g
                 tmp.b += b
             }
-            tmp.r = Math.round(tmp.r / (rgbList.length/3))
-            tmp.g = Math.round(tmp.g / (rgbList.length/3))
-            tmp.b = Math.round(tmp.b / (rgbList.length/3))
+            tmp.r = Math.round(tmp.r / (rgbList.length / 3))
+            tmp.g = Math.round(tmp.g / (rgbList.length / 3))
+            tmp.b = Math.round(tmp.b / (rgbList.length / 3))
             return tmp
         }
         return [getAverageColor(color1sts), getAverageColor(color2nds), getAverageColor(color3rds)]

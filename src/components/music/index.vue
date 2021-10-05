@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       index: 0,
-      nameList: ["bad_apple"],
+      nameList: ["bad_apple","ninelie"],
     };
   },
   methods: {
@@ -56,16 +56,13 @@ export default {
 <style lang="less" scoped>
 .audio-container {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 600px;
 
   .cover {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    top: 200px;
+    left: 200px;
     z-index: 4;
     width: 200px;
     height: 200px;
@@ -78,8 +75,8 @@ export default {
     top: 0;
     left: 0;
     z-index: 3;
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 600px;
   }
 }
 </style>
