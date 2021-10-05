@@ -1,26 +1,15 @@
 const s = sketch => {
     //要取得多少个不同频率的音量数据
     const BINS = 256
-    //要显示多少个不同频率的音量数据
-    const NUM = 90
-    //线的最长和最短
-    const MIN_LENGTH_LINE = 100
-    const MAX_LENGTH_LINE = 200
-    //波的最长和最短
-    const MIN_LENGTH_WAVE = 100
-    const MAX_LENGTH_WAVE = 160
-    //块的最长和最短
-    const MIN_LENGTH_BLOCK = 100
-    const MAX_LENGTH_BLOCK = 140
-    const WIDTH_BLOCK = 8
-    //浅色程度
-    const WHITE = 10
     //图案里，线的颜色默认值rgba
-    let COLOR_LINE = [255, 255, 255, 120]
+    let COLOR_HIGH = [255, 255, 255, 120]
     //图案里，波的颜色默认值rgba
-    let COLOR_WAVE = [255, 255, 255, 180]
+    let COLOR_MID_1 = [255, 255, 255, 180]
+    let COLOR_MID_2 = [255, 255, 255, 210]
     //图案里，块的颜色默认值rgba
-    let COLOR_BLOCK = [255, 255, 255, 210]
+    let COLOR_LOW = [255, 255, 255, 210]
+    //图案里，时域波的颜色默认值rgba
+    let COLOR_TIME = [255, 255, 255, 210]
     //存储fft对象
     let fft
     sketch.setup = () => {
@@ -48,6 +37,7 @@ const s = sketch => {
     //重新载入img
     sketch.reloadImg_ = () => {
         let imgDom = document.getElementsByClassName('cover')[0]
+        console.log("reload")
         sketch.loadImage(imgDom.src, onImgLoaded)
     }
     sketch.palindromeArray = (array) => {
@@ -62,9 +52,8 @@ const s = sketch => {
         let waveform = fft.waveform()
         //绘制块：低频
         sketch.push()
-        let blockColor = sketch.color(COLOR_BLOCK)
         sketch.noStroke()
-        sketch.fill(blockColor)
+        sketch.fill(COLOR_LOW)
         let blockArr = sketch.palindromeArray(spectrum.slice(0, 8))
         sketch.beginShape()
         for (let i = 0; i < blockArr.length; i++) {
@@ -79,8 +68,7 @@ const s = sketch => {
         //绘制面：中频
         sketch.push()
         sketch.noFill()
-        let waveColor = sketch.color(COLOR_WAVE)
-        sketch.stroke(waveColor)
+        sketch.stroke(COLOR_MID_1)
         let waveArr1 = sketch.palindromeArray(spectrum.slice(8, 64))
         let waveArr2 = sketch.palindromeArray(spectrum.slice(64, 128))
         sketch.beginShape()
@@ -92,6 +80,7 @@ const s = sketch => {
             sketch.curveVertex(x, y)
         }
         sketch.endShape(sketch.CLOSE)
+        sketch.stroke(COLOR_MID_2)
         sketch.beginShape()
         for (let i = 0; i < waveArr2.length; i++) {
             let RADIUS = sketch.map(waveArr2[i], 0, 255, 100, 250)
@@ -104,21 +93,20 @@ const s = sketch => {
         sketch.pop()
         //绘制线：高频
         sketch.push()
-        let lineColor = sketch.color(COLOR_LINE)
-        sketch.stroke(lineColor)
+        sketch.stroke(COLOR_HIGH)
         sketch.strokeWeight(2)
         let tmp  = spectrum.slice(128, 256)
         let zeroIndex = tmp.indexOf(0)
-        let lineArr = sketch.palindromeArray(tmp.slice(0,zeroIndex+1))
+        let lineArr = sketch.palindromeArray(tmp.slice(0,zeroIndex))
         for (let i = 0; i < lineArr.length; i++) {
-            let line = sketch.map(lineArr[i], 0, 255, 0, 2)
-            sketch.line(0, 270-line, 0, 270+line)
+            let line = sketch.map(lineArr[i], 0, 255, 0, 4)
+            let radius = sketch.map(lineArr[i], 0, 255, -20, 20)
+            sketch.line(0, 260+radius-line, 0, 260+radius+line)
             sketch.rotate(360/lineArr.length)
         }
         sketch.pop()
-
         //时域波形
-        sketch.stroke(COLOR_WAVE)
+        sketch.stroke(COLOR_TIME)
         sketch.noFill()
         sketch.beginShape()
         for (let i = 0; i < waveform.length; i += 4) {
@@ -136,13 +124,12 @@ const s = sketch => {
     }
     function onImgLoaded(img) {
         img.loadPixels()
-        let [waveColor, blockColor, lineColor] = getMainColors(img)
-        COLOR_BLOCK = [blockColor.r, blockColor.g, blockColor.b, 40]
-        COLOR_WAVE = [waveColor.r, waveColor.g, waveColor.b, 120]
-        COLOR_LINE = [lineColor.r, lineColor.g, lineColor.b, 30]
-        console.log(COLOR_BLOCK)
-        console.log(COLOR_WAVE)
-        console.log(COLOR_LINE)
+        let [color1,color2, color3] = getMainColors(img)
+        COLOR_LOW = [color1.r, color1.g, color1.b, 80]
+        COLOR_MID_1 = [color2.r, color2.g, color2.b, 100]
+        COLOR_MID_2 = [color3.r, color3.g, color3.b, 80]
+        COLOR_HIGH = [color1.r, color1.g, color1.b, 40]
+        COLOR_TIME = [color1.r, color1.g, color1.b, 60]
     }
 
     function getMainColors(img) {
@@ -178,6 +165,25 @@ const s = sketch => {
             tmp.r = Math.round(tmp.r / (rgbList.length / 3))
             tmp.g = Math.round(tmp.g / (rgbList.length / 3))
             tmp.b = Math.round(tmp.b / (rgbList.length / 3))
+
+
+            let bios = 20
+            if(tmp.r>tmp.g && tmp.r>tmp.b){
+                tmp.r+=bios
+            }else if(tmp.g>tmp.r && tmp.g>tmp.b){
+                tmp.g+=bios
+            }else if(tmp.b>tmp.g && tmp.b>tmp.r){
+                tmp.b+=bios
+            }
+
+            if(tmp.r<tmp.g && tmp.r<tmp.b){
+                tmp.r-=bios/2
+            }else if(tmp.g<tmp.r && tmp.g<tmp.b){
+                tmp.g-=bios/2
+            }else if(tmp.b<tmp.g && tmp.b<tmp.r){
+                tmp.b-=bios/2
+            }
+
             return tmp
         }
         return [getAverageColor(color1sts), getAverageColor(color2nds), getAverageColor(color3rds)]

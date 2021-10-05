@@ -1,15 +1,20 @@
 <template>
   <div class="audio-container">
-    <img :src="imgSrc(nameList[index])" class="cover" />
+    <img :src="imgSrc" class="cover" />
     <div id="sketch" class="sketch"></div>
   </div>
 
   <div>
-    <audio controls @play="playMusic">
-      <source :src="oggSrc(nameList[index])" type="audio/ogg" />
-      <source :src="mp3Src(nameList[index])" type="audio/mpeg" />
-      您的浏览器不支持 audio 元素。
-    </audio>
+    <audio
+      :src="mp3Src"
+      type="audio/mpeg"
+      controls
+      @play="resumeAudio"
+      @ended="nextAudio"
+    />
+  </div>
+  <div v-for="(item, index) in nameList" :key="item" @click="checkItem(index)">
+    {{ item }}
   </div>
 </template>
 <script>
@@ -20,22 +25,33 @@ export default {
   data() {
     return {
       index: 0,
-      nameList: ["bad_apple","ninelie"],
+      nameList: ["bad_apple", "ninelie"],
     };
   },
+  computed: {
+    imgSrc() {
+      return "/assets/music/" + this.nameList[this.index] + "/index.jpg";
+    },
+    mp3Src() {
+      return "/assets/music/" + this.nameList[this.index] + "/index.mp3";
+    },
+  },
   methods: {
-    imgSrc: function (name) {
-      return "/assets/music/" + name + "/index.jpg";
+    checkItem(index) {
+      index = index % this.nameList.length;
+      this.index = index;
+      let audioDom = document.getElementsByTagName("audio")[0];
+      audioDom.src = "/assets/music/" + this.nameList[index] + "/index.mp3";
+      setTimeout(() => {
+        audioDom.play();
+      }, 200);
+      this.$nextTick(() => {
+        this.resumeImg();
+      });
     },
-    mp3Src: function (name) {
-      return "/assets/music/" + name + "/index.mp3";
+    nextAudio() {
+      this.checkItem(++this.index);
     },
-    oggSrc: function (name) {
-      return "/assets/music/" + name + "/index.ogg";
-    },
-    /*playMusic: () => {
-      GLOBAL_P5_AUDIO.resumeContext();
-    },*/
   },
   setup() {
     let GLOBAL_P5_AUDIO;
@@ -45,11 +61,14 @@ export default {
       //GLOBAL_P5_AUDIO.reloadImg_();
     });
 
-    function playMusic() {
+    function resumeImg() {
+      GLOBAL_P5_AUDIO.reloadImg_();
+    }
+    function resumeAudio() {
       GLOBAL_P5_AUDIO.resumeContext();
     }
 
-    return { playMusic };
+    return { resumeImg, resumeAudio };
   },
 };
 </script>
@@ -58,25 +77,34 @@ export default {
   position: relative;
   width: 600px;
   height: 600px;
+}
 
-  .cover {
-    position: absolute;
-    top: 200px;
-    left: 200px;
-    z-index: 4;
-    width: 200px;
-    height: 200px;
-    display: block;
-    border-radius: 50%;
+.cover {
+  position: absolute;
+  top: 200px;
+  left: 200px;
+  z-index: 4;
+  width: 200px;
+  height: 200px;
+  display: block;
+  border-radius: 50%;
+  animation: rotate-cover 100s infinite;
+}
+
+.sketch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 600px;
+  height: 600px;
+}
+@keyframes rotate-cover {
+  from {
+    transform: rotate(0deg);
   }
-
-  .sketch {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    width: 600px;
-    height: 600px;
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
