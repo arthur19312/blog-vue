@@ -31,7 +31,6 @@
   </div>
 </template>
 <script>
-import { onMounted } from "@vue/runtime-core";
 import { p5music } from "./p5music";
 export default {
   props: {},
@@ -55,6 +54,7 @@ export default {
         "city_of_stars",
         "mystery_of_love",
       ],
+      GLOBAL_P5_AUDIO: {},
     };
   },
   computed: {
@@ -66,6 +66,13 @@ export default {
     },
   },
   methods: {
+    resumeImg() {
+      this.GLOBAL_P5_AUDIO.reloadImg_();
+    },
+    resumeAudio() {
+      this.GLOBAL_P5_AUDIO.resumeContext();
+    },
+
     checkItem(index) {
       index = index % this.nameList.length;
       this.index = index;
@@ -81,33 +88,25 @@ export default {
     nextAudio() {
       this.checkItem(++this.index);
     },
-    onPlay(){
-      this.resumeAudio()
-      document.getElementsByClassName("cover")[0].style.animationPlayState = "running"
+    onPlay() {
+      this.resumeAudio();
+      document.getElementsByClassName("cover")[0].style.animationPlayState =
+        "running";
     },
-    onPause(){
-      document.getElementsByClassName("cover")[0].style.animationPlayState = "paused"
-    }
+    onPause() {
+      let cover = document.getElementsByClassName("cover")[0];
+      cover && (cover.style.animationPlayState = "paused");
+    },
   },
-  setup() {
-    let GLOBAL_P5_AUDIO;
-
-    onMounted(() => {
-      GLOBAL_P5_AUDIO = p5music();
+  mounted: function () {
+    this.$nextTick(function () {
+      this.GLOBAL_P5_AUDIO = p5music();
     });
-
-    function resumeImg() {
-      GLOBAL_P5_AUDIO.reloadImg_();
-    }
-    function resumeAudio() {
-      GLOBAL_P5_AUDIO.resumeContext();
-    }
-
-    return { resumeImg, resumeAudio };
+    document.getElementsByTagName("audio")[0].volume = 0.6;
   },
-  mounted() {
-    document.getElementsByTagName("audio")[0].volume = 0.6
-  },
+  beforeUnmount(){
+    document.getElementById("sketch").innerHTML=""
+  }
 };
 </script>
 <style lang="less" scoped>
