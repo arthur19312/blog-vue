@@ -2,14 +2,14 @@ const s = sketch => {
     //要取得多少个不同频率的音量数据
     const BINS = 256
     //图案里，线的颜色默认值rgba
-    let COLOR_HIGH = [255, 255, 255, 120]
+    let COLOR_HIGH = [0, 0, 100, 120]
     //图案里，波的颜色默认值rgba
-    let COLOR_MID_1 = [255, 255, 255, 180]
-    let COLOR_MID_2 = [255, 255, 255, 210]
+    let COLOR_MID_1 = [0, 0, 100, 180]
+    let COLOR_MID_2 = [0, 0, 100, 210]
     //图案里，块的颜色默认值rgba
-    let COLOR_LOW = [255, 255, 255, 210]
+    let COLOR_LOW = [0, 0, 100, 210]
     //图案里，时域波的颜色默认值rgba
-    let COLOR_TIME = [255, 255, 255, 210]
+    let COLOR_TIME = [0, 0, 100, 210]
     //存储fft对象
     let fft
     sketch.setup = () => {
@@ -31,7 +31,7 @@ const s = sketch => {
         fft = new p5.FFT(0.8, BINS)
         fft.setInput(source)
         sketch.angleMode(sketch.DEGREES)
-        sketch.colorMode(sketch.RGB)
+        sketch.colorMode(sketch.HSB)
         sketch.rectMode(sketch.CENTER)
     }
     //重新载入img
@@ -40,12 +40,38 @@ const s = sketch => {
         console.log("reload")
         sketch.loadImage(imgDom.src, onImgLoaded)
     }
+    //hsl转换
+    sketch.rgb2hsl = (r, g, b) => {
+        r = r / 255;
+        g = g / 255;
+        b = b / 255;
+        var min = Math.min(r, g, b);
+        var max = Math.max(r, g, b);
+        var l = (min + max) / 2;
+        var difference = max - min;
+        var h, s, l;
+        if (max == min) {
+            h = 0;
+            s = 0;
+        } else {
+            s = l > 0.5 ? difference / (2.0 - max - min) : difference / (max + min);
+            switch (max) {
+                case r: h = (g - b) / difference + (g < b ? 6 : 0); break;
+                case g: h = 2.0 + (b - r) / difference; break;
+                case b: h = 4.0 + (r - g) / difference; break;
+            }
+            h = Math.round(h * 60);
+        }
+        s = Math.round(s * 100);//转换成百分比的形式
+        l = Math.round(l * 100);
+        return { h, s, l };
+    }
+    //获取回文数组
     sketch.palindromeArray = (array) => {
         return array.concat(array.slice().reverse())
     }
-
     sketch.draw = () => {
-        sketch.background(255,255,255,80)
+        sketch.background(0, 0, 100, 80)
         sketch.translate(sketch.width / 2, sketch.height / 2)
         //取得不同频率下的音量
         let spectrum = fft.analyze()
@@ -95,14 +121,14 @@ const s = sketch => {
         sketch.push()
         sketch.stroke(COLOR_HIGH)
         sketch.strokeWeight(2)
-        let tmp  = spectrum.slice(128, 256)
+        let tmp = spectrum.slice(128, 256)
         let zeroIndex = tmp.indexOf(0)
-        let lineArr = sketch.palindromeArray(tmp.slice(0,zeroIndex))
+        let lineArr = sketch.palindromeArray(tmp.slice(0, zeroIndex))
         for (let i = 0; i < lineArr.length; i++) {
             let line = sketch.map(lineArr[i], 0, 255, 0, 2)
             let radius = sketch.map(lineArr[i], 0, 255, -20, 20)
-            sketch.line(0, 260+radius-line, 0, 260+radius+line)
-            sketch.rotate(360/lineArr.length)
+            sketch.line(0, 260 + radius - line, 0, 260 + radius + line)
+            sketch.rotate(360 / lineArr.length)
         }
         sketch.pop()
         //时域波形
@@ -124,12 +150,12 @@ const s = sketch => {
     }
     function onImgLoaded(img) {
         img.loadPixels()
-        let [color1,color2, color3] = getMainColors(img)
-        COLOR_LOW = [color1.r, color1.g, color1.b, 80]
-        COLOR_MID_1 = [color2.r, color2.g, color2.b, 100]
-        COLOR_MID_2 = [color3.r, color3.g, color3.b, 80]
-        COLOR_HIGH = [color1.r, color1.g, color1.b, 80]
-        COLOR_TIME = [color1.r, color1.g, color1.b, 60]
+        let [color1, color2, color3] = getMainColors(img)
+        COLOR_LOW = [color1.h, color1.s, color1.l, 80]
+        COLOR_MID_1 = [color2.h, color2.s, color2.l, 100]
+        COLOR_MID_2 = [color3.h, color3.s, color3.l, 80]
+        COLOR_HIGH = [color1.h, color1.s, color1.l, 80]
+        COLOR_TIME = [color1.h, color1.s, color1.l, 60]
     }
 
     function getMainColors(img) {
@@ -141,14 +167,20 @@ const s = sketch => {
             color3: [],
             color4: [],
             color5: [],
-            color6: []
+            color6: [],
+            color7: [],
+            color8: [],
+            color9: [],
+            color10: [],
+            color11: [],
+            color12: [],
         }
         for (let i = 0; i < 400; i += 4) {
             let r = img.pixels[i]
             let g = img.pixels[i + 1]
             let b = img.pixels[i + 2]
             let hue = getHue(r, g, b)
-            classifiedPix['color' + sketch.round(hue / 60)].push(r, g, b)
+            classifiedPix['color' + sketch.round(hue / 30)].push(r, g, b)
         }
         let [color1sts, color2nds, color3rds] = Object.values(classifiedPix).sort((a, b) => { return b.length - a.length }).slice(0, 3)
 
@@ -165,36 +197,37 @@ const s = sketch => {
             tmp.r = Math.round(tmp.r / (rgbList.length / 3))
             tmp.g = Math.round(tmp.g / (rgbList.length / 3))
             tmp.b = Math.round(tmp.b / (rgbList.length / 3))
-
-            let bios = 20
-            if(tmp.r>tmp.g && tmp.r>tmp.b){
-                tmp.r+=bios
-            }else if(tmp.g>tmp.r && tmp.g>tmp.b){
-                tmp.g+=bios
-            }else if(tmp.b>tmp.g && tmp.b>tmp.r){
-                tmp.b+=bios
+            let hsl = sketch.rgb2hsl(tmp.r, tmp.g, tmp.b)
+            console.log(hsl)
+            //灰色
+            if (hsl.s <= 20) hsl.s += 30
+            //黑色
+            if (hsl.l <= 30) hsl.l += 20
+            //白色降低
+            if (hsl.l > 90 && hsl.s<=20) {
+                hsl.s += 10
+                hsl.l -= 10
             }
-
-            if(tmp.r<tmp.g && tmp.r<tmp.b){
-                tmp.r-=bios/2
-            }else if(tmp.g<tmp.r && tmp.g<tmp.b){
-                tmp.g-=bios/2
-            }else if(tmp.b<tmp.g && tmp.b<tmp.r){
-                tmp.b-=bios/2
+            //橙色、绿色提亮
+            if(hsl.h>30&&hsl.h<90){
+                if(hsl.l<70){
+                    hsl.s+=20
+                    hsl.l+=30
+                }
             }
-
-            if((tmp.r<40)&&(tmp.g<40)&&(tmp.b<40)){
-                tmp.r+=40
-                tmp.g+=40
-                tmp.b+=40
+            //黄色
+            if(hsl.h>50&&hsl.h<70){
+                //黄色倾向不明显
+                if(hsl.s<=70){
+                    hsl.s=10
+                }else{
+                    if(hsl.l<92) hsl.l=92
+                }
             }
-            if((tmp.r>200)&&(tmp.g>200)&&(tmp.b>200)){
-                tmp.r-=40
-                tmp.g-=40
-                tmp.b-=40
-            }
-
-            return tmp
+            //整体
+            hsl.s+=10
+            if(hsl.l<80) hsl.l+=10
+            return hsl
         }
         return [getAverageColor(color1sts), getAverageColor(color2nds), getAverageColor(color3rds)]
     }
