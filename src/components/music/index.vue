@@ -10,23 +10,23 @@
           :src="mp3Src"
           type="audio/mpeg"
           controls
-          @play="resumeAudio"
+          @play="onPlay"
+          @pause="onPause"
           @ended="nextAudio"
-          autoplay="autoplay"
         />
       </div>
     </div>
     <div class="namelist-ctn">
-    <div class="namelist">
-      <div
-        v-for="(item, index) in nameList"
-        :key="item"
-        @click="checkItem(index)"
-        class="nameitem"
-      >
-        {{ item }}
+      <div class="namelist">
+        <div
+          v-for="(item, index) in nameList"
+          :key="item"
+          @click="checkItem(index)"
+          class="nameitem"
+        >
+          {{ item }}
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -42,9 +42,9 @@ export default {
         "ninelie",
         "night_voyager",
         "nimble_as_lightning",
+        "dance_tonight",
         "inner_universe",
         "rise",
-        "dance_tonight",
         "bad_apple",
         "little_princess",
         "inferno",
@@ -81,14 +81,19 @@ export default {
     nextAudio() {
       this.checkItem(++this.index);
     },
+    onPlay(){
+      this.resumeAudio()
+      document.getElementsByClassName("cover")[0].style.animationPlayState = "running"
+    },
+    onPause(){
+      document.getElementsByClassName("cover")[0].style.animationPlayState = "paused"
+    }
   },
   setup() {
     let GLOBAL_P5_AUDIO;
 
     onMounted(() => {
       GLOBAL_P5_AUDIO = p5music();
-      //GLOBAL_P5_AUDIO.reloadImg_();
-      document.getElementsByTagName("audio")[0].volume = 0.6
     });
 
     function resumeImg() {
@@ -99,6 +104,9 @@ export default {
     }
 
     return { resumeImg, resumeAudio };
+  },
+  mounted() {
+    document.getElementsByTagName("audio")[0].volume = 0.6
   },
 };
 </script>
@@ -126,6 +134,7 @@ export default {
   display: block;
   border-radius: 50%;
   animation: rotate-cover 100s infinite;
+  animation-play-state: paused;
 }
 
 .sketch {
@@ -144,7 +153,7 @@ export default {
     transform: rotate(360deg);
   }
 }
-.namelist-ctn{
+.namelist-ctn {
   width: 380px;
   overflow: hidden;
   margin-left: 6rem;
