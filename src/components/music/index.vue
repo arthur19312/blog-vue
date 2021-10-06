@@ -1,20 +1,33 @@
 <template>
-  <div class="audio-container">
-    <img :src="imgSrc" class="cover" />
-    <div id="sketch" class="sketch"></div>
-  </div>
-
-  <div>
-    <audio
-      :src="mp3Src"
-      type="audio/mpeg"
-      controls
-      @play="resumeAudio"
-      @ended="nextAudio"
-    />
-  </div>
-  <div v-for="(item, index) in nameList" :key="item" @click="checkItem(index)">
-    {{ item }}
+  <div class="music-container">
+    <div>
+      <div class="audio-container">
+        <img :src="imgSrc" class="cover" />
+        <div id="sketch" class="sketch"></div>
+      </div>
+      <div>
+        <audio
+          :src="mp3Src"
+          type="audio/mpeg"
+          controls
+          @play="resumeAudio"
+          @ended="nextAudio"
+          autoplay="autoplay"
+        />
+      </div>
+    </div>
+    <div class="namelist-ctn">
+    <div class="namelist">
+      <div
+        v-for="(item, index) in nameList"
+        :key="item"
+        @click="checkItem(index)"
+        class="nameitem"
+      >
+        {{ item }}
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 <script>
@@ -25,7 +38,23 @@ export default {
   data() {
     return {
       index: 0,
-      nameList: ["bad_apple", "ninelie"],
+      nameList: [
+        "ninelie",
+        "night_voyager",
+        "nimble_as_lightning",
+        "inner_universe",
+        "rise",
+        "dance_tonight",
+        "bad_apple",
+        "little_princess",
+        "inferno",
+        "lost_in_paradise",
+        "glassy_sky",
+        "una_mattina",
+        "sun_also_rises",
+        "city_of_stars",
+        "mystery_of_love",
+      ],
     };
   },
   computed: {
@@ -59,6 +88,7 @@ export default {
     onMounted(() => {
       GLOBAL_P5_AUDIO = p5music();
       //GLOBAL_P5_AUDIO.reloadImg_();
+      document.getElementsByTagName("audio")[0].volume = 0.6
     });
 
     function resumeImg() {
@@ -73,10 +103,17 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.music-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+}
 .audio-container {
   position: relative;
   width: 600px;
   height: 600px;
+  margin-top: -1rem;
 }
 
 .cover {
@@ -105,6 +142,24 @@ export default {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+.namelist-ctn{
+  width: 380px;
+  overflow: hidden;
+  margin-left: 6rem;
+}
+
+.namelist {
+  font-size: 14px;
+  line-height: 28px;
+  width: 400px;
+  height: 510px;
+  overflow-y: scroll;
+  .nameitem {
+    cursor: pointer;
+    padding: 1rem;
+    letter-spacing: 6px;
   }
 }
 </style>

@@ -99,7 +99,7 @@ const s = sketch => {
         let zeroIndex = tmp.indexOf(0)
         let lineArr = sketch.palindromeArray(tmp.slice(0,zeroIndex))
         for (let i = 0; i < lineArr.length; i++) {
-            let line = sketch.map(lineArr[i], 0, 255, 0, 4)
+            let line = sketch.map(lineArr[i], 0, 255, 0, 2)
             let radius = sketch.map(lineArr[i], 0, 255, -20, 20)
             sketch.line(0, 260+radius-line, 0, 260+radius+line)
             sketch.rotate(360/lineArr.length)
@@ -128,7 +128,7 @@ const s = sketch => {
         COLOR_LOW = [color1.r, color1.g, color1.b, 80]
         COLOR_MID_1 = [color2.r, color2.g, color2.b, 100]
         COLOR_MID_2 = [color3.r, color3.g, color3.b, 80]
-        COLOR_HIGH = [color1.r, color1.g, color1.b, 40]
+        COLOR_HIGH = [color1.r, color1.g, color1.b, 80]
         COLOR_TIME = [color1.r, color1.g, color1.b, 60]
     }
 
@@ -166,7 +166,6 @@ const s = sketch => {
             tmp.g = Math.round(tmp.g / (rgbList.length / 3))
             tmp.b = Math.round(tmp.b / (rgbList.length / 3))
 
-
             let bios = 20
             if(tmp.r>tmp.g && tmp.r>tmp.b){
                 tmp.r+=bios
@@ -182,6 +181,17 @@ const s = sketch => {
                 tmp.g-=bios/2
             }else if(tmp.b<tmp.g && tmp.b<tmp.r){
                 tmp.b-=bios/2
+            }
+
+            if((tmp.r<40)&&(tmp.g<40)&&(tmp.b<40)){
+                tmp.r+=40
+                tmp.g+=40
+                tmp.b+=40
+            }
+            if((tmp.r>200)&&(tmp.g>200)&&(tmp.b>200)){
+                tmp.r-=40
+                tmp.g-=40
+                tmp.b-=40
             }
 
             return tmp
