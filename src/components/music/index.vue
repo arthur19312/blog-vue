@@ -1,6 +1,6 @@
 <template>
   <div class="music-container">
-    <div>
+    <div class="left-content">
       <div class="audio-container">
         <img :src="imgSrc" class="cover" />
         <div id="sketch" class="sketch"></div>
@@ -19,9 +19,9 @@
     <div class="namelist-ctn">
       <div class="namelist">
         <div
-          v-for="(item, index) in nameList"
+          v-for="(item, indexInList) in nameList"
           :key="item"
-          @click="checkItem(index)"
+          @click="checkItem(indexInList)"
           class="nameitem"
         >
           {{ item }}
@@ -72,7 +72,6 @@ export default {
     resumeAudio() {
       this.GLOBAL_P5_AUDIO.resumeContext();
     },
-
     checkItem(index) {
       index = index % this.nameList.length;
       this.index = index;
@@ -116,12 +115,14 @@ export default {
   justify-content: space-around;
   align-content: center;
 }
+.left-content {
+  margin-left: -3rem;
+}
 .audio-container {
   position: relative;
   width: 400px;
   height: 400px;
-  margin-top: -1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .cover {
@@ -157,19 +158,22 @@ export default {
   width: 280px;
   overflow: hidden;
   margin-left: 6rem;
+  margin-top: 1rem;
 }
 
 .namelist {
-  color: #888;
-  font-size: 13px;
+  color: #bbb;
+  font-size: 12px;
   line-height: 26px;
-  width: 300px;
+  width: max-content;
   height: 378px;
   overflow-y: scroll;
+  text-transform: uppercase;
   .nameitem {
     cursor: pointer;
     padding: 1rem;
-    letter-spacing: 6px;
+    letter-spacing: 8px;
+    font-weight: 500;
     &:hover {
       color: #444;
     }
