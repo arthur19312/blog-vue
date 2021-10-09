@@ -60,7 +60,7 @@ export default defineComponent({
 }
 
 .bachar-container {
-  padding: 2rem;
+  padding: 1rem;
   cursor: pointer;
   transition: 0.2s all ease;
 

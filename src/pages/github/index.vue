@@ -55,14 +55,14 @@ export default {
 
 <style lang="less" scoped>
 .scroll-container {
-  height: 600px;
+  height: 500px;
   overflow: hidden;
 }
 .git-content {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
-  height: 620px;
+  height: 520px;
   transform: translateX(0);
   padding: 2rem 0;
   margin-right: 3rem;

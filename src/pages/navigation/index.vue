@@ -78,11 +78,11 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    padding: 10% 0 0 10%;
+    padding: 8% 0 0 8%;
   }
 
   .intro {
-    flex: 0 1 30%;
+    flex: 0 1 36%;
     padding: 1rem;
   }
 }

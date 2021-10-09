@@ -102,11 +102,11 @@ export default {
     this.$nextTick(function () {
       this.GLOBAL_P5_AUDIO = p5music();
     });
-    document.getElementsByTagName("audio")[0].volume = 0.6;
+    document.getElementsByTagName("audio")[0].volume = 0.5;
   },
-  beforeUnmount(){
-    document.getElementById("sketch").innerHTML=""
-  }
+  beforeUnmount() {
+    document.getElementById("sketch").innerHTML = "";
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -118,21 +118,22 @@ export default {
 }
 .audio-container {
   position: relative;
-  width: 600px;
-  height: 600px;
+  width: 400px;
+  height: 400px;
   margin-top: -1rem;
+  margin-bottom: 1rem;
 }
 
 .cover {
   position: absolute;
-  top: 200px;
-  left: 200px;
+  top: 140px;
+  left: 140px;
   z-index: 4;
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: 120px;
   display: block;
   border-radius: 50%;
-  animation: rotate-cover 100s infinite;
+  animation: rotate-cover 80s infinite;
   animation-play-state: paused;
 }
 
@@ -141,8 +142,8 @@ export default {
   top: 0;
   left: 0;
   z-index: 3;
-  width: 600px;
-  height: 600px;
+  width: 400px;
+  height: 400px;
 }
 @keyframes rotate-cover {
   from {
@@ -153,21 +154,25 @@ export default {
   }
 }
 .namelist-ctn {
-  width: 380px;
+  width: 280px;
   overflow: hidden;
   margin-left: 6rem;
 }
 
 .namelist {
-  font-size: 14px;
-  line-height: 28px;
-  width: 400px;
-  height: 510px;
+  color: #888;
+  font-size: 13px;
+  line-height: 26px;
+  width: 300px;
+  height: 378px;
   overflow-y: scroll;
   .nameitem {
     cursor: pointer;
     padding: 1rem;
     letter-spacing: 6px;
+    &:hover {
+      color: #444;
+    }
   }
 }
 </style>
