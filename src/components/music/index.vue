@@ -170,14 +170,14 @@ export default {
 
 .sign::before{
   content:'';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #bbb;
-  margin-right: 1rem;
+  width: 0;
+  height: 0;
+  margin-right: 8px;
   display: inline-block;
-  position: relative;
-  bottom: 1px;
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-right: 6px solid transparent;
+  border-left: 6px solid #bbb;
 }
 .namelist {
   color: #bbb;
@@ -195,7 +195,7 @@ export default {
     &:hover {
       color: #666;
       .sign::before{
-        background: #666;
+        border-left-color: #666;
       }
     }
   }
