@@ -1,30 +1,32 @@
 <template>
-  <div class="music-container">
-    <div class="left-content">
-      <div class="audio-container">
-        <img :src="imgSrc" class="cover" />
-        <div id="sketch" class="sketch"></div>
+  <div class="center">
+    <div class="music-container">
+      <div class="left-content">
+        <div class="audio-container">
+          <img :src="imgSrc" class="cover" />
+          <div id="sketch" class="sketch"></div>
+        </div>
+        <div>
+          <audio
+            :src="mp3Src"
+            type="audio/mpeg"
+            controls
+            @play="onPlay"
+            @pause="onPause"
+            @ended="nextAudio"
+          />
+        </div>
       </div>
-      <div>
-        <audio
-          :src="mp3Src"
-          type="audio/mpeg"
-          controls
-          @play="onPlay"
-          @pause="onPause"
-          @ended="nextAudio"
-        />
-      </div>
-    </div>
-    <div class="namelist-ctn">
-      <div class="namelist">
-        <div
-          v-for="(item, indexInList) in nameList"
-          :key="item"
-          @click="checkItem(indexInList)"
-          class="nameitem"
-        >
-          {{ item }}
+      <div class="namelist-ctn">
+        <div class="namelist">
+          <div
+            v-for="(item, indexInList) in nameList"
+            :key="item"
+            @click="checkItem(indexInList)"
+            class="nameitem"
+          >
+            <span :class="indexInList===index?'sign':''">{{ item }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -109,6 +111,12 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .music-container {
   display: flex;
   flex-direction: row;
@@ -120,18 +128,18 @@ export default {
 }
 .audio-container {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   margin-bottom: 2rem;
 }
 
 .cover {
   position: absolute;
-  top: 140px;
-  left: 140px;
+  top: 170px;
+  left: 170px;
   z-index: 4;
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   display: block;
   border-radius: 50%;
   animation: rotate-cover 80s infinite;
@@ -143,8 +151,8 @@ export default {
   top: 0;
   left: 0;
   z-index: 3;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
 }
 @keyframes rotate-cover {
   from {
@@ -155,17 +163,27 @@ export default {
   }
 }
 .namelist-ctn {
-  width: 280px;
+  width: 28rem;
   overflow: hidden;
-  margin-left: 6rem;
-  margin-top: 1rem;
+  margin-left: 12rem;
 }
 
+.sign::before{
+  content:'';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bbb;
+  margin-right: 1rem;
+  display: inline-block;
+  position: relative;
+  bottom: 1px;
+}
 .namelist {
   color: #bbb;
   font-size: 12px;
   line-height: 26px;
-  width: max-content;
+  width: 30rem;
   height: 378px;
   overflow-y: scroll;
   text-transform: uppercase;
@@ -175,8 +193,12 @@ export default {
     letter-spacing: 8px;
     font-weight: 500;
     &:hover {
-      color: #444;
+      color: #666;
+      .sign::before{
+        background: #666;
+      }
     }
   }
 }
+
 </style>

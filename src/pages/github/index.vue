@@ -1,31 +1,46 @@
 <template>
-  <div class="scroll-container">
-    <div class="git-content" id="gitContent">
-      <ThreejsContainer />
-      <div class="git-item" v-for="item in imgProjects" :key="item.imgUrl">
-        <a
-          :href="'https://github.com/arthur19312/' + item.gitUrl"
-          target="_blank"
+  <div class="git-container">
+    <div class="scroll-container">
+      <div
+        class="git-content"
+        ref="gitContent"
+        id="gitContent"
+        @keydown="scrollGit"
+      >
+        <div class="scene-container" ref="gitItem0">
+          <ThreejsContainer />
+        </div>
+        <div
+          class="git-item"
+          v-for="(item, index) in imgProjects"
+          :key="item.imgUrl"
+          :ref="'gitItem' + (1 + index)"
         >
-          <img :src="imgUrlRes(item.imgUrl)" :style="{ width: item.width }" />
-        </a>
-      </div>
-
-      <div class="git-item">
-        <img :src="imgUrlRes('kly.png')" style="width: 48rem" />
+          <a
+            :href="'https://github.com/arthur19312/' + item.gitUrl"
+            target="_blank"
+          >
+            <img :src="imgUrlRes(item.imgUrl)" :style="{ width: item.width }" />
+          </a>
+        </div>
+        <div class="git-item" :ref="'gitItem' + (imgProjects.length + 1)">
+          <img :src="imgUrlRes('kly.png')" style="width: 48rem" />
+        </div>
       </div>
     </div>
+    <BottomTab v-model:activeIndex="activeIndex" />
   </div>
 </template>
 
 <script>
-import ThreejsContainer from "@/components/github/ThreejsContainer/index.vue";
+import BottomTab from "@/components/github/bottomTab/index.vue";
+import ThreejsContainer from "@/components/github/threejsContainer/index.vue";
 export default {
-  components: { ThreejsContainer },
+  components: { BottomTab, ThreejsContainer },
   name: "github",
   data() {
     return {
-      contentHeight: "600px",
+      activeIndex: 0,
       imgProjects: [
         {
           gitUrl: "BriefTranslation-EncounterWithTiber",
@@ -34,35 +49,110 @@ export default {
         },
         { gitUrl: "blockcloud", imgUrl: "bc.png", width: "48rem" },
       ],
+      itemPos: [],
     };
+  },
+  watch: {
+    activeIndex(index) {
+      document.getElementById("gitContent").scrollTo({
+        left: this.itemPos[index],
+        behavior: "smooth",
+      });
+    },
   },
   methods: {
     imgUrlRes(url) {
       return "assets/img/github/" + url;
     },
-    updateHeight(height) {
-      this.contentHeight = height.split("px")[0];
+    bindScroll() {
+      document.addEventListener(
+        "DOMMouseScroll",
+        this.throttle(this.realFunc, 0, 200),
+        false
+      );
+      document.addEventListener(
+        "mousewheel",
+        this.throttle(this.realFunc, 0, 200),
+        false
+      );
+    },
+    throttle(func, wait, mustRun) {
+      //var timeout
+      var startTime = new Date();
+      return function () {
+        var context = this,
+          args = arguments,
+          curTime = new Date();
+        //clearTimeout(timeout);
+        if (curTime - startTime >= mustRun) {
+          func.apply(context, args);
+          startTime = curTime;
+        } else {
+          //timeout = setTimeout(func, wait);
+        }
+      };
+    },
+    realFunc() {
+      var detail = event.wheelDelta || event.detail;
+      if (detail < 0) {
+        if (this.activeIndex < 3) {
+          this.activeIndex++;
+        }
+      } else {
+        if (this.activeIndex > 0) {
+          this.activeIndex--;
+        }
+      }
+    },
+    setActiveIndex(index) {
+      this.activeIndex = index;
     },
   },
   computed: {},
   mounted() {
-    /*this.$on("mainContentHeight", (height) => {
-      this.updateHeight(height);
-    });*/
+    for (let i = 0; i < 4; i++) {
+      const item = this.$refs["gitItem" + i];
+      this.itemPos[i] =
+        item.offsetLeft > item.offsetWidth / 2
+          ? item.offsetLeft - item.offsetWidth / 2
+          : 0;
+    }
+    document.onkeydown = (event) => {
+      event.preventDefault()
+      const code = event.code;
+      if (code === "KeyA" || code==="ArrowLeft") {
+        if (this.activeIndex > 0) {
+          this.activeIndex--;
+        }
+      } else if (code === "KeyD" || code==="ArrowRight") {
+        if (this.activeIndex < 3) {
+          this.activeIndex++;
+        }
+      }
+    };
+    this.bindScroll();
+  },
+  unmounted() {
+    document.onkeydown = null;
   },
 };
 </script>
 
 <style lang="less" scoped>
+.git-container {
+  padding: 1rem 2rem;
+  overflow-x: hidden;
+}
 .scroll-container {
-  height: 500px;
+  margin-top: 2%;
+  height: 560px;
   overflow: hidden;
 }
 .git-content {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
-  height: 520px;
+  height: 580px;
   transform: translateX(0);
   padding: 2rem 0;
   margin-right: 3rem;
@@ -75,5 +165,9 @@ export default {
       cursor: pointer;
     }
   }
+}
+.scene-container {
+  display: flex;
+  flex-direction: row;
 }
 </style>

@@ -2,14 +2,14 @@ const s = (sketch) => {
   //要取得多少个不同频率的音量数据
   const BINS = 256;
   //图案里，高频的颜色默认值rgba
-  let COLOR_HIGH = [0, 0, 100, 120];
+  let COLOR_HIGH = [0, 0, 100, 0.8];
   //图案里，中频的颜色默认值rgba
-  let COLOR_MID_1 = [0, 0, 100, 180];
-  let COLOR_MID_2 = [0, 0, 100, 210];
+  let COLOR_MID_1 = [0, 0, 100, 0.9];
+  let COLOR_MID_2 = [0, 0, 100, 0.9];
   //图案里，低频的颜色默认值rgba
-  let COLOR_LOW = [0, 0, 100, 160];
+  let COLOR_LOW = [0, 0, 100, 0.9];
   //图案里，时域波的颜色默认值rgba
-  let COLOR_TIME = [0, 0, 100, 210];
+  let COLOR_TIME = [0, 0, 100, 0.6];
   //存储fft对象
   let fft;
   sketch.setup = () => {
@@ -31,7 +31,7 @@ const s = (sketch) => {
     fft = new p5.FFT(0.8, BINS);
     fft.setInput(source);
     sketch.angleMode(sketch.DEGREES);
-    sketch.colorMode(sketch.HSB);
+    sketch.colorMode(sketch.HSB,360,100,100,1);
     sketch.rectMode(sketch.CENTER);
   };
   //重新载入img
@@ -77,7 +77,7 @@ const s = (sketch) => {
     return array.concat(array.slice().reverse());
   };
   sketch.draw = () => {
-    sketch.background(0, 0, 100, 80);
+    sketch.background(0, 0, 100, 0.9);
     sketch.translate(sketch.width / 2, sketch.height / 2);
     //取得不同频率下的音量
     let spectrum = fft.analyze();
@@ -90,7 +90,7 @@ const s = (sketch) => {
     let waveArr2 = sketch.palindromeArray(spectrum.slice(64, 128));
     sketch.beginShape();
     for (let i = 0; i < waveArr1.length; i++) {
-      let RADIUS = sketch.map(waveArr1[i], 0, 255, 60, 100);
+      let RADIUS = sketch.map(waveArr1[i], 0, 255, 80, 130);
       let angle = sketch.map(i, 0, waveArr1.length, 0, 360);
       let x = RADIUS * sketch.cos(angle);
       let y = RADIUS * sketch.sin(angle);
@@ -100,7 +100,7 @@ const s = (sketch) => {
     sketch.stroke(COLOR_MID_2);
     sketch.beginShape();
     for (let i = 0; i < waveArr2.length; i++) {
-      let RADIUS = sketch.map(waveArr2[i], 0, 255, 60, 170);
+      let RADIUS = sketch.map(waveArr2[i], 0, 255, 80, 210);
       let angle = sketch.map(i, 0, waveArr2.length, 0, 360);
       let x = RADIUS * sketch.cos(angle);
       let y = RADIUS * sketch.sin(angle);
@@ -120,7 +120,7 @@ const s = (sketch) => {
     for (let i = 0; i < lineArr.length; i++) {
       let line = sketch.map(lineArr[i], 0, 255, 0, 2);
       let radius = sketch.map(lineArr[i], 0, 255, -10, 10);
-      sketch.line(0, 180 + radius - line, 0, 180 + radius + line);
+      sketch.line(0, 230 + radius - line, 0, 230 + radius + line);
       sketch.rotate(360 / lineArr.length);
     }
     sketch.pop();
@@ -141,8 +141,8 @@ const s = (sketch) => {
           0,
           1,
           0,
-          160
-        ) + 60;
+          190
+        ) + 80;
       let angle = sketch.map(i, 0, waveform.length, 0, 360);
       let x = RADIUS * sketch.cos(angle);
       let y = RADIUS * sketch.sin(angle);
@@ -156,7 +156,7 @@ const s = (sketch) => {
     let blockArr = sketch.palindromeArray(spectrum.slice(0, 8));
     sketch.beginShape();
     for (let i = 0; i < blockArr.length; i++) {
-      let RADIUS = sketch.map(blockArr[i], 0, 255, 60, 65);
+      let RADIUS = sketch.map(blockArr[i], 0, 255, 80, 86);
       let angle = sketch.map(i, 0, blockArr.length, 0, 360);
       let x = RADIUS * sketch.cos(angle);
       let y = RADIUS * sketch.sin(angle);
@@ -172,11 +172,11 @@ const s = (sketch) => {
   function onImgLoaded(img) {
     img.loadPixels();
     let [color1, color2, color3] = getMainColors(img);
-    COLOR_LOW = [color1.h, color1.s, color1.l, 60];
-    COLOR_MID_1 = [color2.h, color2.s, color2.l, 100];
-    COLOR_MID_2 = [color3.h, color3.s, color3.l, 80];
-    COLOR_HIGH = [color1.h, color1.s, color1.l, 80];
-    COLOR_TIME = [color1.h, color1.s, color1.l, 60];
+    COLOR_LOW = [color1.h, color1.s, color1.l, 0.9];
+    COLOR_MID_1 = [color2.h, color2.s, color2.l, 0.9];
+    COLOR_MID_2 = [color3.h, color3.s, color3.l, 0.9];
+    COLOR_HIGH = [color1.h, color1.s, color1.l, 0.8];
+    COLOR_TIME = [color1.h, color1.s, color1.l, 0.6];
   }
 
   function getMainColors(img) {
@@ -260,7 +260,7 @@ const s = (sketch) => {
       getAverageColor(color3rds),
     ];
   }
-  //根据rgb的数值取得色调，也就是hsv里的h
+  //根据rgb的数值取得色调
   function getHue(red, green, blue) {
     let min = Math.min(Math.min(red, green), blue);
     let max = Math.max(Math.max(red, green), blue);

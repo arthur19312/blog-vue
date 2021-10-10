@@ -3,14 +3,14 @@
     <div id="canvasContainer" ref="threeContainer"></div
   ></a>
   <div class="git-item" style="margin-left: 1rem">
-    <div>
+    <div class="button-container">
       <img
         src="../../../assets/img/github/1.png"
         class="switch-button"
         @click="switchIndex(1)"
       />
     </div>
-    <div>
+    <div class="button-container">
       <img
         src="../../../assets/img/github/2.png"
         class="switch-button"
@@ -46,7 +46,6 @@ export default {
       return "https://github.com/arthur19312/" + url;
     },
   },
-  computed: {},
   mounted() {
     let container = document.getElementById("canvasContainer");
     container.appendChild(renderer.domElement);
@@ -55,11 +54,27 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+#canvasContainer{
+  margin-left: 8rem;
+}
 .switch-button {
   width: 9rem;
   height: 5rem;
-  margin-bottom: 0.4rem;
   cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 1;
+  &:hover{
+    opacity: 0.8;
+  }
+}
+
+.button-container{
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  margin: 0 1rem 1.6rem 1rem;
+  transform: skewX(-9deg);
+  opacity: 0.9;
 }
 </style>

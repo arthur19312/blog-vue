@@ -106,6 +106,7 @@ export default {
     text-decoration-thickness: 1px;
     text-decoration-color: #aaa;
     text-transform: capitalize;
+    letter-spacing: 1px;
 
     &:hover {
       color: #555;

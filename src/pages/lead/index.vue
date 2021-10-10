@@ -57,6 +57,7 @@ export default defineComponent({
   flex-direction: row;
   height: 80%;
   letter-spacing: 4px;
+  margin-top: 3%;
 }
 .rotate-reverse {
   writing-mode: vertical-lr;
@@ -71,7 +72,7 @@ export default defineComponent({
   position: absolute;
   z-index: 3;
   opacity: 0;
-  height: 60%;
+  height: 80%;
   display: block;
   transition: all 0.2s ease;
 }
@@ -101,7 +102,7 @@ export default defineComponent({
 }
 
 .img-container {
-  width: 40rem;
+  width: 50rem;
   position: relative;
 }
 
