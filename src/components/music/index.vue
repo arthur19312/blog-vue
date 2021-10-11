@@ -25,7 +25,7 @@
             @click="checkItem(indexInList)"
             class="nameitem"
           >
-            <span :class="indexInList===index?'sign':''">{{ item }}</span>
+            <span :class="indexInList === index ? 'sign' : ''">{{ item }}</span>
           </div>
         </div>
       </div>
@@ -165,11 +165,12 @@ export default {
 .namelist-ctn {
   width: 28rem;
   overflow: hidden;
-  margin-left: 12rem;
+  margin-left: 8rem;
+  margin-top: 2rem;
 }
 
-.sign::before{
-  content:'';
+.sign::before {
+  content: "";
   width: 0;
   height: 0;
   margin-right: 8px;
@@ -184,21 +185,20 @@ export default {
   font-size: 12px;
   line-height: 26px;
   width: 30rem;
-  height: 378px;
+  height: 352px;
   overflow-y: scroll;
   text-transform: uppercase;
   .nameitem {
     cursor: pointer;
-    padding: 1rem;
+    padding: 14px;
     letter-spacing: 8px;
     font-weight: 500;
     &:hover {
       color: #666;
-      .sign::before{
+      .sign::before {
         border-left-color: #666;
       }
     }
   }
 }
-
 </style>

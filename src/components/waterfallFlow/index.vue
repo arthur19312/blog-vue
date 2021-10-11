@@ -126,11 +126,11 @@ export default {
 }
 .item-1,
 .item-4 {
-  padding-top: 1.5rem;
+  padding-top: 2.5rem;
 }
 .item-2,
 .item-3 {
-  padding-top: 0rem;
+  padding-top: 1rem;
 }
 
 @media only screen and (max-width: 1350px) {

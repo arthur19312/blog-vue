@@ -31,7 +31,7 @@ const s = (sketch) => {
     fft = new p5.FFT(0.8, BINS);
     fft.setInput(source);
     sketch.angleMode(sketch.DEGREES);
-    sketch.colorMode(sketch.HSB,360,100,100,1);
+    sketch.colorMode(sketch.HSB, 360, 100, 100, 1);
     sketch.rectMode(sketch.CENTER);
   };
   //重新载入img

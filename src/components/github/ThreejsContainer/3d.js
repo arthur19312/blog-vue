@@ -14,8 +14,8 @@ import { AfterimagePass } from "./ThreeJs/AfterimagePass";
 
 let index = 0;
 
-const CanvasSizeX = 600,
-  CanvasSizeY = 480;
+const CanvasSizeX = 500,
+  CanvasSizeY = 400;
 
 let renderer = new WebGLRenderer({
   antialias: true,

@@ -118,13 +118,13 @@ export default {
           : 0;
     }
     document.onkeydown = (event) => {
-      event.preventDefault()
+      event.preventDefault();
       const code = event.code;
-      if (code === "KeyA" || code==="ArrowLeft") {
+      if (code === "KeyA" || code === "ArrowLeft") {
         if (this.activeIndex > 0) {
           this.activeIndex--;
         }
-      } else if (code === "KeyD" || code==="ArrowRight") {
+      } else if (code === "KeyD" || code === "ArrowRight") {
         if (this.activeIndex < 3) {
           this.activeIndex++;
         }
@@ -140,21 +140,19 @@ export default {
 
 <style lang="less" scoped>
 .git-container {
-  padding: 1rem 2rem;
+  padding: 3rem 2rem 0 2rem;
   overflow-x: hidden;
 }
 .scroll-container {
-  margin-top: 2%;
-  height: 560px;
+  height: 35rem;
   overflow: hidden;
 }
 .git-content {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
-  height: 580px;
+  height: 37rem;
   transform: translateX(0);
-  padding: 2rem 0;
   margin-right: 3rem;
 
   .git-item {
