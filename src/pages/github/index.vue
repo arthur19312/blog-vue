@@ -140,7 +140,7 @@ export default {
 
 <style lang="less" scoped>
 .git-container {
-  padding: 3rem 2rem 0 2rem;
+  padding: 3rem 2rem 1rem 2rem;
   overflow-x: hidden;
 }
 .scroll-container {
