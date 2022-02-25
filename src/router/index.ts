@@ -11,7 +11,7 @@ export const routes = [
   {
     path: "/lead",
     component: lead,
-    alias: ["/", "/index", "/home", "/potfolio"],
+    alias: ["/index", "/home", "/potfolio"],
   },
   {
     path: "/github",
@@ -31,7 +31,7 @@ export const routes = [
   {
     path: "/music",
     component: music,
-    alias: ["/dj", "/cloudmusic", "/player", "/music-player"],
+    alias: ["/", "/dj", "/cloudmusic", "/player", "/music-player"],
   },
   {
     path: "/kaomoji",

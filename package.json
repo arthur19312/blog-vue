@@ -9,7 +9,8 @@
   "dependencies": {
     "rollup-plugin-copy": "^3.4.0",
     "vue": "^3.0.5",
-    "vue-router": "^4.0.11"
+    "vue-router": "^4.0.11",
+    "blur-cursor": "^1.0.3"
   },
   "devDependencies": {
     "@types/less": "^3.0.3",

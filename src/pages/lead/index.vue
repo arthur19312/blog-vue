@@ -115,10 +115,4 @@ export default defineComponent({
   transition: 0.8s;
   display: block;
 }
-/*
-.home-img {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 0;
-}*/
 </style>
