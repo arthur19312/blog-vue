@@ -5,6 +5,7 @@ const github = () => import("@/pages/github/index.vue");
 const article = () => import("@/pages/article/index.vue");
 const diary = () => import("@/pages/diary/index.vue");
 const music = () => import("@/pages/music/index.vue");
+const record = () => import("@/pages/record/index.vue");
 const kaomoji = () => import("@/pages/kaomoji/index.vue");
 
 export const routes = [
@@ -32,6 +33,11 @@ export const routes = [
     path: "/music",
     component: music,
     alias: ["/", "/dj", "/cloudmusic", "/player", "/music-player"],
+  },
+  {
+    path: "/record",
+    component: record,
+    alias: ["/record", "/records"],
   },
   {
     path: "/kaomoji",

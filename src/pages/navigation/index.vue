@@ -32,6 +32,7 @@ export default {
         { name: "potfolio" },
         { name: "github" },
         { name: "music" },
+        { name: "record" },
         { name: "travels" },
         { name: "kaomoji" },
       ],

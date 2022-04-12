@@ -5,14 +5,14 @@
   <div class="git-item" style="margin-left: 1rem">
     <div class="button-container">
       <img
-        src="../../../assets/img/github/1.png"
+        src="/assets/img/github/1.png"
         class="switch-button"
         @click="switchIndex(1)"
       />
     </div>
     <div class="button-container">
       <img
-        src="../../../assets/img/github/2.png"
+        src="/assets/img/github/2.png"
         class="switch-button"
         @click="switchIndex(2)"
       />
@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#canvasContainer{
+#canvasContainer {
   margin-left: 8rem;
 }
 .switch-button {
@@ -64,12 +64,12 @@ export default {
   cursor: pointer;
   transition: all 0.2s ease;
   opacity: 1;
-  &:hover{
+  &:hover {
     opacity: 0.8;
   }
 }
 
-.button-container{
+.button-container {
   width: fit-content;
   height: fit-content;
   position: relative;

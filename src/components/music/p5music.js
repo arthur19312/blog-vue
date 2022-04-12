@@ -23,7 +23,7 @@ const s = (sketch) => {
     //取得AudioContext
     sketch.audioContext_ = sketch.getAudioContext();
     //取得声音dom，注意vue项目里只能有一个audio tag，切换歌曲时只变src
-    let audioDom = document.querySelector("audio");
+    let audioDom = document.getElementById("musicAudio");
     //根据声音dom创建web audio API source node, 并且连接主输出
     const source = sketch.audioContext_.createMediaElementSource(audioDom);
     source.connect(p5.soundOut);

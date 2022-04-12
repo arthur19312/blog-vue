@@ -8,6 +8,7 @@
         </div>
         <div>
           <audio
+            id="musicAudio"
             :src="mp3Src"
             type="audio/mpeg"
             controls
@@ -34,7 +35,7 @@
 </template>
 <script>
 import { p5music } from "./p5music";
-import Cursor from "blur-cursor";
+//import Cursor from "blur-cursor";
 export default {
   props: {},
   data() {
@@ -58,7 +59,7 @@ export default {
         "mystery_of_love",
       ],
       GLOBAL_P5_AUDIO: {},
-      cursor: {},
+      //cursor: {},
     };
   },
   computed: {
@@ -79,7 +80,7 @@ export default {
     checkItem(index) {
       index = index % this.nameList.length;
       this.index = index;
-      let audioDom = document.getElementsByTagName("audio")[0];
+      let audioDom = document.getElementById("musicAudio");
       audioDom.src = "/assets/music/" + this.nameList[index] + "/index.mp3";
       setTimeout(() => {
         audioDom.play();
@@ -102,16 +103,16 @@ export default {
     },
   },
   mounted: function () {
-    this.cursor = new Cursor({ size: 32, blurSize: 10 });
+    //this.cursor = new Cursor({ size: 32, blurSize: 10 });
     this.$nextTick(function () {
       this.GLOBAL_P5_AUDIO = p5music();
-      this.cursor.init();
+      //this.cursor.init();
     });
-    document.getElementsByTagName("audio")[0].volume = 0.5;
+    document.getElementById("musicAudio").volume = 0.5;
   },
   beforeUnmount() {
     document.getElementById("sketch").innerHTML = "";
-    this.cursor.destroy();
+    //this.cursor.destroy();
   },
 };
 </script>
