@@ -56,7 +56,7 @@ export default {
 }
 
 #sketchRecord {
-  width: 800px;
-  height: 600px;
+  width: 1250px;
+  height: 500px;
 }
 </style>

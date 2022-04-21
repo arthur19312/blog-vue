@@ -1,22 +1,25 @@
 const s = (sketch) => {
   const BINS = 64;
   const CELL_SIZE = BINS * 2;
-  const CELL_PADDING = 15;
-  const CELL_BORDER = CELL_SIZE + CELL_PADDING * 2;
+  const CELL_PADDING_ROW = 36;
+  const CELL_PADDING__COLUMN = 20;
+  const CELL_BORDER_ROW = CELL_SIZE + CELL_PADDING_ROW * 2;
+  const CELL_BORDER_COLUMN = CELL_SIZE + CELL_PADDING__COLUMN * 2;
   let fft, amplitude;
   let rowIndex = 1,
     columnIndex = 1;
-  let rowNum = 5,
+  let rowNum = 6,
     columnNum = 3;
   let drawCount = 0;
 
   sketch.setup = () => {
-    sketch.createCanvas(800, 600);
+    sketch.createCanvas(1250, 500);
+    sketch.frameRate(30);
     sketch.audioContext_ = sketch.getAudioContext();
     let audioDom = document.querySelector("#audioRecord");
     const source = sketch.audioContext_.createMediaElementSource(audioDom);
     source.connect(p5.soundOut);
-    fft = new p5.FFT(0.8, BINS);
+    fft = new p5.FFT(0.3, BINS);
     amplitude = new p5.Amplitude();
     fft.setInput(source);
     sketch.angleMode(sketch.DEGREES);
@@ -40,31 +43,31 @@ const s = (sketch) => {
   };
   sketch.draw = () => {
     const spectrum = fft.analyze();
-    if (spectrum.every((i) => i == 0)) {
+    if (spectrum.indexOf(0) < 10) {
       return;
     }
     const zeroIndex = spectrum.indexOf(0);
     const arr = spectrum.slice(0, zeroIndex);
 
     const level = amplitude.getLevel();
-    const h = sketch.map(level, 0, 1, 190, 360);
+    const h = sketch.map(level, 0, 1, 190, 300);
     const s = sketch.map(level, 0, 1, 10, 100);
 
     drawCount++;
     sketch.testPosition();
     sketch.background(0, 0, 100, 0.008);
-    sketch.strokeWeight(1);
+    sketch.strokeWeight(2);
     sketch.translate(
-      (rowIndex - 1) * CELL_BORDER + CELL_BORDER / 2,
-      (columnIndex - 1) * CELL_BORDER + CELL_BORDER / 2
+      (rowIndex - 1) * CELL_BORDER_ROW + CELL_BORDER_ROW / 2,
+      (columnIndex - 1) * CELL_BORDER_COLUMN + CELL_BORDER_COLUMN / 2
     );
     sketch.push();
     const n = arr.length;
     for (let i = 1; i <= n; i++) {
-      const weight = sketch.map(arr[i], 0, 255, 100, 0);
+      const weight = sketch.map(arr[i], 0, 255, 100, 50);
       const radius = n - i;
-      const x = radius * sketch.cos(drawCount);
-      const y = radius * sketch.sin(drawCount);
+      const x = 2 * radius * sketch.cos(drawCount);
+      const y = 2 * radius * sketch.sin(drawCount);
       sketch.stroke(h, s, weight, 0.4);
       sketch.point(x, y);
     }
