@@ -33,6 +33,7 @@ export default {
         { name: "github" },
         { name: "music" },
         { name: "record" },
+        { name: "sun" },
         { name: "travels" },
         { name: "kaomoji" },
       ],

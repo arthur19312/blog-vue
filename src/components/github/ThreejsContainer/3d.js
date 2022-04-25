@@ -6,11 +6,11 @@ import {
   PointLight,
   Fog,
   Vector2,
-} from "./ThreeJs/three.module";
-import { UnrealBloomPass } from "./ThreeJs/UnrealBloomPass";
-import { RenderPass } from "./ThreeJs/RenderPass";
-import { EffectComposer } from "./ThreeJs/EffectComposer";
-import { AfterimagePass } from "./ThreeJs/AfterimagePass";
+} from "@/lib/ThreeJs/three.module";
+import { UnrealBloomPass } from "@/lib/ThreeJs/UnrealBloomPass";
+import { RenderPass } from "@/lib/ThreeJs/RenderPass";
+import { EffectComposer } from "@/lib/ThreeJs/EffectComposer";
+import { AfterimagePass } from "@/lib/ThreeJs/AfterimagePass";
 
 let index = 0;
 

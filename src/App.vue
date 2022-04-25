@@ -18,12 +18,12 @@ export default defineComponent({
       this.displayFlag = flag;
     },
   },
-  mounted(){
-    document.ondragstart=(e)=>{
-      e.preventDefault()
-      return false
-    }
-  }
+  mounted() {
+    document.ondragstart = (e) => {
+      e.preventDefault();
+      return false;
+    };
+  },
 });
 </script>
 
@@ -35,7 +35,7 @@ export default defineComponent({
   font-size: 14px;
   text-align: center;
   color: #2c3e50;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 body {
