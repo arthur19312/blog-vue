@@ -41,9 +41,9 @@ export const routes = [
     alias: ["/record", "/records"],
   },
   {
-    path: "/sun",
+    path: "/moon",
     component: sun,
-    alias: ["/sun", "/anthony-howe"],
+    alias: ["/moon", "/sun", "/anthony-howe"],
   },
   {
     path: "/kaomoji",

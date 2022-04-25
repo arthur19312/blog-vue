@@ -5,6 +5,12 @@ const Z = 0;
 const N = 36;
 const RADIUS = 30;
 const CIRCLE_RADIUS = 2;
+const baseMaterial = new THREE.MeshStandardMaterial({
+  color: 0x5588dd,
+  metalness: 0.9,
+  roughness: 0.22,
+});
+var animateId;
 
 var scene, renderer, camera;
 const meshes = [];
@@ -26,7 +32,7 @@ function display() {
   const light = new THREE.DirectionalLight(0xddddff);
   scene.add(light);
 
-  const point = new THREE.PointLight(0xff3300, 20, 100);
+  const point = new THREE.PointLight(0xff4400, 20, 100);
   point.position.set(0, 0, 60);
   scene.add(point);
   const point2 = new THREE.PointLight(0x0055aa, 5, 200);
@@ -49,12 +55,9 @@ function display() {
 
   const points = curve.getPoints(N);
 
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
-  const ellipse = new THREE.Line(geometry, material);
-  scene.add(ellipse);
-
-  const boxGeometry = new THREE.BoxGeometry(3, 6, 1);
+  const ringGeom = new THREE.TorusGeometry(RADIUS, 1, 4, RADIUS);
+  const ring = new THREE.Line(ringGeom, baseMaterial);
+  scene.add(ring);
 
   const baseGroup = getQuatGroup();
 
@@ -73,7 +76,7 @@ function display() {
 }
 
 function animate() {
-  requestAnimationFrame(animate);
+  animateId = requestAnimationFrame(animate);
 
   for (let i = 0; i < N; i++) {
     meshes[i].rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.005);
@@ -81,7 +84,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-export { display, renderer };
+export { display, renderer, animateId };
 
 function getQuatGroup() {
   const baseGroup = getBaseGroup();
@@ -104,12 +107,6 @@ function getQuatGroup() {
 }
 
 function getBaseGroup() {
-  const baseMaterial = new THREE.MeshStandardMaterial({
-    color: 0x5588dd,
-    metalness: 0.9,
-    roughness: 0.22,
-  });
-
   const cylinGeom = new THREE.CylinderGeometry(
     0.3,
     0.3,

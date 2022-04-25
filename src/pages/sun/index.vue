@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { display, renderer } from "./3d";
+import { display, renderer, animateId } from "./3d";
 export default defineComponent({
   name: "sun",
   data() {
@@ -16,6 +16,9 @@ export default defineComponent({
     const dom = document.getElementById("sun");
     dom.appendChild(renderer.domElement);
     display();
+  },
+  unmounted() {
+    cancelAnimationFrame(animateId);
   },
 });
 </script>
