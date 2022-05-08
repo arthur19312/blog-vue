@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/src/assets/font/iconfont.css">
+  <link rel="stylesheet" href="/src/assets/font/iconfont.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
   <title>Arthur Space</title>
@@ -14,6 +14,26 @@
 <body>
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
+  <script id="vshader" type="x-shader/x-vertex">
+    attribute vec4 a_Position;
+    attribute float a_PointSize;
+      void main() {
+        gl_Position = a_Position;
+        gl_PointSize = a_PointSize;
+      }
+    </script>
+
+  <script id="fshader" type="x-shader/x-fragment">
+    precision lowp float;  
+    void main() {
+        float dist = distance(gl_PointCoord,vec2(0.5,0.5));
+        if(dist < 0.5){
+          gl_FragColor = vec4(dist*2.0,0.5,dist,1.0);
+        }else{
+          discard;
+        }
+      }
+    </script>
 </body>
 
 </html>

@@ -34,6 +34,7 @@ export default {
         { name: "music" },
         { name: "record" },
         { name: "moon" },
+        { name: "webgl" },
         { name: "travels" },
         { name: "kaomoji" },
       ],

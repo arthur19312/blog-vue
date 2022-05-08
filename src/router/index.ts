@@ -6,7 +6,8 @@ const article = () => import("@/pages/article/index.vue");
 const diary = () => import("@/pages/diary/index.vue");
 const music = () => import("@/pages/music/index.vue");
 const record = () => import("@/pages/record/index.vue");
-const sun = () => import("@/pages/sun/index.vue");
+const moon = () => import("@/pages/moon/index.vue");
+const webgl = () => import("@/pages/webgl/index.vue");
 const kaomoji = () => import("@/pages/kaomoji/index.vue");
 
 export const routes = [
@@ -42,8 +43,13 @@ export const routes = [
   },
   {
     path: "/moon",
-    component: sun,
+    component: moon,
     alias: ["/moon", "/sun", "/anthony-howe"],
+  },
+  {
+    path: "/webgl",
+    component: webgl,
+    alias: ["/webgl"],
   },
   {
     path: "/kaomoji",

@@ -1,19 +1,19 @@
 <template>
-  <div class="sun" id="sun"></div>
+  <div class="moon" id="moon"></div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import { display, renderer, animateId } from "./3d";
 export default defineComponent({
-  name: "sun",
+  name: "moon",
   data() {
     return {};
   },
   methods: {},
   computed: {},
   mounted() {
-    const dom = document.getElementById("sun");
+    const dom = document.getElementById("moon");
     dom.appendChild(renderer.domElement);
     display();
   },
@@ -24,7 +24,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.sun {
+.moon {
   position: absolute;
   width: 100%;
   height: 100%;

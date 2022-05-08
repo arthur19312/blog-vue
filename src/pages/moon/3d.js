@@ -25,7 +25,7 @@ camera.position.z = 200;
 renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.domElement.id = "sunCanvas";
+renderer.domElement.id = "moonCanvas";
 
 function display() {
   scene = new THREE.Scene();
