@@ -25,10 +25,12 @@
 
   <script id="fshader" type="x-shader/x-fragment">
     precision lowp float;  
+    uniform float u_FragColor;
     void main() {
         float dist = distance(gl_PointCoord,vec2(0.5,0.5));
+        float color = dist*u_FragColor*10.0;
         if(dist < 0.5){
-          gl_FragColor = vec4(dist*2.0,0.5,dist,1.0);
+          gl_FragColor = vec4(color,color,color,1.0);
         }else{
           discard;
         }
