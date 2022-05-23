@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -16,28 +16,28 @@
   <script type="module" src="/src/main.ts"></script>
   <script id="vshader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
+    attribute float a_PointSize;
       void main() {
         gl_Position = a_Position;
-        gl_PointSize = 2.4;
+        gl_PointSize = a_PointSize;
       }
     </script>
-  <script id="vshader-xn" type="x-shader/x-vertex">
-        attribute vec4 a_Position;
-          void main() {
-            gl_Position = a_Position;
-        gl_PointSize = 2.4;
-          }
-  </script>
 
   <script id="fshader" type="x-shader/x-fragment">
+    precision lowp float;  
+    uniform float u_FragColor;
     void main() {
-          gl_FragColor = vec4(1.0,(gl_FragCoord.x-1000.0)/2400.0+0.3,0.0,1.0-(gl_FragCoord.x-1000.0)/1600.0);
+        float dist = distance(gl_PointCoord,vec2(0.5,0.5));
+        float color = dist*u_FragColor*10.0;
+        float r = (dist+color)*2.0;
+        float g = 1.0-color;
+        float b = dist;
+        if(dist < 0.5){
+          gl_FragColor = vec4(r,g,b,1.0);
+        }else{
+          discard;
+        }
       }
-    </script>
-  <script id="fshader-xn" type="x-shader/x-fragment">
-        void main() {
-              gl_FragColor = vec4(1.0,0.6-gl_FragCoord.x/800.0,0.0,1.0);
-          }
     </script>
 </body>
 

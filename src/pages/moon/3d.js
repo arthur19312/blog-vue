@@ -36,10 +36,10 @@ function display() {
   point.position.set(0, 0, 60);
   scene.add(point);
   const point2 = new THREE.PointLight(0x0055aa, 5, 200);
-  point2.position.set(0, 0, -70);
+  point2.position.set(10, 10, 60);
   scene.add(point2);
   const point3 = new THREE.PointLight(0x0011ff, 2, 0);
-  point2.position.set(10, 10, 60);
+  point3.position.set(-10, -10, -10);
   scene.add(point3);
 
   const curve = new THREE.EllipseCurve(
@@ -79,7 +79,7 @@ function animate() {
   animateId = requestAnimationFrame(animate);
 
   for (let i = 0; i < N; i++) {
-    meshes[i].rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.005);
+    meshes[i].rotateOnAxis(new THREE.Vector3(1, 0, 0), 0.008);
   }
   renderer.render(scene, camera);
 }
