@@ -50,6 +50,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.header{
+  margin-top: 2rem;
+}
+
 .content {
   text-align: center;
   padding: 100px;

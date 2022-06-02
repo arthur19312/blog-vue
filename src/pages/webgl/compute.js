@@ -21,7 +21,7 @@ export const main = () => {
     drawXnList(xnList);
     drawRList(rList);
     if (r < R_ITERATIONS) {
-      setTimeout(tick, 10);
+      setTimeout(tick, 20);
     }
     r = lowp(r + STEP, 3);
   };

@@ -1,7 +1,6 @@
 <template>
   <div class="intro-container">
     <avatar :imgSrc="avatarUrl" name="ARTHUR19312" />
-    <div class="info">————El Psy Congroo</div>
     <div class="link">
       <IconLink
         v-for="item in iconLinks"
@@ -43,8 +42,8 @@ export default {
           href: "https://steamcommunity.com/profiles/76561198454211888",
           scale: "1.25rem",
         },
-        { className: "weibo", color: "#e05730", href: "?weibo=ARTHUR19312" },
-        { className: "qq", color: "#61c5ef", href: "?qq=413389361" },
+        { className: "weibo", color: "#e05730", href: "https://weibo.com/u/6861834736" },
+        // { className: "qq", color: "#61c5ef", href: "?qq=413389361" },
       ],
     };
   },
@@ -53,22 +52,14 @@ export default {
 
 <style lang="less" scoped>
 .intro-container {
-  width: 10rem;
   text-align: left;
-  margin-top: 8rem;
-
-  .info {
-    color: #bbb;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    margin-top: 2rem;
-  }
+  display: flex;
+  gap: 2rem;
 
   .link {
+    margin-top: 0.75rem;
     display: flex;
-    flex-direction: row;
     justify-content: start;
-    margin-top: 3rem;
     line-height: 1.5rem;
 
     .iconfont {

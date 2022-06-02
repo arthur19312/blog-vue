@@ -1,5 +1,14 @@
 <template>
   <div class="container" :style="{ height }">
+    <div class="svg-ctn">
+      <div
+        class="rotate"
+        v-for="(item, index) in '2022/02/02'.split('')"
+        :key="index"
+      >
+        <img :src="svgSrc(item)" style="width:20%"/>
+      </div>
+    </div>
     <div class="img-container">
       <div
         class="left-slider slider"
@@ -13,6 +22,8 @@
       ></div>
       <img :src="imgSrc" class="lead-img" ref="leadImg" @load="updateHeight" />
     </div>
+
+    <div class="rotate-reverse">2022/02/02 深圳</div>
   </div>
 </template>
 
@@ -38,12 +49,15 @@ export default defineComponent({
     },
     provideHeight() {
       this.$emit("mainContentHeight", this.height);
+    },svgSrc: function (num) {
+      return `/assets/lead/${num === "/" ? "separate" : num}.svg`;
     },
   },
   computed: {
     imgSrc: function () {
       return "/assets/img/home/" + (this.index + 1) + ".jpg";
     },
+    
   },
   mounted() {
     this.updateHeight();
@@ -51,22 +65,41 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .container {
   display: flex;
   flex-direction: row;
   height: 80%;
   letter-spacing: 4px;
-  margin-top: 3%;
+  margin-top: 6rem;
+}
+.svg-ctn{
+  position: relative;
+  left:180px;
+}
+.rotate {
+  padding: 0 1rem;
+  color: gray;
+  text-align: start;
+  font-size: 1.1rem;
+  letter-spacing: 0.8rem;
+  font-style: oblique;
+
+
+  &:not(:first-child) {
+    margin-top: -2rem;
+  }
+  &:nth-child(even){
+    margin-left: 1rem;
+  }
 }
 .rotate-reverse {
   writing-mode: vertical-lr;
-  writing-mode: tb-lr;
   padding: 0 1rem;
-  color: gray;
+  color: #bbb;
   text-align: end;
-  font-style: italic;
   font-size: 0.9rem;
+  font-style: oblique;
 }
 .slider {
   position: absolute;

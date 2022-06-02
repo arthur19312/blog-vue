@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
+const nav = () => import("@/pages/navigation/index.vue");
 const lead = () => import("@/pages/lead/index.vue");
 const github = () => import("@/pages/github/index.vue");
 const article = () => import("@/pages/article/index.vue");
@@ -12,9 +13,14 @@ const kaomoji = () => import("@/pages/kaomoji/index.vue");
 
 export const routes = [
   {
+    path: "/navigation",
+    component: nav,
+    alias: ["/", "/index", "/nav", "/navigation", "/router", "/menu"],
+  },
+  {
     path: "/lead",
     component: lead,
-    alias: ["/index", "/home", "/potfolio"],
+    alias: ["/home", "/potfolio"],
   },
   {
     path: "/github",
@@ -34,7 +40,7 @@ export const routes = [
   {
     path: "/music",
     component: music,
-    alias: ["/", "/dj", "/cloudmusic", "/player", "/music-player"],
+    alias: ["/dj", "/cloudmusic", "/player", "/music-player"],
   },
   {
     path: "/record",

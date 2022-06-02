@@ -1,10 +1,11 @@
 <template>
-  <Navigation @displayContent="displayContent($event)" />
-  <Content :style="{ display: displayFlag ? 'flex' : 'none' }" />
+  <!-- <Navigation @displayContent="displayContent($event)" /> -->
+  <!-- <Content :style="{ display: displayFlag ? 'flex' : 'none' }" /> -->
+  <Content  />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "App",
@@ -13,11 +14,11 @@ export default defineComponent({
       displayFlag: true,
     };
   },
-  methods: {
-    displayContent(flag: boolean) {
-      this.displayFlag = flag;
-    },
-  },
+  // methods: {
+  //   displayContent(flag: boolean) {
+  //     this.displayFlag = flag;
+  //   },
+  // },
   mounted() {
     document.ondragstart = (e) => {
       e.preventDefault();
