@@ -2,20 +2,29 @@
   "name": "blog-vue",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "serve": "npm run build && vite preview"
+    "dev": "vite-ssr --port 1337 --force",
+    "dev:spa": "vite --port 1337 --force",
+    "build": "rm -rf dist && vite-ssr build",
+    "serve": "npm run build && node node-server/index"
   },
   "dependencies": {
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "node-fetch": "^2.6.1",
     "rollup-plugin-copy": "^3.4.0",
-    "vue": "^3.0.5",
-    "vue-router": "^4.0.11",
-    "blur-cursor": "^1.0.3"
+    "blur-cursor": "^1.0.3",
+    "@vitejs/plugin-vue": "^2.0.1",
+    "@vue/compiler-sfc": "^3.2.26",
+    "@vue/server-renderer": "^3.2.26",
+    "@vueuse/head": "^0.6.0",
+    "vite": "2.9.x",
+    "vite-ssr": "^0.16.0",
+    "vue": "^3.2.26",
+    "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@types/less": "^3.0.3",
     "@types/node": "^16.7.2",
-    "@vitejs/plugin-vue": "^1.3.0",
     "@vue/compiler-sfc": "^3.0.5",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",

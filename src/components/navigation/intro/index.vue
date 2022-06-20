@@ -17,7 +17,7 @@
 <script lang="ts">
 import Avatar from "@/components/navigation/intro/avatar.vue";
 import IconLink from "@/components/navigation/intro/iconLink.vue";
-import avatarUrl from "/assets/img/avatar/kk.jpg";
+import avatarUrl from "@/assets/img/avatar/kk.jpg";
 
 export default {
   components: { Avatar, IconLink },
