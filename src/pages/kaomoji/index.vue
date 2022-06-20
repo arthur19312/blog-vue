@@ -1,5 +1,5 @@
 <template>
-  <div @mouseleave.stop="clearPop">
+  <div class="ctn" @mouseleave.stop="clearPop">
     <div class="kaomoji-container">
       <KaomojiItem
         v-for="item in mojiList"
@@ -38,7 +38,6 @@ export default {
 
       tipOffsetX: 0,
       tipOffsetY: 0,
-      //tip:{X,Y}
       tipList: new Set(),
     };
   },
@@ -91,6 +90,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.ctn{
+  padding: 4rem 6rem 4rem 3rem;
+}
+
 .kaomoji-container {
   display: flex;
   flex-direction: row;

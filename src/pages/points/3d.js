@@ -1,15 +1,15 @@
-import { initShaders } from "./utils";
+import { initShaders } from "../../lib/webgl/util";
+import VSHADER_SOURCE from './point.vert'
+import FSHADER_SOURCE from "./point.frag";
 
 export const main = () => {
-  const canvas = document.getElementById("webgl-canvas");
+  const canvas = document.getElementById("webgl-points");
   const gl = canvas.getContext("webgl");
   if (!gl) {
     console.log("Failed2get rendering context 4 webgl");
     return;
   }
 
-  const VSHADER_SOURCE = document.getElementById("vshader").innerText;
-  const FSHADER_SOURCE = document.getElementById("fshader").innerText;
 
   const program = initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
   if (!program) {

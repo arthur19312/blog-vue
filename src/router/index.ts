@@ -8,8 +8,10 @@ const diary = () => import("@/pages/diary/index.vue");
 const music = () => import("@/pages/music/index.vue");
 const record = () => import("@/pages/record/index.vue");
 const moon = () => import("@/pages/moon/index.vue");
-const webgl = () => import("@/pages/webgl/index.vue");
+const logicfunc = () => import("@/pages/logicfunc/index.vue");
+const points = () => import("@/pages/points/index.vue");
 const kaomoji = () => import("@/pages/kaomoji/index.vue");
+const metaball = () => import("@/pages/metaball/index.vue");
 
 export const routes = [
   {
@@ -53,13 +55,22 @@ export const routes = [
     alias: ["/moon", "/sun", "/anthony-howe"],
   },
   {
-    path: "/webgl",
-    component: webgl,
-    alias: ["/webgl"],
+    path: "/logicfunc",
+    component: logicfunc,
+    alias: ["/logicfunc"],
+  },
+  {
+    path: "/points",
+    component: points,
+    alias: ["/points", "/point"],
   },
   {
     path: "/kaomoji",
     component: kaomoji,
+  },
+  {
+    path: "/metaball",
+    component: metaball,
   },
 ];
 

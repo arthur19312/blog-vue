@@ -41,16 +41,21 @@ export default {
     return {
       // openFlag: false,
       links: [
+        {
+          name: "metaball",
+          desc: "Memory of IntelliJ's homepage ",
+          img: "",
+        },
         { name: "music", desc: "P5 player for favorite music", img: "" },
 
         { name: "moon", desc: "A practice for Anthony Howe", img: "" },
         {
-          route: "webgl",
+          route: "logicfunc",
           name: "logic Func",
           desc: "A fractal function by webgl view & svg axis",
           img: "",
         },
-
+        
         { name: "travels", desc: "Waterfall flow for my footprints", img: "" },
         {
           name: "github",
@@ -64,7 +69,13 @@ export default {
           desc: "A quiet P5 audio recorder for meditation",
           img: "",
         },
-        { name: "potfolio", desc: "An overview of photos", img: "" },
+        { name: "potfolio", desc: "Overview of photos", img: "" },
+        {
+          name: "points",
+          desc: "First practice in webgl",
+          img: "",
+        },
+        
       ],
     };
   },
@@ -151,7 +162,7 @@ export default {
 
   &:hover {
     .num {
-      letter-spacing: 0.2rem;
+      letter-spacing: 1.2rem;
     }
 
     .title {

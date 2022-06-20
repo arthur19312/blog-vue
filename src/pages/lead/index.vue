@@ -62,6 +62,8 @@ export default defineComponent({
   mounted() {
     this.updateHeight();
   },
+
+  // strokeDasharray={`${circumference * circlePercent}, ${circumference}`}
 });
 </script>
 
@@ -147,5 +149,15 @@ export default defineComponent({
   left: 0%;
   transition: 0.8s;
   display: block;
+}
+
+path {
+  transition: all 2s;
+     stroke-dasharray:314,314;
+     stroke-dashoffset:314;
+}
+
+svg:hover path{
+    stroke-dashoffset:0;
 }
 </style>

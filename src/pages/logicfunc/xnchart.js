@@ -1,5 +1,7 @@
-import { initShaders, lowp, normalize } from "./utils";
-import { XN_ITERATIONS, R_ITERATIONS } from "./compute";
+import { initShaders, normalize } from "./utils";
+import { XN_ITERATIONS } from "./compute";
+import VSHADER_SOURCE from './xn.vert'
+import FSHADER_SOURCE from "./xn.frag";
 let gl, program;
 
 export const main = () => {
@@ -40,9 +42,6 @@ export const init = () => {
     console.log("Failed2get rendering context 4 webgl");
     return null;
   }
-
-  const VSHADER_SOURCE = document.getElementById("vshader-xn").innerText;
-  const FSHADER_SOURCE = document.getElementById("fshader-xn").innerText;
 
   program = initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
   if (!program) {
