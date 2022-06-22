@@ -14,18 +14,20 @@ var animateId;
 
 var scene, renderer, camera;
 const meshes = [];
-camera = new THREE.PerspectiveCamera(
-  50,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera.position.z = 200;
+if(!import.meta.env.SSR) {
+  camera = new THREE.PerspectiveCamera(
+      50,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+  );
+  camera.position.z = 200;
 
-renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.domElement.id = "moonCanvas";
+  renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.domElement.id = "moonCanvas";
+}
 
 function display() {
   scene = new THREE.Scene();
