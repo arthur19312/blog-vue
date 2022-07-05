@@ -1,15 +1,19 @@
 export const VSHADER_SOURCE_TRI = `
 attribute vec2 a_position;
 uniform mat3 u_xform;
+varying vec2 v_initialPosition;
 void main() {
   vec3 pos = vec3(a_position.x,a_position.y,1.0);
   vec3 propos = u_xform * pos;
   gl_Position = vec4(propos.x,propos.y, 0.0, 1.0);
+  v_initialPosition = a_position;
 }`;
 
 export const FSHADER_SOURCE_TRI = `
+precision lowp float;
+varying vec2 v_initialPosition;
 void main(){
-  gl_FragColor = vec4(.4, .9, .4, .9);
+  gl_FragColor = vec4( (v_initialPosition.y-.3)*1.8, .9, (.9-v_initialPosition.y)*1.6, .9);
 }
 `;
 
@@ -91,7 +95,7 @@ export const FSHADER_SOURCE_BALL = `
               v += r*r/(dx*dx + dy*dy);
           }
           if (v > .9) {
-              gl_FragColor = vec4(x/WIDTH/1.5, y/HEIGHT,
+              gl_FragColor = vec4(x/WIDTH/1.5, y/HEIGHT*1.1,
                                       0.8, .8);
                                       return true;
               
