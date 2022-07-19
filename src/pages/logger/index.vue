@@ -1,5 +1,5 @@
 <template>
-  <canvas id="webgl-logger" width="1600" height="1200"></canvas>
+  <canvas id="webgl-logger" width="800" height="600"></canvas>
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#webgl-metaball {
+#webgl-logger {
   width: 800px;
   height: 600px;
   margin-top: 8rem;

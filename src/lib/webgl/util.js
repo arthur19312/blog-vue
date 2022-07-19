@@ -25,3 +25,9 @@ export const loadShader = (gl, type, source) => {
 
   return shader;
 };
+
+export const useBuffer = (gl, array) => {
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
+};

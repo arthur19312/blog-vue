@@ -12,6 +12,7 @@ const logicfunc = () => import("@/pages/logicfunc/index.vue");
 const points = () => import("@/pages/points/index.vue");
 const kaomoji = () => import("@/pages/kaomoji/index.vue");
 const metaball = () => import("@/pages/metaball/index.vue");
+const logger = () => import("@/pages/logger/index.vue");
 
 export const routes = [
   {
@@ -71,6 +72,10 @@ export const routes = [
   {
     path: "/metaball",
     component: metaball,
+  },
+  {
+    path: "/logger",
+    component: logger,
   },
 ];
 

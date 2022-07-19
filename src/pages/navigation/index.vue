@@ -42,6 +42,11 @@ export default {
       // openFlag: false,
       links: [
         {
+          name: "logger",
+          desc: "float logger test program for webgl",
+          img: "",
+        },
+        {
           name: "metaball",
           desc: "Memory of IntelliJ's homepage ",
           img: "",
@@ -55,7 +60,7 @@ export default {
           desc: "A fractal function by webgl view & svg axis",
           img: "",
         },
-        
+
         { name: "travels", desc: "Waterfall flow for my footprints", img: "" },
         {
           name: "github",
@@ -75,7 +80,6 @@ export default {
           desc: "First practice in webgl",
           img: "",
         },
-        
       ],
     };
   },
