@@ -43,7 +43,7 @@ export default {
       links: [
         {
           name: "logger",
-          desc: "float logger test program for webgl",
+          desc: "float logger & texture test program in webgl",
           img: "",
         },
         {
