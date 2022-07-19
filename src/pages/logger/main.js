@@ -64,7 +64,7 @@ const initTexture = (program) => {
   img.onload = () => {
     loadTexture(gl, texture, img, u_sampler);
   };
-  img.src = "/src/assets/img/texture/1.jpg";
+  img.src = "/assets/img/texture/1.jpg";
 };
 
 const loadTexture = (gl, texture, image, u_sampler) => {
