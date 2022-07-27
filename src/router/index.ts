@@ -13,6 +13,7 @@ const points = () => import("@/pages/points/index.vue");
 const kaomoji = () => import("@/pages/kaomoji/index.vue");
 const metaball = () => import("@/pages/metaball/index.vue");
 const logger = () => import("@/pages/logger/index.vue");
+const imgFilter = () => import("@/pages/imgFilter/index.vue");
 
 export const routes = [
   {
@@ -76,6 +77,10 @@ export const routes = [
   {
     path: "/logger",
     component: logger,
+  },
+  {
+    path: "/imgFilter",
+    component: imgFilter,
   },
 ];
 

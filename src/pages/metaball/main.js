@@ -14,7 +14,7 @@ export const WIDTH = 1600;
 export const HEIGHT = 1200;
 export const PADDING = 200;
 export const PADDING2 = 300;
-export const BALL_NUM = 10;
+export const BALL_NUM = 8;
 export const BALL_NUM2 = 6;
 const SCALE = 2.8;
 const originBallsData = new Array(BALL_NUM);
@@ -294,7 +294,7 @@ const drawTriangle = (program) => {
 
 const initBalls = () => {
   for (let i = 0; i < BALL_NUM; i++) {
-    const r = Math.random() * 80 + 50;
+    const r = Math.random() * 60 + 80;
     const l = r * 2;
     originBallsData[i] = {
       x: Math.random() * (WIDTH - l) + r,

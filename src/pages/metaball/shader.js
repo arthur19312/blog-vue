@@ -79,7 +79,7 @@ void main() {
 
 export const FSHADER_SOURCE_BALL = `
       precision lowp float;
-      const int BALL_NUM = 10;
+      const int BALL_NUM = 8;
       uniform vec3 u_balls[BALL_NUM];
       const float WIDTH = 1600.0;
       const float HEIGHT = 1200.0;

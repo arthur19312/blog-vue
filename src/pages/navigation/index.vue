@@ -42,8 +42,9 @@ export default {
       // openFlag: false,
       links: [
         {
-          name: "logger",
-          desc: "float logger & texture test program in webgl",
+          route: "imgFilter",
+          name: "image Filter",
+          desc: "Some of webgl image filters & Play with your own kernel",
           img: "",
         },
         {
@@ -75,6 +76,11 @@ export default {
           img: "",
         },
         { name: "potfolio", desc: "Overview of photos", img: "" },
+        {
+          name: "logger",
+          desc: "Float logger & texture test program in webgl",
+          img: "",
+        },
         {
           name: "points",
           desc: "First practice in webgl",
@@ -160,7 +166,7 @@ export default {
   outline: 0;
   text-decoration: none;
   text-align: left;
-  width: 12rem;
+  width: 14rem;
   height: 12rem;
   padding: 2rem;
 

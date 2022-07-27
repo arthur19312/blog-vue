@@ -31,3 +31,25 @@ export const useBuffer = (gl, array) => {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 };
+
+export const getUniformLoc = (gl, program, name) => {
+  const loc = gl.getUniformLocation(program, name);
+  if (loc == null) throw `getUniformLoc ${name} err`;
+  return loc;
+};
+
+export const initTexture = (gl, program, index, samplerName, image) => {
+  const texture = gl.createTexture();
+  gl.activeTexture(gl[`TEXTURE${index}`]);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+  // 将指向纹理的特殊变量使用uniform绑定到程序里
+  gl.uniform1i(getUniformLoc(gl, program, samplerName), index);
+};
