@@ -1,6 +1,6 @@
 <template>
   <div></div>
-  <div class="main-ctn" @mousemove="getCursor">
+  <div class="preview" @mousemove="getCursor">
     <canvas
       id="webgl-filter-before"
       :width="COMPARE_SCALE"
@@ -20,7 +20,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { main } from "./main";
+import previewRender, { updateTexture } from "./previewRender";
 export default defineComponent({
   name: "logger",
   data() {
@@ -35,13 +35,14 @@ export default defineComponent({
       this.renderBefore(offsetX, offsetY);
     },
     renderBefore(x, y) {
-      const { data } = this.bgCtx.getImageData(
+      const imgData = this.bgCtx.getImageData(
         x > this.SCALE - 3 ? this.SCALE - 3 : x,
         y > this.SCALE - 3 ? this.SCALE - 3 : y,
         3,
         3
       );
-      console.log(data);
+
+      updateTexture(imgData);
     },
   },
   computed: {},
@@ -52,7 +53,8 @@ export default defineComponent({
       this.bgCtx.drawImage(img, 0, 0, 600, 600);
     };
     img.src = "/assets/img/filter/1.jpg";
-    this.renderBefore(0, 0);
+    previewRender(img);
+    this.renderBefore(1, 1);
   },
   unmounted() {},
 });

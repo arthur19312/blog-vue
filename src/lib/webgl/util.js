@@ -49,7 +49,5 @@ export const initTexture = (gl, program, index, samplerName, image) => {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-
-  // 将指向纹理的特殊变量使用uniform绑定到程序里
   gl.uniform1i(getUniformLoc(gl, program, samplerName), index);
 };
