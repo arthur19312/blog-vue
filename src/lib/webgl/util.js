@@ -38,7 +38,17 @@ export const getUniformLoc = (gl, program, name) => {
   return loc;
 };
 
-export const initTexture = (gl, program, index, samplerName, image) => {
+export const initTexture = (
+  gl,
+  program,
+  index,
+  samplerName,
+  image,
+  isArrayBuffer = false,
+  width = 1,
+  height = 1,
+  border = 0
+) => {
   const texture = gl.createTexture();
   gl.activeTexture(gl[`TEXTURE${index}`]);
   gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -48,6 +58,36 @@ export const initTexture = (gl, program, index, samplerName, image) => {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  isArrayBuffer
+    ? gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        width,
+        height,
+        border,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        image
+      )
+    : gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        image
+      );
   gl.uniform1i(getUniformLoc(gl, program, samplerName), index);
+};
+
+export const useBg = (gl, program) => {
+  const verticesTexCoord = new Float32Array([
+    -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0,
+  ]);
+  useBuffer(gl, verticesTexCoord);
+  const SIZE = verticesTexCoord.BYTES_PER_ELEMENT;
+  const a_position = gl.getAttribLocation(program, "a_position");
+  gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, SIZE * 2, 0);
+  gl.enableVertexAttribArray(a_position);
 };

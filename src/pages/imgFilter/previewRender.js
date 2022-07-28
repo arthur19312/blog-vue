@@ -3,32 +3,50 @@ import {
   useBuffer,
   initTexture,
   getUniformLoc,
+  useBg,
 } from "@/lib/webgl/util";
 import { VSHADER_SOURCE, FSHADER_SOURCE } from "./previewShader";
-var gl, program;
-const previewRender = (imageData) => {
-  gl = document.getElementById("webgl-filter-before").getContext("webgl");
-  program = initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
-  initVertexBuffer(program);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-  initTexture(gl, program, 0, "u_sampler", imageData);
+var glBefore, programBefore, glAfter, programAfter;
+const previewRender = (gl, program, imageData, isAfter = false) => {
+  useBg(gl, program);
+  !isAfter && gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  imageData && initTexture(gl, program, 0, "u_sampler", imageData);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
 
-const initVertexBuffer = (program) => {
-  const verticesTexCoord = new Float32Array([
-    -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0,
-  ]);
-  useBuffer(gl, verticesTexCoord);
-  const SIZE = verticesTexCoord.BYTES_PER_ELEMENT;
-  const a_position = gl.getAttribLocation(program, "a_position");
-  gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, SIZE * 2, 0);
-  gl.enableVertexAttribArray(a_position);
-};
-
-export const updateTexture = (imageData) => {
-  initTexture(gl, program, 0, "u_sampler", imageData);
+const updateTexture = (gl, program, imageData, isArrayBuffer = false) => {
+  isArrayBuffer
+    ? initTexture(
+        gl,
+        program,
+        0,
+        "u_sampler",
+        imageData,
+        isArrayBuffer,
+        3,
+        3,
+        0
+      )
+    : initTexture(gl, program, 0, "u_sampler", imageData);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
 
-export default previewRender;
+export const initBefore = (imageData) => {
+  glBefore = document.getElementById("webgl-filter-before").getContext("webgl");
+  programBefore = initShaders(glBefore, VSHADER_SOURCE, FSHADER_SOURCE);
+  previewRender(glBefore, programBefore, imageData);
+};
+
+export const initAfter = (imageData) => {
+  glAfter = document.getElementById("webgl-filter-after").getContext("webgl");
+  programAfter = initShaders(glAfter, VSHADER_SOURCE, FSHADER_SOURCE);
+  previewRender(glAfter, programAfter, imageData, true);
+};
+
+export const updateBefore = (imageData) => {
+  updateTexture(glBefore, programBefore, imageData);
+};
+
+export const updateAfter = (imageData) => {
+  updateTexture(glAfter, programAfter, imageData, true);
+};
