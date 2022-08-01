@@ -1,8 +1,14 @@
 <template>
   <div class="ctn">
     <div class="main-ctn" @mousemove="getCursor">
-      <canvas id="webgl-filter" :width="SCALE" :height="SCALE"></canvas>
+      <canvas
+        id="webgl-filter"
+        :width="SCALE"
+        :height="SCALE"
+        :style="{ opacity: mainOpacity }"
+      ></canvas>
       <canvas id="webgl-filter-bg" :width="SCALE" :height="SCALE"></canvas>
+      <div class="compare" @mouseenter="showBg" @mouseleave="showMain">中</div>
     </div>
     <div class="preview">
       <select @change="onSelect">
@@ -36,8 +42,8 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import main, { getMainData } from "./main";
+import { defineComponent, toRaw } from "vue";
+import main, { getMainData, updateKernel } from "./main";
 import {
   initBefore,
   initAfter,
@@ -48,11 +54,17 @@ export default defineComponent({
   name: "filter",
   data() {
     return {
+      mainOpacity: false,
       COMPARE_SCALE: 240,
       SCALE: 600,
       mainCtx: null,
       bgCtx: null,
       filterList: [
+        {
+          name: "normal",
+          desc: "dcsdscd",
+          kernel: [0, 0, 0, 0, 1, 0, 0, 0, 0],
+        },
         {
           name: "boxBlur",
           desc: "dcsdscd",
@@ -73,17 +85,29 @@ export default defineComponent({
           kernel: [-2, -1, 0, -1, 1, 1, 0, 1, 2],
         },
         {
-          name: "sharpness",
+          name: "sharpen",
           desc: "dcsdscd",
           kernel: [0, -1, 0, -1, 5, -1, 0, -1, 0],
+        },
+        {
+          name: "edge detect",
+          desc: "dcsdscd",
+          kernel: [0, 1, 0, 1, -4, 1, 0, 1, 0],
         },
       ],
       activeIndex: 0,
     };
   },
   methods: {
+    showBg() {
+      this.mainOpacity = 0;
+    },
+    showMain() {
+      this.mainOpacity = 1;
+    },
     onSelect(e) {
       this.activeIndex = e.target.selectedIndex;
+      updateKernel(toRaw(this.filterList[this.activeIndex].kernel));
     },
     getCursor({ offsetX, offsetY }) {
       this.renderBefore(offsetX - 1, offsetY - 1);
@@ -187,6 +211,13 @@ export default defineComponent({
     z-index: 2;
     left: 0;
     top: 0;
+  }
+
+  .compare {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    bottom: 0;
   }
 }
 
