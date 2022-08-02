@@ -43,7 +43,7 @@
 
 <script>
 import { defineComponent, toRaw } from "vue";
-import main, { getMainData, updateKernel } from "./main";
+import main, { getMainData, updateKernel, initStylize } from "./main";
 import {
   initBefore,
   initAfter,
@@ -61,38 +61,68 @@ export default defineComponent({
       bgCtx: null,
       filterList: [
         {
-          name: "normal",
+          name: "原始 Normal",
           desc: "dcsdscd",
           kernel: [0, 0, 0, 0, 1, 0, 0, 0, 0],
         },
         {
-          name: "boxBlur",
+          name: "方框模糊 BoxBlur",
           desc: "dcsdscd",
           kernel: [
             0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111,
           ],
         },
         {
-          name: "triangleBlur",
+          name: "三角模糊 TriangleBlur",
           desc: "dcsdscd",
           kernel: [
             0.0625, 0.125, 0.0625, 0.125, 0.25, 0.125, 0.0625, 0.125, 0.0625,
           ],
         },
         {
-          name: "emboss",
+          name: "高斯模糊 Gaussian Blur",
+          desc: "",
+          shaderSrc: "GAUSSIAN_BLUR",
+        },
+        {
+          name: "浮雕 Emboss",
           desc: "dcsdscd",
           kernel: [-2, -1, 0, -1, 1, 1, 0, 1, 2],
         },
         {
-          name: "sharpen",
+          name: "锐化 Sharpen",
           desc: "dcsdscd",
           kernel: [0, -1, 0, -1, 5, -1, 0, -1, 0],
         },
         {
-          name: "edge detect",
+          name: "边缘检测 Edge Detect",
           desc: "dcsdscd",
           kernel: [0, 1, 0, 1, -4, 1, 0, 1, 0],
+        },
+        {
+          name: "灰度 Gray Scale",
+          desc: "",
+          shaderSrc: "GRAY_SCALE",
+        },
+        {
+          name: "怀旧 Sepia Tone",
+          desc: "",
+          shaderSrc: "SEPIA_TONE",
+        },
+        {
+          name: "反色 Negative",
+          desc: "",
+          shaderSrc: "NEGATIVE",
+        },
+        {
+          name: "膨胀 Dilate",
+          desc: "",
+          shaderSrc: "DILATE",
+        },
+        {
+          name: "侵蚀 Erode",
+          desc: "",
+          shaderSrc: "ERODE",
         },
       ],
       activeIndex: 0,
@@ -107,7 +137,14 @@ export default defineComponent({
     },
     onSelect(e) {
       this.activeIndex = e.target.selectedIndex;
-      updateKernel(toRaw(this.filterList[this.activeIndex].kernel));
+      const filter = this.filterList[this.activeIndex];
+      if (filter.kernel) {
+        // by kernrl
+        updateKernel(toRaw(filter.kernel));
+      } else {
+        // by stylize shader
+        initStylize(filter.shaderSrc);
+      }
     },
     getCursor({ offsetX, offsetY }) {
       this.renderBefore(offsetX - 1, offsetY - 1);
