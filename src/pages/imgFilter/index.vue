@@ -11,11 +11,28 @@
       <div class="compare" @mouseenter="showBg" @mouseleave="showMain">中</div>
     </div>
     <div class="preview">
-      <select @change="onSelect">
-        <option :value="name" v-for="{ name } in filterList" :key="name">
-          {{ name }}
-        </option>
-      </select>
+      <div class="input-group">
+        <div class="select-ctn">
+          <div class="caption">滤镜</div>
+          <select @change="onSelect">
+            <option :value="name" v-for="{ name } in filterList" :key="name">
+              {{ name }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <div class="caption">强度</div>
+          <input
+            type="number"
+            :step="1"
+            :min="1"
+            :max="10"
+            v-model.number="range"
+            @change="onRange"
+          />
+        </div>
+      </div>
+      <div class="caption">原始</div>
       <div class="before-ctn">
         <div class="kernel">
           <div
@@ -32,6 +49,7 @@
           :height="COMPARE_SCALE"
         ></canvas>
       </div>
+      <div class="caption">预览</div>
       <canvas
         id="webgl-filter-after"
         :width="COMPARE_SCALE"
@@ -43,7 +61,12 @@
 
 <script>
 import { defineComponent, toRaw } from "vue";
-import main, { getMainData, updateKernel, initStylize } from "./main";
+import main, {
+  getMainData,
+  updateKernel,
+  initStylize,
+  updateLevel,
+} from "./main";
 import {
   initBefore,
   initAfter,
@@ -126,6 +149,7 @@ export default defineComponent({
         },
       ],
       activeIndex: 0,
+      range: 3,
     };
   },
   methods: {
@@ -145,6 +169,10 @@ export default defineComponent({
         // by stylize shader
         initStylize(filter.shaderSrc);
       }
+    },
+    onRange(e) {
+      this.range = this.range > 10 ? 10 : this.range < 1 ? 1 : this.range;
+      updateLevel(this.range);
     },
     getCursor({ offsetX, offsetY }) {
       this.renderBefore(offsetX - 1, offsetY - 1);
@@ -192,12 +220,14 @@ export default defineComponent({
 .ctn {
   padding: 2rem;
   display: flex;
-  gap: 60px;
+  gap: 40px;
 }
+
 .preview {
+  width: 240px;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  // gap: 2.5rem;
 
   .before-ctn {
     position: relative;
@@ -223,6 +253,7 @@ export default defineComponent({
       align-items: center;
       justify-content: center;
     }
+
     canvas {
       position: absolute;
       z-index: 1;
@@ -230,7 +261,12 @@ export default defineComponent({
       left: 0;
     }
   }
+
+  canvas {
+    border-radius: 2rem;
+  }
 }
+
 .main-ctn {
   position: relative;
   width: 600px;
@@ -259,7 +295,8 @@ export default defineComponent({
 }
 
 select {
-  padding: 1rem;
+  width: 100%;
+  padding: 0.8rem;
   border-radius: 0.5rem;
   border: 0;
   border-right: 14px #fff solid;
@@ -269,5 +306,41 @@ select {
   &:hover {
     outline: #444 1px solid;
   }
+}
+
+input {
+  padding: 0.8rem 0 0.8rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 0;
+  border-right: 8px #fff solid;
+  outline: #aaa 1px solid;
+  // cursor: pointer;
+
+  &:hover {
+    outline: #444 1px solid;
+  }
+}
+
+.caption {
+  text-align: left;
+  font-size: 6px;
+  color: #aaa;
+  padding: 0.8rem 0 0.2rem 0;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  .caption {
+    padding: 0;
+  }
+}
+
+.select-ctn {
+  width: auto;
 }
 </style>

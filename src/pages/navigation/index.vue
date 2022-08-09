@@ -44,7 +44,7 @@ export default {
         {
           route: "imgFilter",
           name: "image Filter",
-          desc: "Some of webgl image filters & Play with your own kernel",
+          desc: "Image filters & Play with your own kernel",
           img: "",
         },
         {

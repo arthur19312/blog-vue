@@ -10,24 +10,21 @@ var glBefore, programBefore, glAfter, programAfter;
 const previewRender = (gl, program, imageData, isAfter = false) => {
   useBg(gl, program);
   !isAfter && gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-  imageData && initTexture(gl, program, 0, "u_sampler", imageData);
+  imageData && initTexture({ gl, program, image: imageData });
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
 
 const updateTexture = (gl, program, imageData, isArrayBuffer = false) => {
   isArrayBuffer
-    ? initTexture(
+    ? initTexture({
         gl,
         program,
-        0,
-        "u_sampler",
-        imageData,
+        image: imageData,
         isArrayBuffer,
-        3,
-        3,
-        0
-      )
-    : initTexture(gl, program, 0, "u_sampler", imageData);
+        width: 3,
+        height: 3,
+      })
+    : initTexture({ gl, program, image: imageData });
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
 

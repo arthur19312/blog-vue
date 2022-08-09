@@ -17,13 +17,13 @@ export const main = () => {
 
   initVertexBuffer(program);
 
-  const img = new Image();
-  img.onload = () => {
+  const image = new Image();
+  image.onload = () => {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-    initTexture(gl, program, 0, "u_sampler", img);
+    initTexture({ gl, program, image });
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   };
-  img.src = "/assets/img/texture/1.jpg";
+  image.src = "/assets/img/texture/1.jpg";
 
   const step = () => {
     // drawBg(program);

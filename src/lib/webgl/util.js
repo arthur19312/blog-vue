@@ -38,25 +38,32 @@ export const getUniformLoc = (gl, program, name) => {
   return loc;
 };
 
-export const initTexture = (
-  gl,
-  program,
-  index,
-  samplerName,
-  image,
-  isArrayBuffer = false,
-  width = 1,
-  height = 1,
-  border = 0
-) => {
+export const createTexture = (gl) => {
   const texture = gl.createTexture();
-  gl.activeTexture(gl[`TEXTURE${index}`]);
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  return texture;
+};
+
+export const initTexture = ({
+  gl,
+  program,
+  index = 0,
+  samplerName = "u_sampler",
+  image,
+  isArrayBuffer = false,
+  width = 1,
+  height = 1,
+  border = 0,
+  setUniform = true,
+}) => {
+  gl.activeTexture(gl[`TEXTURE${index}`]);
+  createTexture(gl);
 
   isArrayBuffer
     ? gl.texImage2D(
@@ -78,7 +85,7 @@ export const initTexture = (
         gl.UNSIGNED_BYTE,
         image
       );
-  gl.uniform1i(getUniformLoc(gl, program, samplerName), index);
+  setUniform && gl.uniform1i(getUniformLoc(gl, program, samplerName), index);
 };
 
 export const useBg = (gl, program) => {
@@ -90,4 +97,12 @@ export const useBg = (gl, program) => {
   const a_position = gl.getAttribLocation(program, "a_position");
   gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, SIZE * 2, 0);
   gl.enableVertexAttribArray(a_position);
+};
+
+export const loadImg = (src, callback) => {
+  const image = new Image();
+  image.onload = () => {
+    callback(image);
+  };
+  image.src = src;
 };

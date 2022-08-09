@@ -1,72 +1,130 @@
 import {
   initShaders,
   getUniformLoc,
+  createTexture,
   initTexture,
   useBg,
+  loadImg,
 } from "@/lib/webgl/util";
+import {
+  computeKernelWeight,
+  initFramebuffers,
+  setFramebuffer,
+  getMainData as getMainDataHelper,
+} from "./helper";
+import { SCALE, NORMAL } from "./constant";
 import { VSHADER_SOURCE, FSHADER_SOURCE } from "./mainShader";
 import * as stylizeShader from "./stylizeShader";
-const NORMAL = [0, 0, 0, 0, 1, 0, 0, 0, 0];
 var gl, program;
-var kernel, kernelWeight;
-var isKernel = true; //if use general kernel
+var kernel = NORMAL,
+  kernelWeight,
+  shaderSrc;
+var isKernel = true;
+var textures = [],
+  framebuffers = [];
+var mainImage = null;
 
-const computeKernelWeight = () => {
-  const res = kernel.reduce((prev, cur) => prev + cur);
-  return res <= 0 ? 1 : res;
+const setMainImage = (image) => {
+  !mainImage && (mainImage = image);
 };
-const loadImg = (kernel = NORMAL) => {
-  const img = new Image();
-  img.onload = () => {
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-    initTexture(gl, program, 0, "u_sampler", img);
-    isKernel && updateKernel(kernel);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  };
-  img.src = "/assets/img/filter/1.jpg";
+
+const draw = () => {
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };
+
+// 设置主图片
+const setImg = (callback) => {
+  loadImg("/assets/img/filter/1.jpg", (image) => {
+    setMainImage(image);
+    callback(image);
+  });
+};
+
+// gl环境初始化
 const main = () => {
   gl = document
     .getElementById("webgl-filter")
     .getContext("webgl", { preserveDrawingBuffer: true });
-  initKernel();
+  initKernel(NORMAL);
 };
 
-export const getMainData = (x, y) => {
-  const pixels = new Uint8Array(9 * 4);
-  gl.readPixels(x, y, 3, 3, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-  return pixels;
-};
-
-// 待优化的调用
-export const updateKernel = (newKernel) => {
-  if (!isKernel) {
-    initKernel(newKernel);
-  } else {
-    kernel = newKernel;
-    kernelWeight = computeKernelWeight();
-    gl.uniform1fv(gl.getUniformLocation(program, "u_kernel"), kernel);
-    gl.uniform1f(getUniformLoc(gl, program, "u_kernelWeight"), kernelWeight);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  }
-};
-
-export const initStylize = (shaderSrc) => {
-  isKernel = false;
-  program = initShaders(
-    gl,
-    stylizeShader[`VSHADER_SOURCE`],
-    stylizeShader[`FSHADER_SOURCE_${shaderSrc}`]
-  );
-  useBg(gl, program);
-  loadImg();
-};
-
+// 初始化kernel环境
 export const initKernel = (newKernel) => {
   isKernel = true;
   program = initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
   useBg(gl, program);
-  loadImg(newKernel);
+  setImg((image) => {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+    initTexture({ gl, program, image });
+    renderKernel(newKernel);
+  });
+};
+// 执行kernel
+export const renderKernel = (newKernel) => {
+  kernel = newKernel;
+  kernelWeight = computeKernelWeight(kernel);
+  gl.uniform1fv(gl.getUniformLocation(program, "u_kernel"), kernel);
+  gl.uniform1f(getUniformLoc(gl, program, "u_kernelWeight"), kernelWeight);
+  draw();
+};
+// 接收kernel
+export const updateKernel = (newKernel = NORMAL) => {
+  if (!isKernel) {
+    initKernel(newKernel);
+  } else {
+    renderKernel(newKernel);
+  }
+};
+
+// 初始化风格化
+export const initStylize = (newShaderSrc, needLoadImg = true) => {
+  isKernel = false;
+  shaderSrc = newShaderSrc;
+  program = initShaders(
+    gl,
+    stylizeShader[`VSHADER_SOURCE`],
+    stylizeShader[`FSHADER_SOURCE_${newShaderSrc}`]
+  );
+  useBg(gl, program);
+  needLoadImg &&
+    setImg((image) => {
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+      initTexture({ gl, program, image });
+      draw();
+    });
+};
+
+export const updateLevel = (level) => {
+  const { textures: texs, framebuffers: frames } = initFramebuffers(gl);
+  textures = texs;
+  framebuffers = frames;
+  doIterations(level);
+};
+
+export const setInitialFrame = (image = mainImage) => {
+  const originTexture = createTexture(gl);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  gl.bindTexture(gl.TEXTURE_2D, originTexture);
+};
+
+export const doIterations = (level) => {
+  setInitialFrame();
+  for (let i = 1; i < level; i++) {
+    setFramebuffer(gl, framebuffers[i % 2]);
+    if (isKernel) {
+      renderKernel(kernel);
+    } else {
+      initStylize(shaderSrc, false);
+      draw();
+    }
+    gl.bindTexture(gl.TEXTURE_2D, textures[i % 2]);
+  }
+  setFramebuffer(gl, null);
+  draw();
+};
+
+export const getMainData = (x, y) => {
+  return getMainDataHelper(gl, x, y);
 };
 
 export default main;
