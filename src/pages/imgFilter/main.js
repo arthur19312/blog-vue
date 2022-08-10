@@ -94,6 +94,7 @@ export const initStylize = (newShaderSrc, needLoadImg = true) => {
     });
 };
 
+// 更新强度
 export const updateLevel = (level) => {
   const { textures: texs, framebuffers: frames } = initFramebuffers(gl);
   textures = texs;
@@ -101,12 +102,14 @@ export const updateLevel = (level) => {
   doIterations(level);
 };
 
+// 初始化帧
 export const setInitialFrame = (image = mainImage) => {
   const originTexture = createTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
   gl.bindTexture(gl.TEXTURE_2D, originTexture);
 };
 
+// 执行乒乓
 export const doIterations = (level) => {
   setInitialFrame();
   for (let i = 1; i < level; i++) {
@@ -123,6 +126,7 @@ export const doIterations = (level) => {
   draw();
 };
 
+// 传递坐标像素数据
 export const getMainData = (x, y) => {
   return getMainDataHelper(gl, x, y);
 };

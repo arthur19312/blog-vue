@@ -20,13 +20,13 @@
             </option>
           </select>
         </div>
-        <div>
+        <div v-if="filterList[activeIndex].hasRange">
           <div class="caption">强度</div>
           <input
             type="number"
             :step="1"
-            :min="1"
-            :max="10"
+            :min="filterList[activeIndex].min"
+            :max="filterList[activeIndex].max"
             v-model.number="range"
             @change="onRange"
           />
@@ -85,67 +85,76 @@ export default defineComponent({
       filterList: [
         {
           name: "原始 Normal",
-          desc: "dcsdscd",
           kernel: [0, 0, 0, 0, 1, 0, 0, 0, 0],
+          hasRange: false,
         },
         {
           name: "方框模糊 BoxBlur",
-          desc: "dcsdscd",
           kernel: [
             0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111, 0.111,
           ],
+          hasRange: true,
+          max: 60,
         },
         {
           name: "三角模糊 TriangleBlur",
-          desc: "dcsdscd",
           kernel: [
             0.0625, 0.125, 0.0625, 0.125, 0.25, 0.125, 0.0625, 0.125, 0.0625,
           ],
+          hasRange: true,
+          max: 60,
         },
         {
           name: "高斯模糊 Gaussian Blur",
-          desc: "",
           shaderSrc: "GAUSSIAN_BLUR",
+          hasRange: true,
+          max: 60,
         },
         {
           name: "浮雕 Emboss",
-          desc: "dcsdscd",
           kernel: [-2, -1, 0, -1, 1, 1, 0, 1, 2],
+          hasRange: true,
+          max: 3,
         },
         {
           name: "锐化 Sharpen",
-          desc: "dcsdscd",
           kernel: [0, -1, 0, -1, 5, -1, 0, -1, 0],
+          hasRange: true,
+          max: 3,
         },
         {
           name: "边缘检测 Edge Detect",
-          desc: "dcsdscd",
           kernel: [0, 1, 0, 1, -4, 1, 0, 1, 0],
+          hasRange: true,
+          max: 3,
         },
         {
           name: "灰度 Gray Scale",
-          desc: "",
           shaderSrc: "GRAY_SCALE",
+          hasRange: false,
         },
         {
           name: "怀旧 Sepia Tone",
-          desc: "",
           shaderSrc: "SEPIA_TONE",
+          hasRange: true,
+          max: 10,
         },
         {
           name: "反色 Negative",
-          desc: "",
           shaderSrc: "NEGATIVE",
+          hasRange: false,
         },
         {
           name: "膨胀 Dilate",
-          desc: "",
           shaderSrc: "DILATE",
+          hasRange: true,
+          max: 20,
         },
         {
           name: "侵蚀 Erode",
-          desc: "",
           shaderSrc: "ERODE",
+          hasRange: true,
+          max: 20,
         },
       ],
       activeIndex: 0,
@@ -160,6 +169,9 @@ export default defineComponent({
       this.mainOpacity = 1;
     },
     onSelect(e) {
+      if (this.activeIndex === e.target.selectedIndex) {
+        return;
+      }
       this.activeIndex = e.target.selectedIndex;
       const filter = this.filterList[this.activeIndex];
       if (filter.kernel) {
@@ -169,9 +181,11 @@ export default defineComponent({
         // by stylize shader
         initStylize(filter.shaderSrc);
       }
+      this.range = 1;
     },
     onRange(e) {
-      this.range = this.range > 10 ? 10 : this.range < 1 ? 1 : this.range;
+      const max = this.filterList[this.activeIndex].max;
+      this.range = this.range > max ? max : this.range < 1 ? 1 : this.range;
       updateLevel(this.range);
     },
     getCursor({ offsetX, offsetY }) {
@@ -309,12 +323,12 @@ select {
 }
 
 input {
+  width: 30px;
   padding: 0.8rem 0 0.8rem 0.8rem;
   border-radius: 0.5rem;
-  border: 0;
+  border: #fff 1px solid;
   border-right: 8px #fff solid;
   outline: #aaa 1px solid;
-  // cursor: pointer;
 
   &:hover {
     outline: #444 1px solid;
@@ -333,7 +347,7 @@ input {
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 10px;
 
   .caption {
     padding: 0;
@@ -341,6 +355,6 @@ input {
 }
 
 .select-ctn {
-  width: auto;
+  width: 100%;
 }
 </style>
