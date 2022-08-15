@@ -86,12 +86,21 @@ export const initStylize = (newShaderSrc, needLoadImg = true) => {
     stylizeShader[`FSHADER_SOURCE_${newShaderSrc}`]
   );
   useBg(gl, program);
-  needLoadImg &&
+  if (newShaderSrc === "DIFFUSE_BLUR") {
+    const u_samplerList = [];
     setImg((image) => {
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-      initTexture({ gl, program, image });
+      console.log(image);
+      gl.uniform4fv(gl.getUniformLocation(program, "u_samplerList"));
       draw();
     });
+  } else {
+    needLoadImg &&
+      setImg((image) => {
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+        initTexture({ gl, program, image });
+        draw();
+      });
+  }
 };
 
 // 更新强度
@@ -124,6 +133,7 @@ export const doIterations = (level) => {
   }
   setFramebuffer(gl, null);
   draw();
+  setInitialFrame();
 };
 
 // 传递坐标像素数据

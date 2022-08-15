@@ -109,3 +109,26 @@ void main() {
   gl_FragColor = minValue;
 }
 `;
+
+export const FSHADER_SOURCE_DIFFUSE_BLUR = `
+precision lowp float;
+      varying vec2 v_position;
+      uniform sampler2D u_sampler;
+      vec2 offset;
+      vec4 sum = vec4(0.);
+      void main() {
+            vec2 pos = v_position/2.+0.5;
+            vec2 onePixel = vec2(1,1)/vec2(600,600);
+            float scale = 100.;
+            float x = -scale;float y=-scale;
+            for (int i = 0; i < 40401; i++){
+              offset = vec2(x,y);
+              sum+= texture2D(u_sampler, pos + onePixel*offset);
+              x++;
+              if(x>scale){
+                x=-scale;y++;
+              }
+            }
+              gl_FragColor = sum/40401.;
+          }
+`;
