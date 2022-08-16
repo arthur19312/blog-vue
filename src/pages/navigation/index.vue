@@ -42,6 +42,12 @@ export default {
       // openFlag: false,
       links: [
         {
+          route: "imgFilter",
+          name: "image Filter",
+          desc: "Image filters & Play with your own kernel",
+          img: "",
+        },
+        {
           name: "metaball",
           desc: "Memory of IntelliJ's homepage ",
           img: "",
@@ -55,7 +61,7 @@ export default {
           desc: "A fractal function by webgl view & svg axis",
           img: "",
         },
-        
+
         { name: "travels", desc: "Waterfall flow for my footprints", img: "" },
         {
           name: "github",
@@ -71,11 +77,15 @@ export default {
         },
         { name: "potfolio", desc: "Overview of photos", img: "" },
         {
+          name: "logger",
+          desc: "Float logger & texture test program in webgl",
+          img: "",
+        },
+        {
           name: "points",
           desc: "First practice in webgl",
           img: "",
         },
-        
       ],
     };
   },
@@ -156,7 +166,7 @@ export default {
   outline: 0;
   text-decoration: none;
   text-align: left;
-  width: 12rem;
+  width: 14rem;
   height: 12rem;
   padding: 2rem;
 

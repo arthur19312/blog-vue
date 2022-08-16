@@ -17,7 +17,6 @@ export const main = () => {
   initXnChart();
   const tick = () => {
     computeByR(r);
-    console.log(r, [...xnList], [...rList]);
     drawXnList(xnList);
     drawRList(rList);
     if (r < R_ITERATIONS) {

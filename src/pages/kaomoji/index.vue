@@ -55,7 +55,7 @@ export default {
     popIn() {
       //this.$refs.popItem.style.opacity = 0;
     },
-    clearPop(){
+    clearPop() {
       this.$refs.popItem.style.opacity = 0;
     },
 
@@ -75,8 +75,6 @@ export default {
       inputElement.select();
       // 执行浏览器复制命令
       document.execCommand("Copy");
-
-      console.log("copied");
     },
 
     showToast() {
@@ -90,7 +88,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.ctn{
+.ctn {
   padding: 4rem 6rem 4rem 3rem;
 }
 

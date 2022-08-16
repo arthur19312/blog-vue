@@ -6,7 +6,7 @@
         v-for="(item, index) in '2022/02/02'.split('')"
         :key="index"
       >
-        <img :src="svgSrc(item)" style="width:20%"/>
+        <img :src="svgSrc(item)" style="width: 26%" />
       </div>
     </div>
     <div class="img-container">
@@ -49,7 +49,8 @@ export default defineComponent({
     },
     provideHeight() {
       this.$emit("mainContentHeight", this.height);
-    },svgSrc: function (num) {
+    },
+    svgSrc: function (num) {
       return `/assets/lead/${num === "/" ? "separate" : num}.svg`;
     },
   },
@@ -57,7 +58,6 @@ export default defineComponent({
     imgSrc: function () {
       return "/assets/img/home/" + (this.index + 1) + ".jpg";
     },
-    
   },
   mounted() {
     this.updateHeight();
@@ -75,9 +75,9 @@ export default defineComponent({
   letter-spacing: 4px;
   margin-top: 6rem;
 }
-.svg-ctn{
+.svg-ctn {
   position: relative;
-  left:180px;
+  left: 180px;
 }
 .rotate {
   padding: 0 1rem;
@@ -87,11 +87,10 @@ export default defineComponent({
   letter-spacing: 0.8rem;
   font-style: oblique;
 
-
   &:not(:first-child) {
     margin-top: -2rem;
   }
-  &:nth-child(even){
+  &:nth-child(even) {
     margin-left: 1rem;
   }
 }
@@ -153,11 +152,11 @@ export default defineComponent({
 
 path {
   transition: all 2s;
-     stroke-dasharray:314,314;
-     stroke-dashoffset:314;
+  stroke-dasharray: 314, 314;
+  stroke-dashoffset: 314;
 }
 
-svg:hover path{
-    stroke-dashoffset:0;
+svg:hover path {
+  stroke-dashoffset: 0;
 }
 </style>
