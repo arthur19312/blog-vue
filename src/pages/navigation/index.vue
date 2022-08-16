@@ -111,7 +111,7 @@ export default {
         .join("");
     },
     preUrl(str) {
-      return window.location.origin + "/#/" + str;
+      return str;
     },
   },
 };
