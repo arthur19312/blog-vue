@@ -5,6 +5,7 @@ import {
   initTexture,
   useBg,
   loadImg,
+  useBuffer,
 } from "@/lib/webgl/util";
 import {
   computeKernelWeight,
@@ -87,12 +88,29 @@ export const initStylize = (newShaderSrc, needLoadImg = true) => {
   );
   useBg(gl, program);
   if (newShaderSrc === "DIFFUSE_BLUR") {
-    const u_samplerList = [];
-    setImg((image) => {
-      console.log(image);
-      gl.uniform4fv(gl.getUniformLocation(program, "u_samplerList"));
-      draw();
-    });
+    let colors = [];
+    const ctx = document.getElementById("webgl-filter-bg").getContext("2d");
+    colors.push(
+      ...ctx.getImageData(0, 0, 1, 1).data,
+      ...ctx.getImageData(199, 0, 1, 1).data,
+      ...ctx.getImageData(399, 0, 1, 1).data,
+      ...ctx.getImageData(599, 0, 1, 1).data,
+      ...ctx.getImageData(0, 199, 1, 1).data,
+      ...ctx.getImageData(199, 199, 1, 1).data,
+      ...ctx.getImageData(399, 199, 1, 1).data,
+      ...ctx.getImageData(599, 199, 1, 1).data,
+      ...ctx.getImageData(0, 399, 1, 1).data,
+      ...ctx.getImageData(199, 399, 1, 1).data,
+      ...ctx.getImageData(399, 399, 1, 1).data,
+      ...ctx.getImageData(599, 399, 1, 1).data,
+      ...ctx.getImageData(0, 599, 1, 1).data,
+      ...ctx.getImageData(199, 599, 1, 1).data,
+      ...ctx.getImageData(399, 599, 1, 1).data,
+      ...ctx.getImageData(599, 599, 1, 1).data
+    );
+    colors = new Float32Array(colors);
+    gl.uniform4fv(gl.getUniformLocation(program, "u_colors"), colors);
+    draw();
   } else {
     needLoadImg &&
       setImg((image) => {

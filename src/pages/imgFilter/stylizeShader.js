@@ -112,23 +112,45 @@ void main() {
 
 export const FSHADER_SOURCE_DIFFUSE_BLUR = `
 precision lowp float;
-      varying vec2 v_position;
-      uniform sampler2D u_sampler;
-      vec2 offset;
-      vec4 sum = vec4(0.);
+varying vec2 v_position;
+uniform vec4 u_colors[16];
+
+vec4 getColor(float index){
+  int i = int(index);
+  if(i==0){return u_colors[0];}
+  if(i==1){return u_colors[1];}
+  if(i==2){return u_colors[2];}
+  if(i==3){return u_colors[3];}
+  if(i==4){return u_colors[4];}
+  if(i==5){return u_colors[5];}
+  if(i==6){return u_colors[6];}
+  if(i==7){return u_colors[7];}
+  if(i==8){return u_colors[8];}
+  if(i==9){return u_colors[9];}
+  if(i==10){return u_colors[10];}
+  if(i==11){return u_colors[11];}
+  if(i==12){return u_colors[12];}
+  if(i==13){return u_colors[13];}
+  if(i==14){return u_colors[14];}
+  if(i==15){return u_colors[15];}
+}
+
+vec4 getColors(vec2 pos){
+  for(int i=0;i<4;i++){
+    for(int j=0;j<4;j++){
+      if(i==int(pos.x) && j==int(pos.y)){
+        return u_colors[j*4+i];
+      }
+    }
+  }
+}
       void main() {
-            vec2 pos = v_position/2.+0.5;
-            vec2 onePixel = vec2(1,1)/vec2(600,600);
-            float scale = 100.;
-            float x = -scale;float y=-scale;
-            for (int i = 0; i < 40401; i++){
-              offset = vec2(x,y);
-              sum+= texture2D(u_sampler, pos + onePixel*offset);
-              x++;
-              if(x>scale){
-                x=-scale;y++;
-              }
-            }
-              gl_FragColor = sum/40401.;
-          }
+        vec2 pos = v_position/2.+0.5;
+        float x=gl_FragCoord.x;float y=600.-gl_FragCoord.y;
+        float index = floor(y/200.)*4.+floor(x/200.);float index1 = ceil(y/200.)*4.+floor(x/200.);
+        float xx = smoothstep(0.,1.,mod(x,200.)/200.);
+        vec4 color1 = mix(getColors(vec2(floor(x/200.),floor(y/200.))),getColor(mod(index+1.,4.)<.1?index:index+1.),xx);
+        vec4 color2 = mix(getColor(index1),getColor(mod(index1+1.,4.)<.1?index1:index1+1.),xx);
+        gl_FragColor = mix(color1,color2,smoothstep(0.,1.,mod(y,200.)/200.))/254.;
+      }
 `;
