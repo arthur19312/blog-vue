@@ -84,9 +84,5 @@ export const routes = [
   },
 ];
 
-const Router = createRouter({
-  history: createWebHashHistory(),
-  routes,
-});
 
-export default Router;
+export default routes;
