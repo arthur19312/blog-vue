@@ -1,6 +1,6 @@
 <template>
   <div class="intro-container">
-    <avatar :imgSrc="avatarUrl" name="ARTHUR19312" />
+    <avatar imgSrc="/assets/img/avatar/kk.jpg" name="ARTHUR19312" />
     <div class="link">
       <IconLink
         v-for="item in iconLinks"
@@ -17,13 +17,11 @@
 <script lang="ts">
 import Avatar from "@/components/navigation/intro/avatar.vue";
 import IconLink from "@/components/navigation/intro/iconLink.vue";
-import avatarUrl from "@/assets/img/avatar/kk.jpg";
 
 export default {
   components: { Avatar, IconLink },
   data() {
     return {
-      avatarUrl,
       iconLinks: [
         {
           className: "csdn",
@@ -42,7 +40,11 @@ export default {
           href: "https://steamcommunity.com/profiles/76561198454211888",
           scale: "1.25rem",
         },
-        { className: "weibo", color: "#e05730", href: "https://weibo.com/u/6861834736" },
+        {
+          className: "weibo",
+          color: "#e05730",
+          href: "https://weibo.com/u/6861834736",
+        },
         // { className: "qq", color: "#61c5ef", href: "?qq=413389361" },
       ],
     };

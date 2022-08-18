@@ -23,6 +23,7 @@
         <div v-if="filterList[activeIndex].hasRange">
           <div class="caption">强度</div>
           <input
+            class="range-input"
             type="number"
             :step="1"
             :min="1"
@@ -34,7 +35,19 @@
       </div>
       <div class="caption">原始</div>
       <div class="before-ctn">
-        <div class="kernel">
+        <div class="kernel" v-if="custom">
+          <input
+            class="kernel-input"
+            type="number"
+            :step="1"
+            :min="-20"
+            :max="20"
+            v-for="(item, index) in customKernel"
+            v-model.number="item.value"
+            @change="onCustomKernelChange"
+          />
+        </div>
+        <div class="kernel" v-else>
           <div
             class="kernel-item"
             v-for="value in filterList[activeIndex].kernel"
@@ -86,6 +99,18 @@ export default defineComponent({
       filterList: FILTER_LIST,
       activeIndex: 0,
       range: 3,
+      custom: false,
+      customKernel: [
+        { value: 6 },
+        { value: -10 },
+        { value: 5 },
+        { value: 3 },
+        { value: -4 },
+        { value: 8 },
+        { value: 2 },
+        { value: -9 },
+        { value: 6 },
+      ],
     };
   },
   methods: {
@@ -109,6 +134,16 @@ export default defineComponent({
         initStylize(filter.shaderSrc);
       }
       this.range = 1;
+
+      if (filter.custom) {
+        this.custom = true;
+        updateKernel(this.customKernel.map((item) => item.value));
+      } else {
+        this.custom = false;
+      }
+    },
+    onCustomKernelChange() {
+      updateKernel(this.customKernel.map((item) => item.value));
     },
     onRange(e) {
       const max = this.filterList[this.activeIndex].max;
@@ -249,7 +284,7 @@ select {
   }
 }
 
-input {
+.range-input {
   width: 30px;
   padding: 0.8rem 0 0.8rem 0.8rem;
   border-radius: 0.5rem;
@@ -283,5 +318,14 @@ input {
 
 .select-ctn {
   width: 100%;
+}
+
+.kernel-input {
+  background: inherit;
+  border: 0;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: center;
 }
 </style>

@@ -42,12 +42,6 @@ export const FILTER_LIST = [
     max: 3,
   },
   {
-    name: "边缘检测 Edge Detect",
-    kernel: [1, 1, 1, 1, -8, 1, 1, 1, 1],
-    hasRange: true,
-    max: 3,
-  },
-  {
     name: "灰度 Gray Scale",
     shaderSrc: "GRAY_SCALE",
     hasRange: false,
@@ -74,5 +68,18 @@ export const FILTER_LIST = [
     shaderSrc: "ERODE",
     hasRange: true,
     max: 20,
+  },
+  {
+    name: "边缘检测 Edge Detect",
+    kernel: [1, 1, 1, 1, -8, 1, 1, 1, 1],
+    hasRange: true,
+    max: 3,
+  },
+  {
+    name: "自定义 Custom Kernel",
+    kernel: [3, -4, 3, 5, 0, 5, 2, -6, 2],
+    hasRange: true,
+    max: 5,
+    custom: true,
   },
 ];

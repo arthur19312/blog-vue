@@ -14,6 +14,7 @@ const kaomoji = () => import("@/pages/kaomoji/index.vue");
 const metaball = () => import("@/pages/metaball/index.vue");
 const logger = () => import("@/pages/logger/index.vue");
 const imgFilter = () => import("@/pages/imgFilter/index.vue");
+const svgPlayground = () => import("@/pages/svgPlayground/index.vue");
 
 export const routes = [
   {
@@ -82,7 +83,10 @@ export const routes = [
     path: "/imgFilter",
     component: imgFilter,
   },
+  {
+    path: "/svgPlayground",
+    component: svgPlayground,
+  },
 ];
-
 
 export default routes;

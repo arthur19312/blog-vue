@@ -42,6 +42,12 @@ export default {
       // openFlag: false,
       links: [
         {
+          route: "svgPlayground",
+          name: "svg display",
+          desc: "I make some svg drawings using figma",
+          img: "",
+        },
+        {
           route: "imgFilter",
           name: "image Filter",
           desc: "Image filters & Play with your own kernel",
