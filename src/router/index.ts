@@ -15,6 +15,7 @@ const metaball = () => import("@/pages/metaball/index.vue");
 const logger = () => import("@/pages/logger/index.vue");
 const imgFilter = () => import("@/pages/imgFilter/index.vue");
 const svgPlayground = () => import("@/pages/svgPlayground/index.vue");
+const svgDataReducer = () => import("@/pages/svgDataReducer/index.vue");
 
 export const routes = [
   {
@@ -86,6 +87,10 @@ export const routes = [
   {
     path: "/svgPlayground",
     component: svgPlayground,
+  },
+  {
+    path: "/svgDataReducer",
+    component: svgDataReducer,
   },
 ];
 

@@ -42,6 +42,12 @@ export default {
       // openFlag: false,
       links: [
         {
+          route: "svgDataReducer",
+          name: "Svg Data Reducer",
+          desc: "Reducer for automatically exported svg path data",
+          img: "",
+        },
+        {
           route: "svgPlayground",
           name: "svg display",
           desc: "I make some svg drawings using figma",
