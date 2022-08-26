@@ -2,6 +2,7 @@
   "name": "blog-vue",
   "version": "0.0.0",
   "scripts": {
+    "start": "npm run build && node node-server/index",
     "dev": "vite-ssr --port 1337 --force",
     "dev:spa": "vite --port 1337 --force",
     "build": "rm -rf dist && vite-ssr build",

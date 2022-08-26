@@ -27,15 +27,11 @@ export default {
     },
   },
   mounted() {
-    if (!import.meta.env.SSR) {
-      main(0);
-      window.addEventListener("mousemove", this.changeRange);
-    }
+    main(0);
+    window.addEventListener("mousemove", this.changeRange);
   },
   unmounted() {
-    if (!import.meta.env.SSR) {
-      window.removeEventListener("mousemove", this.changeRange);
-    }
+    window.removeEventListener("mousemove", this.changeRange);
   },
 };
 </script>
