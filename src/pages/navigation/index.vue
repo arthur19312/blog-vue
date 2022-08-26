@@ -50,7 +50,7 @@ export default {
         {
           route: "svgPlayground",
           name: "svg display",
-          desc: "I make some svg drawings using figma",
+          desc: "I make some svg drawings using figma(还没弄，等搬完家再玩吧)",
           img: "",
         },
         {
