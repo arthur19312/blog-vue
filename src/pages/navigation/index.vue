@@ -47,12 +47,12 @@ export default {
           desc: "Node reducer for automatically exported svg path data",
           img: "",
         },
-        {
-          route: "svgPlayground",
-          name: "svg display",
-          desc: "I make some svg drawings using figma(还没弄，等搬完家再玩吧)",
-          img: "",
-        },
+        // {
+        //   route: "svgPlayground",
+        //   name: "svg display",
+        //   desc: "I make some svg drawings using figma",
+        //   img: "",
+        // },
         {
           route: "imgFilter",
           name: "image Filter",
@@ -64,9 +64,9 @@ export default {
           desc: "Memory of IntelliJ's homepage ",
           img: "",
         },
-        { name: "music", desc: "P5 player for favorite music", img: "" },
 
         { name: "moon", desc: "A practice for Anthony Howe", img: "" },
+        { name: "music", desc: "P5 player for favorite music", img: "" },
         {
           route: "logicfunc",
           name: "logic Func",
@@ -239,5 +239,6 @@ export default {
 .desc {
   color: #aaa;
   font-size: 1rem;
+  font-weight: 100;
 }
 </style>

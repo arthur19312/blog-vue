@@ -4,18 +4,10 @@
   </a>
   <div class="git-item" style="margin-left: 1rem">
     <div class="button-container">
-      <img
-        src="@/assets/img/github/1.png"
-        class="switch-button"
-        @click="switchIndex(1)"
-      />
+      <img :src="imgSrc(1)" class="switch-button" @click="switchIndex(1)" />
     </div>
     <div class="button-container">
-      <img
-        src="@/assets/img/github/2.png"
-        class="switch-button"
-        @click="switchIndex(2)"
-      />
+      <img :src="imgSrc(2)" class="switch-button" @click="switchIndex(2)" />
     </div>
   </div>
 </template>
@@ -32,6 +24,9 @@ export default {
     };
   },
   methods: {
+    imgSrc(index) {
+      return "/assets/img/github/" + index + ".png";
+    },
     switchIndex(num) {
       if (!import.meta.env.SSR) {
         if (num === 1) {
