@@ -40,8 +40,8 @@ export const integerPath = (group) => {
 };
 
 // —— O ——
-export const removeParallel = (groups) => {
-  const bios = 0.3;
+export const removeParallel = (groups, range) => {
+  const bios = Math.tan((range * Math.PI) / 180);
   for (let i = 0; i < groups.length; i++) {
     const path = groups[i].path;
     groups[i].path = path.reduce((prevArr, cur, index) => {

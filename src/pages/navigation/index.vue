@@ -43,8 +43,8 @@ export default {
       links: [
         {
           route: "svgDataReducer",
-          name: "Svg Data Reducer",
-          desc: "Reducer for automatically exported svg path data",
+          name: "毛毛球解开器",
+          desc: "Node reducer for automatically exported svg path data",
           img: "",
         },
         {
@@ -212,7 +212,7 @@ export default {
 .title {
   font-size: 1.2rem;
   color: #888;
-  font-weight: 100;
+  font-weight: 400;
   // text-decoration: underline;
   // text-decoration-thickness: 1px;
   // text-decoration-color: #aaa;
