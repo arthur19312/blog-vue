@@ -6,12 +6,18 @@ import {
   joinPath,
 } from "./tool";
 
-var originSvgData = null;
+var originSvgData = null,
+  loadFlag = false;
 export const main = (range) => {
-  !originSvgData &&
-    (originSvgData =
-      document.getElementById("svg-reducer-before").contentDocument
-        .firstElementChild.outerHTML);
+  if (!loadFlag) {
+    if (originSvgData?.indexOf("svg") > -1) {
+      loadFlag = true;
+    } else {
+      originSvgData =
+        document.getElementById("svg-reducer-before").contentDocument
+          .firstElementChild.outerHTML;
+    }
+  }
   const path = pipeline(originSvgData, [
     getPath,
     filterPath,
