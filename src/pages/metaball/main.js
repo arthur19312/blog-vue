@@ -1,14 +1,7 @@
-import { initShaders, createProgram } from "@/lib/webgl/util";
-import {
-  VSHADER_SOURCE,
-  FSHADER_SOURCE,
-  VSHADER_SOURCE_TRI,
-  FSHADER_SOURCE_TRI,
-  VSHADER_SOURCE_BALL,
-  FSHADER_SOURCE_BALL,
-  VSHADER_SOURCE_BALL2,
-  FSHADER_SOURCE_BALL2,
-} from "./shader";
+import { initShaders, createProgram, useBg } from "@/lib/webgl/util";
+import Dot2 from "../../lib/math/Dot2";
+import Matrix3 from "../../lib/math/Matrix3";
+import { VSHADER_SOURCE, FSHADER_SOURCE } from "./shader";
 
 export const WIDTH = 1600;
 export const HEIGHT = 1200;
@@ -18,12 +11,14 @@ export const BALL_NUM = 8;
 export const BALL_NUM2 = 6;
 const SCALE = 2.8;
 const originBallsData = new Array(BALL_NUM);
-const originBallsData2 = new Array(BALL_NUM);
+const originBallsData2 = new Array(BALL_NUM2);
 let angle = 0;
 
-var gl;
-let u_xform_addr, u_balls, u_balls2;
-var bgData;
+const triv1 = new Dot2(-0.7, 0.6);
+const triv2 = new Dot2(-0.6, 0.5);
+const triv3 = new Dot2(-0.5, 0.7);
+var gl, program;
+let u_balls, u_balls2;
 
 const setBallsData = () => {
   const ballListLength = BALL_NUM * 3;
@@ -37,92 +32,32 @@ const setBallsData = () => {
   }
 
   gl.uniform3fv(u_balls, ballList);
-};
-const setBallsData2 = () => {
-  const ballListLength = BALL_NUM2 * 3;
-  const ballList = new Float32Array(ballListLength);
+
+  const ballListLength2 = BALL_NUM2 * 3;
+  const ballList2 = new Float32Array(ballListLength2);
   for (let i = 0; i < BALL_NUM2; i++) {
     const ball = originBallsData2[i];
     const listIndex = i * 3;
-    ballList[listIndex] = ball.x;
-    ballList[listIndex + 1] = ball.y;
-    ballList[listIndex + 2] = ball.r;
+    ballList2[listIndex] = ball.x;
+    ballList2[listIndex + 1] = ball.y;
+    ballList2[listIndex + 2] = ball.r;
   }
-
-  gl.uniform3fv(u_balls2, ballList);
+  gl.uniform3fv(u_balls2, ballList2);
 };
 
-export const main = () => {
-  const canvas = document.getElementById("webgl-metaball");
-  gl = canvas.getContext("webgl");
-  if (!gl) {
-    console.log("Failed2get rendering context 4 webgl");
-    return;
-  }
+const initTriangle = () => {
+  const u_initialTriangle = gl.getUniformLocation(program, "u_initialTriangle");
+  gl.uniform2fv(u_initialTriangle, [
+    triv1.x,
+    triv1.y,
+    triv2.x,
+    triv2.y,
+    triv3.x,
+    triv3.y,
+  ]);
+};
 
-  const program1 = createProgram(gl, VSHADER_SOURCE_BALL, FSHADER_SOURCE_BALL);
-  const program0 = createProgram(
-    gl,
-    VSHADER_SOURCE_BALL2,
-    FSHADER_SOURCE_BALL2
-  );
-  const program2 = createProgram(gl, VSHADER_SOURCE_TRI, FSHADER_SOURCE_TRI);
-  const program3 = createProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE);
-
-  gl.useProgram(program1);
-
-  bgData = new Float32Array([-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0]);
-  var bgBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, bgData, gl.STATIC_DRAW);
-  var posAttr = gl.getAttribLocation(program1, "position");
-  gl.enableVertexAttribArray(posAttr);
-  gl.vertexAttribPointer(
-    posAttr,
-    2, // position is a vec2
-    gl.FLOAT, // each component is a float
-    false, // don't normalize values
-    2 * 4, // two 4 byte float components per vertex
-    0 // offset into each span of vertex data
-  );
-
-  u_balls = gl.getUniformLocation(program1, "u_balls");
-
-  initBalls();
-  setBallsData();
-
-  gl.useProgram(program0);
-
-  bgData = new Float32Array([-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0]);
-  var bgBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, bgData, gl.STATIC_DRAW);
-  var posAttr = gl.getAttribLocation(program0, "position");
-  gl.enableVertexAttribArray(posAttr);
-  gl.vertexAttribPointer(
-    posAttr,
-    2, // position is a vec2
-    gl.FLOAT, // each component is a float
-    false, // don't normalize values
-    2 * 4, // two 4 byte float components per vertex
-    0 // offset into each span of vertex data
-  );
-
-  u_balls2 = gl.getUniformLocation(program0, "u_balls2");
-
-  initBalls2();
-  setBallsData2();
-
-  gl.useProgram(program2);
-
-  const triangleVertices = new Float32Array([-0.7, 0.6, -0.6, 0.5, -0.5, 0.7]);
-  const verticesBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, triangleVertices, gl.STATIC_DRAW);
-  const a_position = gl.getAttribLocation(program2, "a_position");
-  gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 2 * 4, 0);
-  gl.enableVertexAttribArray(a_position);
-
+const setTriangleData = () => {
   const radian = (Math.PI * angle) / 180;
   const cos = Math.cos(radian);
   const sin = Math.sin(radian);
@@ -131,7 +66,7 @@ export const main = () => {
   const deltx = 0.5833333;
   const delty = 0.6166666;
 
-  const u_xform = new Float32Array([
+  const mat3 = new Matrix3().set(
     cos * scale,
     sin * scale,
     0,
@@ -140,60 +75,28 @@ export const main = () => {
     0,
     deltx * cos * scale + delty * sin * scale - deltx,
     deltx * sin * scale - delty * cos * scale + delty,
-    1,
+    1
+  );
+  const v1 = triv1.applyMatrix(mat3);
+  const v2 = triv2.applyMatrix(mat3);
+  const v3 = triv3.applyMatrix(mat3);
+
+  console.log(v1, v2, v3);
+  const triangleVertices = new Float32Array([
+    v1.x,
+    v1.y,
+    v2.x,
+    v2.y,
+    v3.x,
+    v3.y,
   ]);
-  u_xform_addr = gl.getUniformLocation(program2, "u_xform");
-  gl.uniformMatrix3fv(u_xform_addr, false, u_xform);
-
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-  const step = () => {
-    drawBg(program3);
-    drawBalls2(program0);
-    drawTriangle(program2);
-    drawBalls(program1);
-    requestAnimationFrame(step);
-  };
-
-  step();
+  const u_triangle = gl.getUniformLocation(program, "u_triangle");
+  gl.uniform2fv(u_triangle, triangleVertices);
 };
 
-const drawBg = (program) => {
-  gl.useProgram(program);
-  var bgBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, bgData, gl.STATIC_DRAW);
-  var posAttr = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(posAttr);
-  gl.vertexAttribPointer(
-    posAttr,
-    2, // position is a vec2
-    gl.FLOAT, // each component is a float
-    false, // don't normalize values
-    2 * 4, // two 4 byte float components per vertex
-    0 // offset into each span of vertex data
-  );
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-};
-
-const drawBalls = (program) => {
-  gl.useProgram(program);
-  var bgBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, bgData, gl.STATIC_DRAW);
-  var posAttr = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(posAttr);
-  gl.vertexAttribPointer(
-    posAttr,
-    2, // position is a vec2
-    gl.FLOAT, // each component is a float
-    false, // don't normalize values
-    2 * 4, // two 4 byte float components per vertex
-    0 // offset into each span of vertex data
-  );
+const updateBalls = () => {
   for (var i = 0; i < BALL_NUM; i++) {
     var mb = originBallsData[i];
-
     mb.x += mb.vx;
     if (mb.x < PADDING) {
       mb.x = PADDING;
@@ -211,30 +114,8 @@ const drawBalls = (program) => {
       mb.vy = -Math.abs(mb.vy);
     }
   }
-
-  setBallsData();
-
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-};
-
-const drawBalls2 = (program) => {
-  gl.useProgram(program);
-  var bgBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, bgBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, bgData, gl.STATIC_DRAW);
-  var posAttr = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(posAttr);
-  gl.vertexAttribPointer(
-    posAttr,
-    2, // position is a vec2
-    gl.FLOAT, // each component is a float
-    false, // don't normalize values
-    2 * 4, // two 4 byte float components per vertex
-    0 // offset into each span of vertex data
-  );
   for (var i = 0; i < BALL_NUM2; i++) {
     var mb = originBallsData2[i];
-
     mb.x += mb.vx;
     if (mb.x < PADDING2) {
       mb.x = PADDING2;
@@ -252,44 +133,7 @@ const drawBalls2 = (program) => {
       mb.vy = -Math.abs(mb.vy);
     }
   }
-
-  setBallsData2();
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-};
-
-const drawTriangle = (program) => {
-  gl.useProgram(program);
-  const triangleVertices = new Float32Array([-0.7, 0.6, -0.6, 0.5, -0.5, 0.7]);
-  const verticesBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, triangleVertices, gl.STATIC_DRAW);
-  const a_position = gl.getAttribLocation(program, "a_position");
-  gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 2 * 4, 0);
-  gl.enableVertexAttribArray(a_position);
-  // gl.bindBuffer(gl.ARRAY_BUFFER, null);
-  angle += 0.75;
-  const radian = (Math.PI * angle) / 180;
-  const cos = Math.cos(radian);
-  const sin = Math.sin(radian);
-  const sinn = Math.sin(radian * 2.78);
-  const scale = SCALE + sinn * 0.4;
-  const deltx = 0.5833333;
-  const delty = 0.6166666;
-
-  const u_xform = new Float32Array([
-    cos * scale,
-    sin * scale,
-    0,
-    -sin * scale,
-    cos * scale,
-    0,
-    deltx * cos * scale + delty * sin * scale - deltx,
-    deltx * sin * scale - delty * cos * scale + delty,
-    1,
-  ]);
-  gl.uniformMatrix3fv(u_xform_addr, false, u_xform);
-
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  setBallsData();
 };
 
 const initBalls = () => {
@@ -304,9 +148,6 @@ const initBalls = () => {
       r,
     };
   }
-};
-
-const initBalls2 = () => {
   for (let i = 0; i < BALL_NUM2; i++) {
     const r = Math.random() * 20 + 120;
     const l = r * 2;
@@ -318,4 +159,34 @@ const initBalls2 = () => {
       r,
     };
   }
+};
+
+export const main = () => {
+  const canvas = document.getElementById("webgl-metaball");
+  gl = canvas.getContext("webgl");
+  if (!gl) {
+    console.log("Failed2get rendering context 4 webgl");
+    return;
+  }
+
+  program = createProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE);
+  gl.useProgram(program);
+  useBg(gl, program);
+
+  u_balls = gl.getUniformLocation(program, "u_balls");
+  u_balls2 = gl.getUniformLocation(program, "u_balls2");
+  initBalls();
+  setBallsData();
+  initTriangle();
+  setTriangleData();
+
+  const step = () => {
+    angle += 0.75;
+    setTriangleData();
+    updateBalls();
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(step);
+  };
+
+  step();
 };

@@ -49,4 +49,8 @@ export default {
   display: flex;
   gap: 6rem;
 }
+
+#svg-reducer-before {
+  pointer-events: none;
+}
 </style>
