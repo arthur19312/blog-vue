@@ -18,7 +18,6 @@ const int	BALL_NUM2	= 6;
 uniform vec3	u_balls[BALL_NUM];
 uniform vec3	u_balls2[BALL_NUM2];
 uniform vec2	u_triangle[3];
-uniform vec2	u_initialTriangle[3];
 
 void drawCross( float x, float y )
 {
@@ -67,7 +66,7 @@ bool drawBall1( float x, float y )
 		float	r	= mb.z;
 		v += r * r / (dx * dx + dy * dy);
 	}
-	if ( v > .9 )
+	if ( v > .91 )
 	{
 		gl_FragColor = vec4( x / WIDTH / 1.5, y / HEIGHT * 1.1,
 				     0.8, .8 );
@@ -112,7 +111,8 @@ bool drawTriangle( float x, float y )
 	float	flag		= isInTriangle( normalizedCoord );
 	if ( flag > 0.5 )
 	{
-		gl_FragColor = vec4( (normalizedCoord.y - .3) * 1.8, .9, (.9 - normalizedCoord.y) * 1.6, .9 );
+    float d = distance(normalizedCoord,u_triangle[0]);
+		gl_FragColor = vec4( d * .47+.38, .9, .66-d*.6, .9 );
 		return(true);
 	}else{
 		return(false);

@@ -22,7 +22,7 @@ export default class Matrix3 {
   premultiply(m) {
     return this.multiplyMatrices(m, this);
   }
-  multiplyMatrices(a, b) {
+  multiplyMatrices(b, a) {
     const ae = a.elements;
     const be = b.elements;
     const te = this.elements;
@@ -72,5 +72,25 @@ export default class Matrix3 {
     te[5] *= s;
     te[8] *= s;
     return this;
+  }
+
+  rotate(radian) {
+    const c = Math.cos(radian);
+    const s = Math.sin(radian);
+    return this.premultiply(
+      new this.constructor().set(c, s, 0, -s, c, 0, 0, 0, 1)
+    );
+  }
+
+  translate(tx, ty) {
+    return this.premultiply(
+      new this.constructor().set(1, 0, 0, 0, 1, 0, tx, ty, 1)
+    );
+  }
+
+  scale(sx, sy = sx) {
+    return this.premultiply(
+      new this.constructor().set(sx, 0, 0, 0, sy, 0, 0, 0, 1)
+    );
   }
 }

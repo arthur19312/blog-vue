@@ -45,43 +45,22 @@ const setBallsData = () => {
   gl.uniform3fv(u_balls2, ballList2);
 };
 
-const initTriangle = () => {
-  const u_initialTriangle = gl.getUniformLocation(program, "u_initialTriangle");
-  gl.uniform2fv(u_initialTriangle, [
-    triv1.x,
-    triv1.y,
-    triv2.x,
-    triv2.y,
-    triv3.x,
-    triv3.y,
-  ]);
-};
-
 const setTriangleData = () => {
   const radian = (Math.PI * angle) / 180;
-  const cos = Math.cos(radian);
-  const sin = Math.sin(radian);
   const sinn = Math.sin(radian * 2.78);
-  const scale = SCALE + sinn * 0.4;
+  const scale = SCALE + sinn * 0.2;
   const deltx = 0.5833333;
-  const delty = 0.6166666;
+  const delty = -0.6166666;
 
-  const mat3 = new Matrix3().set(
-    cos * scale,
-    sin * scale,
-    0,
-    -sin * scale,
-    cos * scale,
-    0,
-    deltx * cos * scale + delty * sin * scale - deltx,
-    deltx * sin * scale - delty * cos * scale + delty,
-    1
-  );
+  const mat3 = new Matrix3()
+    .translate(deltx, delty)
+    .rotate(radian)
+    .scale(scale)
+    .translate(-deltx, -delty);
   const v1 = triv1.applyMatrix(mat3);
   const v2 = triv2.applyMatrix(mat3);
   const v3 = triv3.applyMatrix(mat3);
 
-  console.log(v1, v2, v3);
   const triangleVertices = new Float32Array([
     v1.x,
     v1.y,
@@ -143,8 +122,8 @@ const initBalls = () => {
     originBallsData[i] = {
       x: Math.random() * (WIDTH - l) + r,
       y: Math.random() * (HEIGHT - l) + r,
-      vx: Math.random() * 5,
-      vy: Math.random() * 5,
+      vx: Math.random() * 6,
+      vy: Math.random() * 6,
       r,
     };
   }
@@ -177,11 +156,10 @@ export const main = () => {
   u_balls2 = gl.getUniformLocation(program, "u_balls2");
   initBalls();
   setBallsData();
-  initTriangle();
   setTriangleData();
 
   const step = () => {
-    angle += 0.75;
+    angle -= 1;
     setTriangleData();
     updateBalls();
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
