@@ -117,13 +117,13 @@ const updateBalls = () => {
 
 const initBalls = () => {
   for (let i = 0; i < BALL_NUM; i++) {
-    const r = Math.random() * 60 + 80;
+    const r = Math.random() * 40 + 60;
     const l = r * 2;
     originBallsData[i] = {
       x: Math.random() * (WIDTH - l) + r,
       y: Math.random() * (HEIGHT - l) + r,
-      vx: Math.random() * 6,
-      vy: Math.random() * 6,
+      vx: Math.random() * 5,
+      vy: Math.random() * 5,
       r,
     };
   }

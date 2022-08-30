@@ -66,7 +66,7 @@ bool drawBall1( float x, float y )
 		float	r	= mb.z;
 		v += r * r / (dx * dx + dy * dy);
 	}
-	if ( v > .91 )
+	if ( v > .56 )
 	{
 		gl_FragColor = vec4( x / WIDTH / 1.5, y / HEIGHT * 1.1,
 				     0.8, .8 );
