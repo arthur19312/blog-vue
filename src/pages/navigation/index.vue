@@ -42,17 +42,22 @@ export default {
       // openFlag: false,
       links: [
         {
+          name: "kaikaikitan",
+          desc: "-",
+          img: "",
+        },
+        {
           route: "svgDataReducer",
           name: "毛毛球解开器",
           desc: "Node reducer for automatically exported svg path data",
           img: "",
         },
-        // {
-        //   route: "svgPlayground",
-        //   name: "svg display",
-        //   desc: "I make some svg drawings using figma",
-        //   img: "",
-        // },
+        {
+          route: "svgPlayground",
+          name: "svg display",
+          desc: "I make some svg drawings using pencil in figma",
+          img: "",
+        },
         {
           route: "imgFilter",
           name: "image Filter",

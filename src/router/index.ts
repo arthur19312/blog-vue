@@ -16,6 +16,7 @@ const logger = () => import("@/pages/logger/index.vue");
 const imgFilter = () => import("@/pages/imgFilter/index.vue");
 const svgPlayground = () => import("@/pages/svgPlayground/index.vue");
 const svgDataReducer = () => import("@/pages/svgDataReducer/index.vue");
+const kaikaikitan = () => import("@/pages/kaikaikitan/index.vue");
 
 export const routes = [
   {
@@ -91,6 +92,10 @@ export const routes = [
   {
     path: "/svgDataReducer",
     component: svgDataReducer,
+  },
+  {
+    path: "/kaikaikitan",
+    component: kaikaikitan,
   },
 ];
 

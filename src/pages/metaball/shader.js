@@ -112,7 +112,7 @@ bool drawTriangle( float x, float y )
 	if ( flag > 0.5 )
 	{
     float d = distance(normalizedCoord,u_triangle[0]);
-		gl_FragColor = vec4( d * .47+.38, .9, .66-d*.6, .9 );
+		gl_FragColor = vec4( d * .47+.4, .9, .66-d*.6, .9 );
 		return(true);
 	}else{
 		return(false);
