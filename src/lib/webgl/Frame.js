@@ -25,25 +25,33 @@ export default class glFrame {
     this.canvasId = canvasId;
   }
 
-  init(VSHADER_SOURCE, FSHADER_SOURCE) {
-    console.log("init");
-    this.gl = document.getElementById(this.canvasId).getContext("webgl");
+  #buildProgram(VSHADER_SOURCE, FSHADER_SOURCE) {
     this.program = createProgram(this.gl, VSHADER_SOURCE, FSHADER_SOURCE);
     this.gl.useProgram(this.program);
     useBg(this.gl, this.program);
-    this.initFunc();
+    this.initFunc(this.gl, this.program);
     this.updateFunc && this.update();
   }
 
+  init(VSHADER_SOURCE, FSHADER_SOURCE) {
+    this.gl = document.getElementById(this.canvasId).getContext("webgl");
+    this.#buildProgram(VSHADER_SOURCE, FSHADER_SOURCE);
+  }
+
   update() {
-    console.log("update");
     const step = () => {
-      this.updateFunc();
+      this.updateFunc(this.gl, this.program);
       this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
       this.rafId = requestAnimationFrame(step);
     };
 
     step();
+  }
+
+  refreshProgram(VSHADER_SOURCE, FSHADER_SOURCE) {
+    console.log(11111);
+    this.stop();
+    this.#buildProgram(VSHADER_SOURCE, FSHADER_SOURCE);
   }
 
   stop() {

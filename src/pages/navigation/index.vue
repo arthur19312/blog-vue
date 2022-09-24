@@ -42,10 +42,14 @@ export default {
       // openFlag: false,
       links: [
         {
-          name: "kaikaikitan",
-          desc: "-",
+          name: "noise",
           img: "",
         },
+        // {
+        //   name: "kaikaikitan",
+        //   desc: "-",
+        //   img: "",
+        // },
         {
           route: "svgDataReducer",
           name: "毛毛球解开器",
