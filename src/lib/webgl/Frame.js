@@ -49,7 +49,6 @@ export default class glFrame {
   }
 
   refreshProgram(VSHADER_SOURCE, FSHADER_SOURCE) {
-    console.log(11111);
     this.stop();
     this.#buildProgram(VSHADER_SOURCE, FSHADER_SOURCE);
   }

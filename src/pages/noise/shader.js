@@ -9,7 +9,14 @@ export const FSHADER_SOURCE = ({ fbm }) => {
 	precision lowp float;  
 uniform vec2 u_Resolution;
 uniform float u_Scale;
+uniform float u_IterateRotation;
+uniform float u_IterateShift;
 uniform float u_Time;
+uniform vec3 u_Color1;
+uniform vec3 u_Color2;
+uniform vec3 u_Color3;
+uniform vec3 u_Color4;
+
 
 float random (in vec2 _st) {
     return fract(sin(dot(_st.xy,
@@ -40,17 +47,37 @@ float fbm (in vec2 st) {
     float frequency = 0.;
     for (int i = 0; i < ${fbm}; i++) {
         value += amplitude * noise(st);
-        st = st*2.+.9;
+        float c = cos(u_IterateRotation),s=sin(u_IterateRotation);
+        mat2 rotation = mat2(c,s,-s,c);
+        st = rotation*st*2.+u_IterateShift;
         amplitude *= .5;
     }
     return value;
 }
 
+vec3 iterateFbm(in vec2 p){
+vec2 q = vec2(fbm(p),fbm(p + vec2(5.,2.)+0.142*u_Time));
+vec2 r = vec2(fbm(p + 4.*q + vec2(1.,5.)+0.276*u_Time),fbm(p +4.*q + vec2(5.,2.)+0.134*u_Time));
+float s = fbm(p+4.*r);
+
+
+vec3 color = vec3(s);
+color = mix(u_Color1,u_Color2,s);
+color = mix(color,u_Color3,length(r)/2.);
+color = mix(color,u_Color4,q.x/10.);
+
+return color;
+// return vec3(fbm(p+4.*r),fbm(p+4.*q),fbm(5.*p));
+}
+
 
     void main() {
+      float c = cos(u_Time/20.),s=sin(u_Time/20.);
+        mat2 rotation = mat2(c,s,-s,c);
     vec2 pos = vec2(gl_FragCoord)/u_Resolution * u_Scale;
-    float n = fbm(pos);
-    gl_FragColor = vec4(vec3(n), 1.0);
+    vec3 n = iterateFbm(rotation*pos+0.025*u_Time);
+    vec3 smn = smoothstep(0.,1.,n);
+    gl_FragColor = vec4(n, 1.0);
 }
 `;
 };
