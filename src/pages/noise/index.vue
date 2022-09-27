@@ -25,6 +25,10 @@
         <input type="range" min="0" max="1000" v-model.number="iterateShift" />
       </div>
       <div>
+        <div class="caption">模式</div>
+        <input type="range" min="1" max="2" v-model.number="mode" />
+      </div>
+      <div>
         <div class="caption">底色</div>
         <input type="color" v-model="color1" />
       </div>
@@ -54,6 +58,7 @@ export default {
       runWithTime: false,
       iterateRotation: 0.5,
       iterateShift: 100,
+      mode: 1,
       color1: "#FF000D",
       color2: "#F1FF2E",
       color3: "#85A3FF",
@@ -72,6 +77,10 @@ export default {
     },
     iterateShift(val) {
       paramsDispather("iterateShift", val);
+    },
+    mode(val) {
+      paramsDispather("mode", val);
+      this.switchMode();
     },
     color1(val) {
       paramsDispather("color1", this.hex2rgb(val));
@@ -104,6 +113,23 @@ export default {
       paramsDispather("color2", this.hex2rgb(this.color2));
       paramsDispather("color3", this.hex2rgb(this.color3));
       paramsDispather("color4", this.hex2rgb(this.color4));
+    },
+
+    switchMode() {
+      let colors = [];
+      switch (this.mode) {
+        case 1: {
+          colors = ["#FF000D", "#F1FF2E", "#85A3FF", "#AE00FF"];
+          break;
+        }
+        case 2: {
+          colors = ["#C2FFF8", "#FFC72E", "#C299FF", "#FF2499"];
+          break;
+        }
+      }
+      colors.forEach((c, index) => {
+        this[`color${index + 1}`] = c;
+      });
     },
   },
 

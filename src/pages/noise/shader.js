@@ -12,6 +12,7 @@ uniform float u_Scale;
 uniform float u_IterateRotation;
 uniform float u_IterateShift;
 uniform float u_Time;
+uniform float u_Mode;
 uniform vec3 u_Color1;
 uniform vec3 u_Color2;
 uniform vec3 u_Color3;
@@ -59,13 +60,16 @@ vec3 iterateFbm(in vec2 p){
 vec2 q = vec2(fbm(p),fbm(p + vec2(5.,2.)+0.142*u_Time));
 vec2 r = vec2(fbm(p + 4.*q + vec2(1.,5.)+0.276*u_Time),fbm(p +4.*q + vec2(5.,2.)+0.134*u_Time));
 float s = fbm(p+4.*r);
-
-
 vec3 color = vec3(s);
+if(u_Mode<2.){
 color = mix(u_Color1,u_Color2,s);
 color = mix(color,u_Color3,length(r)/2.);
 color = mix(color,u_Color4,q.x/10.);
-
+}else{
+color = mix(u_Color1,u_Color2,s*3.-r.x-q.y);
+color = mix(color,u_Color3,length(r)-s/2.);
+color = mix(color,u_Color4,dot(q,r)*s);
+}
 return color;
 // return vec3(fbm(p+4.*r),fbm(p+4.*q),fbm(5.*p));
 }
