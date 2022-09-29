@@ -43,6 +43,7 @@ export default {
       links: [
         {
           name: "noise",
+          desc: "Domain warping FBM noise",
           img: "",
         },
         // {
@@ -187,7 +188,7 @@ export default {
   outline: 0;
   text-decoration: none;
   text-align: left;
-  width: 14rem;
+  width: 16rem;
   height: 12rem;
   padding: 2rem;
 

@@ -1,6 +1,11 @@
 <template>
   <div class="ctn">
-    <div class="main-ctn" @mousemove="getCursor">
+    <div
+      class="main-ctn"
+      @mousemove="getCursor"
+      @mousedown="showBg"
+      @mouseup="showMain"
+    >
       <canvas
         id="webgl-filter"
         :width="SCALE"
@@ -8,7 +13,7 @@
         :style="{ opacity: mainOpacity }"
       ></canvas>
       <canvas id="webgl-filter-bg" :width="SCALE" :height="SCALE"></canvas>
-      <div class="compare" @mouseenter="showBg" @mouseleave="showMain">中</div>
+      <!-- <div class="compare" @mouseenter="showBg" @mouseleave="showMain">中</div> -->
     </div>
     <div class="preview">
       <div class="input-group">
@@ -194,6 +199,7 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .ctn {
+  margin-top: 2rem;
   padding: 2rem;
   display: flex;
   gap: 40px;

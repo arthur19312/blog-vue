@@ -61,7 +61,7 @@ export default {
       mode: 1,
       color1: "#FF000D",
       color2: "#F1FF2E",
-      color3: "#85A3FF",
+      color3: "#ADC2FF",
       color4: "#AE00FF",
     };
   },
@@ -119,11 +119,11 @@ export default {
       let colors = [];
       switch (this.mode) {
         case 1: {
-          colors = ["#FF000D", "#F1FF2E", "#85A3FF", "#AE00FF"];
+          colors = ["#FF000D", "#F1FF2E", "#ADC2FF", "#AE00FF"];
           break;
         }
         case 2: {
-          colors = ["#C2FFF8", "#FFC72E", "#C299FF", "#FF2499"];
+          colors = ["#A8FFB7", "#FFC038", "#D699FF", "#FF4747"];
           break;
         }
       }
@@ -157,6 +157,6 @@ export default {
 .caption {
   font-size: 6px;
   color: #aaa;
-  padding: 0.8rem 0 0.2rem 0;
+  padding: 0.6rem 0 0.2rem 0;
 }
 </style>

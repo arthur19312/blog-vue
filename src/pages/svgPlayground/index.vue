@@ -1,13 +1,15 @@
 <template>
   <div class="ctn">
-    <img src="/assets/img/svg/1.svg" />
+    <img :src="imgUrl" />
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      imgUrl: "/assets/img/svg/1.svg",
+    };
   },
   methods: {},
 };
