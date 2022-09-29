@@ -188,7 +188,7 @@ export default {
   outline: 0;
   text-decoration: none;
   text-align: left;
-  width: 16rem;
+  width: 14rem;
   height: 12rem;
   padding: 2rem;
 
