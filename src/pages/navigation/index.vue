@@ -29,6 +29,11 @@
         <!-- </router-link> -->
       </div>
     </div>
+    <div>
+      <a href="https://beian.miit.gov.cn" target="_blank"
+        >—————————— 皖ICP备2022008333号-1 ——————————</a
+      >
+    </div>
   </div>
 </template>
 
@@ -250,5 +255,16 @@ export default {
   color: #aaa;
   font-size: 1rem;
   font-weight: 100;
+}
+
+a {
+  padding-top: 4rem;
+  text-decoration: none;
+  color: #aaa;
+}
+
+.ctn {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

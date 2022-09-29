@@ -13,11 +13,6 @@
         />
       </div>
     </div>
-    <div class="a-ctn">
-      <a href="https://beian.miit.gov.cn" target="_blank"
-        >皖ICP备2022008333号-1</a
-      >
-    </div>
   </div>
 </template>
 
@@ -77,18 +72,5 @@ export default {
       color: #aaa;
     }
   }
-}
-a {
-  text-decoration: none;
-  color: #888;
-}
-
-.a-ctn {
-  margin-top: 0.75rem;
-  padding-right: 8rem;
-}
-.ctn {
-  display: flex;
-  justify-content: space-between;
 }
 </style>
