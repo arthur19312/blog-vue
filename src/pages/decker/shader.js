@@ -49,7 +49,7 @@ export const FSHADER_SOURCE = `
           vec2 offset = vec2(x,y);
           vec2 n = Hash21(i+offset);
           float size = fract(n.x*647.9);
-          float star = Star(f-offset-n+.5,smoothstep(.4,.9,size)*.4);
+          float star = Star(f-offset-n+.5,smoothstep(.4,.9,size)*.4) * (sin(iTime*16.+n.y*10.)*.5+.9);
           vec3 color =(sin( size * vec3(.4,.2,.8)*135.)*.3+.7)*vec3(.6,.4,.8);
           col+= star*(size+1.)*color;
         }
