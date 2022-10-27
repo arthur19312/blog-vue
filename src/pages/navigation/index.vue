@@ -47,6 +47,12 @@ export default {
       // openFlag: false,
       links: [
         {
+          route: "decker",
+          name: "Wake Up Decker!",
+          desc: "Ultraman Decker OP",
+          img: "",
+        },
+        {
           name: "noise",
           desc: "Domain warping FBM noise",
           img: "",
