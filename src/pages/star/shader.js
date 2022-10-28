@@ -26,10 +26,10 @@ export const FSHADER_SOURCE = `
     // light
       float d = length(uv);
       float m = .03/d;
-      float size = smoothstep(0.,1.2,m);
+      float size = smoothstep(0.,1.5,m);
 
       // ray
-      float ray = max(0.,1.-abs(uv.x*uv.y*10000.));
+      float ray = max(0.,1.-abs(uv.x*uv.y*16000.));
       m+=ray*flare*size;
       uv*= Rot(3.141593/4.);
       float ray2 = max(0.,1.-abs(uv.x*uv.y*10000.));
@@ -66,7 +66,7 @@ export const FSHADER_SOURCE = `
         float depth = fract(i+t);
         float scale = mix(16.,.5,depth);
         float fade = depth * smoothstep(1.,.8,depth);
-        col+= StarLayer(uv * scale+i*249.+ mouse*(i))*fade;
+        col+= StarLayer(uv * scale+i*249.+ mouse)*fade;
       }
     return col;
   }
@@ -74,7 +74,7 @@ export const FSHADER_SOURCE = `
     void main() {
       vec2 uv = (gl_FragCoord.xy - .5*iResolution.xy) / min(iResolution.y, iResolution.x);
 
-      vec2 mouse = (iMouse - iResolution.xy*.5)/ min(iResolution.y, iResolution.x)*.2;
+      vec2 mouse = (iMouse - iResolution.xy*.5)/ min(iResolution.y, iResolution.x)*.2*vec2(1.,-1.);
       uv+=mouse*1.;
       vec3 col = vec3(0);
       col+= renderStar(uv,mouse);
