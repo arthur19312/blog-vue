@@ -47,11 +47,17 @@ export default {
       // openFlag: false,
       links: [
         {
-          route: "decker",
-          name: "Wake Up Decker!",
-          desc: "Ultraman Decker OP",
+          route: "star",
+          name: "屏幕指纹检测器",
+          desc: "Star practice",
           img: "",
         },
+        // {
+        //   route: "star",
+        //   name: "Wake Up Decker!",
+        //   desc: "Ultraman Decker OP",
+        //   img: "",
+        // },
         {
           name: "noise",
           desc: "Domain warping FBM noise",

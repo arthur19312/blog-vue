@@ -1,5 +1,5 @@
 <template>
-  <canvas id="webgl-decker" width="800" height="600"></canvas>
+  <canvas id="webgl-star" width="1600" height="1200"></canvas>
 </template>
 
 <script>
@@ -15,4 +15,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+#webgl-star {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+</style>

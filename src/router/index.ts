@@ -18,7 +18,7 @@ const svgPlayground = () => import("@/pages/svgPlayground/index.vue");
 const svgDataReducer = () => import("@/pages/svgDataReducer/index.vue");
 const kaikaikitan = () => import("@/pages/kaikaikitan/index.vue");
 const noise = () => import("@/pages/noise/index.vue");
-const decker = () => import("@/pages/decker/index.vue");
+const star = () => import("@/pages/star/index.vue");
 
 export const routes = [
   {
@@ -104,8 +104,8 @@ export const routes = [
     component: noise,
   },
   {
-    path: "/decker",
-    component: decker,
+    path: "/star",
+    component: star,
   },
 ];
 
