@@ -11,7 +11,6 @@ export const createProgram = (gl, vshader, fshader) => {
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
-  console.log(gl.getProgramParameter(program, gl.LINK_STATUS));
   return program;
 };
 

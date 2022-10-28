@@ -58,11 +58,16 @@ export default class glFrame {
   #onSize() {
     const x = window.innerWidth,
       y = window.innerHeight;
+    this.domEle.width = x;
+    this.domEle.height = y;
+    this.domEle.style.width = x + "px";
+    this.domEle.style.height = y + "px";
     this.gl.uniform2f(
       getUniformLoc(this.gl, this.program, "iResolution"),
       x,
       y
     );
+    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
   }
 
   #buildProgram(VSHADER_SOURCE, FSHADER_SOURCE) {
