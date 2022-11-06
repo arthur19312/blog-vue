@@ -1,7 +1,7 @@
 <template>
   <!-- <Navigation @displayContent="displayContent($event)" /> -->
   <!-- <Content :style="{ display: displayFlag ? 'flex' : 'none' }" /> -->
-  <Content  />
+  <Content />
 </template>
 
 <script lang="ts">

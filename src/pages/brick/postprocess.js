@@ -27,7 +27,6 @@ const getColorPass = (renderer) => {
       },
     },
     vertexShader: `
-    attribute vec3 normal;
       varying vec2 vUv;
       varying vec3 vNormal;
       
