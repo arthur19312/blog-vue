@@ -1143,7 +1143,7 @@ Object.assign(Quaternion.prototype, {
     return this;
   },
 
-  inverse: function () {
+  invert: function () {
     // quaternion is assumed to have unit length
 
     return this.conjugate();

@@ -1,13 +1,27 @@
 <template>
-  <a target="_blank" :href="gitUrl(url)">
+  <a
+    target="_blank"
+    :href="gitUrl(url)"
+    aria-label="read more about my displays on github"
+  >
     <div id="canvasContainer" ref="threeContainer"></div>
   </a>
   <div class="git-item" style="margin-left: 1rem">
     <div class="button-container">
-      <img :src="imgSrc(1)" class="switch-button" @click="switchIndex(1)" />
+      <img
+        :src="imgSrc(1)"
+        class="switch-button"
+        @click="switchIndex(1)"
+        :alt="`A 3d presentation modeled in blender on github: ${imgSrc(1)}`"
+      />
     </div>
     <div class="button-container">
-      <img :src="imgSrc(2)" class="switch-button" @click="switchIndex(2)" />
+      <img
+        :src="imgSrc(2)"
+        class="switch-button"
+        @click="switchIndex(2)"
+        :alt="`A 3d presentation modeled in Threejs on github: ${imgSrc(2)}`"
+      />
     </div>
   </div>
 </template>

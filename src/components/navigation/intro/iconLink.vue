@@ -1,5 +1,10 @@
 <template>
-  <a :href="href" target="_blank" class="a-link">
+  <a
+    :href="href"
+    target="_blank"
+    class="a-link"
+    aria-label="contact me on social media"
+  >
     <span
       class="iconfont"
       :class="iconName"

@@ -1,6 +1,6 @@
 <template>
   <div class="avatar-container">
-    <img :src="imgSrc" class="avatar-img" />
+    <img :src="imgSrc" class="avatar-img" alt="avatar of arthur19312" />
     <div class="avatar-text">{{ name }}</div>
   </div>
 </template>

@@ -19,12 +19,21 @@
           <a
             :href="'https://github.com/arthur19312/' + item.gitUrl"
             target="_blank"
+            aria-label="read more about my github displays"
           >
-            <img :src="imgUrlRes(item.imgUrl)" :style="{ width: item.width }" />
+            <img
+              :src="imgUrlRes(item.imgUrl)"
+              :style="{ width: item.width }"
+              :alt="`https://github.com/arthur19312/${item.gitUrl}`"
+            />
           </a>
         </div>
         <div class="git-item" :ref="'gitItem' + (imgProjects.length + 1)">
-          <img :src="imgUrlRes('kly.png')" style="width: 48rem" />
+          <img
+            :src="imgUrlRes('kly.png')"
+            style="width: 48rem"
+            :alt="`https://github.com/arthur19312`"
+          />
         </div>
       </div>
     </div>

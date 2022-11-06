@@ -1,6 +1,6 @@
 <template>
   <div class="item-content">
-    <img :src="imgUrl(imgName)" />
+    <img :src="imgUrl(imgName)" :alt="`photo of my footprint on ${location}`" />
     <div class="date-line">
       <span class="date-text">{{ formatDate(date) }}</span>
     </div>

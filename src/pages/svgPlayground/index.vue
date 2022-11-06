@@ -1,6 +1,6 @@
 <template>
   <div class="ctn">
-    <img :src="imgUrl" />
+    <img :src="imgUrl" alt="svg made by pencil in figma" />
   </div>
 </template>
 

@@ -21,6 +21,7 @@
           :key="item.name"
           :href="preUrl(item.route || item.name)"
           target="_blank"
+          :aria-label="`read more about ${item.name} - ${item.desc}`"
         >
           <span class="num">{{ `${addPreZero(index + 1)} / ` }}</span>
           <div class="title">{{ item.name }}</div>
@@ -30,7 +31,7 @@
       </div>
     </div>
     <div>
-      <a href="https://beian.miit.gov.cn" target="_blank"
+      <a href="https://beian.miit.gov.cn" target="_blank" aria-label="网站备案"
         >—————————— 皖ICP备2022008333号-1 ——————————</a
       >
     </div>
@@ -46,18 +47,24 @@ export default {
     return {
       // openFlag: false,
       links: [
+        // {
+        //   route: "decker",
+        //   name: "Wake Up Decker!",
+        //   desc: "Ultraman Decker OP",
+        //   img: "",
+        // },
+        {
+          route: "brick",
+          desc: "",
+          img: "",
+        },
         {
           route: "star",
           name: "屏幕指纹检测器",
           desc: "Star practice",
           img: "",
         },
-        // {
-        //   route: "star",
-        //   name: "Wake Up Decker!",
-        //   desc: "Ultraman Decker OP",
-        //   img: "",
-        // },
+
         {
           name: "noise",
           desc: "Domain warping FBM noise",

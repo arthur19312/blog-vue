@@ -1,6 +1,6 @@
 <template>
   <div class="container" :style="{ height }">
-    <div class="svg-ctn">
+    <!-- <div class="svg-ctn">
       <div
         class="rotate"
         v-for="(item, index) in '2022/02/02'.split('')"
@@ -8,7 +8,7 @@
       >
         <img :src="svgSrc(item)" style="width: 26%" />
       </div>
-    </div>
+    </div> -->
     <div class="img-container">
       <div
         class="left-slider slider"
@@ -20,10 +20,16 @@
         @click="slide(1)"
         :style="{ height }"
       ></div>
-      <img :src="imgSrc" class="lead-img" ref="leadImg" @load="updateHeight" />
+      <img
+        :src="imgSrc"
+        class="lead-img"
+        ref="leadImg"
+        @load="updateHeight"
+        alt="display of my footprint"
+      />
     </div>
 
-    <div class="rotate-reverse">2022/02/02 深圳</div>
+    <!-- <div class="rotate-reverse">2022/02/02 深圳</div> -->
   </div>
 </template>
 

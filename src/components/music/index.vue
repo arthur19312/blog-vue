@@ -3,7 +3,7 @@
     <div class="music-container">
       <div class="left-content">
         <div class="audio-container">
-          <img :src="imgSrc" class="cover" />
+          <img :src="imgSrc" class="cover" alt="p5 cd cover" />
           <div id="sketch" class="sketch"></div>
         </div>
         <div>
