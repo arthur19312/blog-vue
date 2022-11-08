@@ -1,8 +1,7 @@
 import * as THREE from "@/lib/ThreeJs/three.module";
 import { Vector3 } from "@/lib/ThreeJs/three.module";
-import { getComposer } from "./postprocess";
-
 import { OrbitControls } from "@/lib/ThreeJs/OrbitControls";
+import { getComposer } from "./postprocess";
 
 const DIRECTION_LIST = [
   [1, 0, 0],
@@ -14,46 +13,68 @@ const DIRECTION_LIST = [
 ];
 const PI = Math.PI;
 const SIZE = 90;
-const MAX_STEP = 5;
-const MIN_STEP = 1;
+const MAX_STEP = 10;
+const MIN_STEP = 3;
 const baseMaterial = new THREE.MeshStandardMaterial({
   color: 0x5588dd,
   metalness: 0.9,
   roughness: 0.22,
 });
+const START_X = -120;
+const START_Y = 70;
+const STEP_X = 60;
+const STEP_Y = 60;
+
 var animateId, brickAniId;
-var scene, renderer, camera, controls;
+var scene, renderer, camera;
 var composer;
+var controls, cameraHelper;
+var deltaY = 0;
+
+var list = new THREE.Group();
+var group = new THREE.Group();
 const state = {
   direction: new Vector3(0, 0, 0),
-  position: new Vector3(0, 0, 0),
+  position: new Vector3(START_X, START_Y, 0),
   size: new Vector3(0, 0, 0),
 };
 if (!import.meta.env.SSR) {
-  camera = new THREE.PerspectiveCamera(
-    50,
-    window.innerWidth / window.innerHeight,
-    10,
-    1000
-  );
-  camera.position.z = 50;
+  let SCREEN_WIDTH = window.innerWidth;
+  let SCREEN_HEIGHT = window.innerHeight;
+
+  scene = new THREE.Scene();
+  window.scene = scene;
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setClearAlpha(0);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.domElement.id = "brickCanvas";
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-  controls.dampingFactor = 0.05;
-  controls.screenSpacePanning = false;
-  controls.minDistance = 30;
-  controls.maxDistance = 500;
-  controls.maxPolarAngle = Math.PI / 2;
+
+  camera = new THREE.OrthographicCamera(
+    -SCREEN_WIDTH / 2,
+    SCREEN_WIDTH / 2,
+    SCREEN_HEIGHT / 2,
+    -SCREEN_HEIGHT / 2,
+    0.1,
+    1000
+  );
+
+  camera.position.x = 0;
+  camera.position.y = 0;
+  camera.position.z = 100;
+  camera.lookAt(scene.position);
+  camera.zoom = 4.25;
+  camera.updateProjectionMatrix();
+
+  scene.add(camera);
+  // controls = new OrbitControls(camera, renderer.domElement);
+  // controls.autoRotate = true;
+  // cameraHelper = new THREE.CameraHelper(camera);
+  // scene.add(cameraHelper);
 }
 
 function startAnimate() {
-  scene = new THREE.Scene();
   const light = new THREE.AmbientLight(0xe0e0e0);
   scene.add(light);
 
@@ -66,7 +87,6 @@ function startAnimate() {
 
 function animate() {
   animateId = requestAnimationFrame(animate);
-  controls.update();
   // renderer.render(scene, camera);
   composer.render();
 }
@@ -108,10 +128,21 @@ const getRandomMaterial = () => {
   });
 };
 export const generateBricks = () => {
+  scene.add(list);
   brickAniId = setInterval(getBrick, 100);
 };
-
 export const getBrick = () => {
+  const f = group.children.length % 5;
+  if (!f) {
+    group = new THREE.Group();
+    list.add(group);
+    const l = list.children.length - 1;
+    state.position.x = (l % 5) * STEP_X + START_X;
+    state.position.y = -Math.floor(l / 5) * STEP_Y + START_Y;
+  }
+  if (list.children.length === 40) {
+    clearInterval(brickAniId);
+  }
   const { position, direction, size } = state;
   const newDirection = getNextDirection(direction.negate());
   const box = getRandomBox();
@@ -123,11 +154,12 @@ export const getBrick = () => {
   cube.position.x = newPosition.x;
   cube.position.y = newPosition.y;
   cube.position.z = newPosition.z;
-  state.direction = newDirection;
-  state.position = newPosition;
-  scene.add(cube);
+  // state.direction = newDirection;
+  // state.position = newPosition;
+  group.add(cube);
+};
 
-  if (scene.children.length > 500) {
-    clearInterval(brickAniId);
-  }
+export const onMouseWheel = (e) => {
+  deltaY -= e.deltaY / 100;
+  if (deltaY > -300 && deltaY < 40) camera.position.y = deltaY;
 };

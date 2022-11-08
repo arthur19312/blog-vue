@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { rendererDom, startAnimate, stopAnimate } from "./3d";
+import { rendererDom, startAnimate, stopAnimate, onMouseWheel } from "./3d";
 
 export default defineComponent({
   name: "moon",
@@ -19,11 +19,22 @@ export default defineComponent({
       dom.appendChild(rendererDom);
       startAnimate();
     }
+
+    window.addEventListener("wheel", onMouseWheel, {
+      passive: true,
+    });
+    window.addEventListener("onDrag", onMouseWheel, {
+      passive: true,
+    });
   },
   unmounted() {
     if (!import.meta.env.SSR) {
       stopAnimate();
     }
+
+    window.removeEventListener("wheel", onMouseWheel, {
+      passive: true,
+    });
   },
 });
 </script>

@@ -4913,7 +4913,7 @@ Object3D.prototype = Object.assign(Object.create(EventDispatcher.prototype), {
     if (parent) {
       _m1$1.extractRotation(parent.matrixWorld);
       _q1.setFromRotationMatrix(_m1$1);
-      this.quaternion.premultiply(_q1.inverse());
+      this.quaternion.premultiply(_q1.invert());
     }
   },
 
