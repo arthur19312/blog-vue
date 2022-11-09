@@ -2,6 +2,7 @@ import * as THREE from "@/lib/ThreeJs/three.module";
 import { Vector3 } from "@/lib/ThreeJs/three.module";
 import { OrbitControls } from "@/lib/ThreeJs/OrbitControls";
 import { getComposer } from "./postprocess";
+import { AnimateObj } from "./AnimateObj";
 
 const DIRECTION_LIST = [
   [1, 0, 0],
@@ -29,10 +30,16 @@ var animateId, brickAniId;
 var scene, renderer, camera;
 var composer;
 var controls, cameraHelper;
-var deltaY = 0;
+var scrollY = 0;
+var raycaster = new THREE.Raycaster();
+var pointer = new THREE.Vector2();
 
 var list = new THREE.Group();
 var group = new THREE.Group();
+var intersectList = [];
+var drag = false,
+  animateQueue = [];
+
 const state = {
   direction: new Vector3(0, 0, 0),
   position: new Vector3(START_X, START_Y, 0),
@@ -86,6 +93,13 @@ function startAnimate() {
 }
 
 function animate() {
+  // let gcList = [];
+  // animateQueue.forEach((item, index) => {
+  //   if (!item.detectAniStatus()) {
+  //     gcList.push(index);
+  //   }
+  // });
+  // animateQueue = animateQueue.filter((_, index) => !gcList.includes(index));
   animateId = requestAnimationFrame(animate);
   // renderer.render(scene, camera);
   composer.render();
@@ -136,6 +150,7 @@ export const getBrick = () => {
   if (!f) {
     group = new THREE.Group();
     list.add(group);
+
     const l = list.children.length - 1;
     state.position.x = (l % 5) * STEP_X + START_X;
     state.position.y = -Math.floor(l / 5) * STEP_Y + START_Y;
@@ -156,10 +171,42 @@ export const getBrick = () => {
   cube.position.z = newPosition.z;
   // state.direction = newDirection;
   // state.position = newPosition;
+  cube.index = list.children.length - 1;
   group.add(cube);
+  intersectList.push(cube);
 };
 
 export const onMouseWheel = (e) => {
-  deltaY -= e.deltaY / 100;
-  if (deltaY > -300 && deltaY < 40) camera.position.y = deltaY;
+  scrollY -= e.scrollY / 100;
+  if (scrollY > -300 && scrollY < 40) camera.position.y = scrollY;
+};
+export const onMouseDown = (e) => {
+  const { clientX, clientY } = e;
+  drag = true;
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(intersectList);
+  if (intersects.length) {
+    animateQueue.push(
+      new AnimateObj(
+        list.children[intersects[0].object.index],
+        clientX,
+        clientY
+      )
+    );
+  }
+};
+export const onMouseUp = (e) => {
+  drag = false;
+  animateQueue[animateQueue.length - 1].startReset();
+};
+
+export const onMouseMove = (e) => {
+  const { clientX, clientY } = e;
+  if (!drag) {
+  } else {
+    animateQueue[animateQueue.length - 1].update(clientX, clientY);
+  }
 };
