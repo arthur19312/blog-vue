@@ -25,6 +25,8 @@ const START_X = -120;
 const START_Y = 70;
 const STEP_X = 60;
 const STEP_Y = 60;
+const MAX_SCROLL_Y = START_Y;
+const MIN_SCROLL_Y = START_Y - STEP_Y * 8;
 
 var animateId, brickAniId;
 var scene, renderer, camera;
@@ -42,7 +44,7 @@ var drag = false,
 
 const state = {
   direction: new Vector3(0, 0, 0),
-  position: new Vector3(START_X, START_Y, 0),
+  position: new Vector3(0, 0, 0),
   size: new Vector3(0, 0, 0),
 };
 if (!import.meta.env.SSR) {
@@ -84,6 +86,8 @@ if (!import.meta.env.SSR) {
 function startAnimate() {
   const light = new THREE.AmbientLight(0xe0e0e0);
   scene.add(light);
+  const directionalLight = new THREE.DirectionalLight(0xddffff, 0.8);
+  scene.add(directionalLight);
 
   generateBricks();
 
@@ -132,13 +136,18 @@ const getRandomBox = () => {
   const x = getStep();
   const y = getStep();
   const z = getStep();
-  state.size = new Vector3(x, y, z);
+  // state.size = new Vector3(x, y, z);
   return new THREE.BoxGeometry(x, y, z);
 };
 
 const getRandomMaterial = () => {
-  return new THREE.MeshBasicMaterial({
+  // return new THREE.MeshBasicMaterial({
+  //   color: new THREE.Color(`rgb(${getColor()}, ${getColor()}, ${getColor()})`),
+  // });
+  return new THREE.MeshStandardMaterial({
     color: new THREE.Color(`rgb(${getColor()}, ${getColor()}, ${getColor()})`),
+    metalness: Math.random() / 2,
+    roughness: Math.random(),
   });
 };
 export const generateBricks = () => {
@@ -150,10 +159,13 @@ export const getBrick = () => {
   if (!f) {
     group = new THREE.Group();
     list.add(group);
-
     const l = list.children.length - 1;
-    state.position.x = (l % 5) * STEP_X + START_X;
-    state.position.y = -Math.floor(l / 5) * STEP_Y + START_Y;
+    group.position.x = (l % 5) * STEP_X + START_X;
+    group.position.y = -Math.floor(l / 5) * STEP_Y + START_Y;
+    group.setRotationFromAxisAngle(
+      new Vector3(Math.random(), Math.random(), Math.random()).normalize(),
+      Math.random() * 10
+    );
   }
   if (list.children.length === 40) {
     clearInterval(brickAniId);
@@ -177,8 +189,9 @@ export const getBrick = () => {
 };
 
 export const onMouseWheel = (e) => {
-  scrollY -= e.scrollY / 100;
-  if (scrollY > -300 && scrollY < 40) camera.position.y = scrollY;
+  scrollY -= e.deltaY / 100;
+  if (scrollY > MIN_SCROLL_Y && scrollY <= MAX_SCROLL_Y)
+    camera.position.y = scrollY;
 };
 export const onMouseDown = (e) => {
   const { clientX, clientY } = e;

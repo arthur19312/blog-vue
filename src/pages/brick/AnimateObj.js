@@ -17,6 +17,7 @@ class AnimateObj {
     this.posBiosList = this.obj.children.map((i) =>
       i.position.clone().add(this.pos.clone().negate())
     );
+    console.log(this.obj);
   }
   detectAniStatus() {
     return this.obj.rotation.y || this.obj.rotation.x;
@@ -43,21 +44,16 @@ class AnimateObj {
     //   new Vector3(this.pos.x, 0, 0).normalize(),
     //   (y - this.originPos.y) * this.inSpeed
     // );
-    this.obj.children.forEach((item, i) => {
-      //   this.moveIn(item);
-      //   item.rotation.y += (x - this.originPos.x) * this.inSpeed;
-      //   item.rotation.x -= (y - this.originPos.y) * this.inSpeed;
-      item.rotateOnAxis(
-        new Vector3(0, this.pos.y, 0).normalize(),
-        (x - this.originPos.x) * this.inSpeed
-      );
-      item.rotateOnAxis(
-        new Vector3(this.pos.x, 0, 0).normalize(),
-        (y - this.originPos.y) * this.inSpeed
-      );
-      //   item.rotateX((y - this.originPos.y) * this.inSpeed);
-      //   this.moveOut(item);
-    });
+    // this.obj.children.forEach((item, i) => {
+    //   this.moveIn(item);
+    // });
+    this.obj.rotateY((x - this.originPos.x) * this.inSpeed);
+    this.obj.rotateX((y - this.originPos.y) * this.inSpeed);
+    // this.obj.rotation.y += (x - this.originPos.x) * this.inSpeed;
+    // this.obj.rotation.x -= (y - this.originPos.y) * this.inSpeed;
+    // this.obj.children.forEach((item, i) => {
+    //   this.moveOut(item);
+    // });
   }
   decrease(n) {
     if (n === 0) return 0;
