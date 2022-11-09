@@ -36,24 +36,8 @@ class AnimateObj {
   }
 
   update(x, y) {
-    // this.obj.rotateOnAxis(
-    //   new Vector3(0, this.pos.y, 0).normalize(),
-    //   (x - this.originPos.x) * this.inSpeed
-    // );
-    // this.obj.rotateOnAxis(
-    //   new Vector3(this.pos.x, 0, 0).normalize(),
-    //   (y - this.originPos.y) * this.inSpeed
-    // );
-    // this.obj.children.forEach((item, i) => {
-    //   this.moveIn(item);
-    // });
     this.obj.rotateY((x - this.originPos.x) * this.inSpeed);
     this.obj.rotateX((y - this.originPos.y) * this.inSpeed);
-    // this.obj.rotation.y += (x - this.originPos.x) * this.inSpeed;
-    // this.obj.rotation.x -= (y - this.originPos.y) * this.inSpeed;
-    // this.obj.children.forEach((item, i) => {
-    //   this.moveOut(item);
-    // });
   }
   decrease(n) {
     if (n === 0) return 0;
@@ -74,18 +58,18 @@ class AnimateObj {
     });
   }
   reset(obj) {
-    const { x, y } = obj.children[0].rotation;
-    if (Math.abs(x) < this.bios && Math.abs(y) < this.bios) {
-      this.obj.children.forEach((item, i) => {
-        this.moveIn(item);
-        item.rotation.x = 0;
-        item.rotation.y = 0;
-        this.moveOut(item);
-      });
-      clearInterval(this.aniId);
-    } else {
-      this.decreasePosition();
-    }
+    // const { x, y } = obj.children[0].rotation;
+    // if (Math.abs(x) < this.bios && Math.abs(y) < this.bios) {
+    //   this.obj.children.forEach((item, i) => {
+    //     this.moveIn(item);
+    //     item.rotation.x = 0;
+    //     item.rotation.y = 0;
+    //     this.moveOut(item);
+    //   });
+    //   clearInterval(this.aniId);
+    // } else {
+    //   this.decreasePosition();
+    // }
   }
   startReset() {
     this.aniId = setInterval(() => {

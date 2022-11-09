@@ -14,19 +14,14 @@ const DIRECTION_LIST = [
 ];
 const PI = Math.PI;
 const SIZE = 90;
-const MAX_STEP = 10;
+const MAX_STEP = 14;
 const MIN_STEP = 3;
-const baseMaterial = new THREE.MeshStandardMaterial({
-  color: 0x5588dd,
-  metalness: 0.9,
-  roughness: 0.22,
-});
 const START_X = -120;
 const START_Y = 70;
 const STEP_X = 60;
 const STEP_Y = 60;
-const MAX_SCROLL_Y = START_Y;
-const MIN_SCROLL_Y = START_Y - STEP_Y * 8;
+const MAX_SCROLL_Y = START_Y - 40;
+const MIN_SCROLL_Y = START_Y - STEP_Y * 7 + 40;
 
 var animateId, brickAniId;
 var scene, renderer, camera;
@@ -88,6 +83,8 @@ function startAnimate() {
   scene.add(light);
   const directionalLight = new THREE.DirectionalLight(0xddffff, 0.8);
   scene.add(directionalLight);
+  const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x80d0f0, 0.3);
+  scene.add(hemisphereLight);
 
   generateBricks();
 
@@ -146,8 +143,8 @@ const getRandomMaterial = () => {
   // });
   return new THREE.MeshStandardMaterial({
     color: new THREE.Color(`rgb(${getColor()}, ${getColor()}, ${getColor()})`),
-    metalness: Math.random() / 2,
-    roughness: Math.random(),
+    metalness: Math.random() / 10,
+    roughness: Math.random() / 1.2,
   });
 };
 export const generateBricks = () => {
@@ -167,9 +164,7 @@ export const getBrick = () => {
       Math.random() * 10
     );
   }
-  if (list.children.length === 40) {
-    clearInterval(brickAniId);
-  }
+
   const { position, direction, size } = state;
   const newDirection = getNextDirection(direction.negate());
   const box = getRandomBox();
@@ -186,6 +181,10 @@ export const getBrick = () => {
   cube.index = list.children.length - 1;
   group.add(cube);
   intersectList.push(cube);
+
+  if (list.children.length === 40 && group.children.length === 5) {
+    clearInterval(brickAniId);
+  }
 };
 
 export const onMouseWheel = (e) => {
@@ -209,6 +208,8 @@ export const onMouseDown = (e) => {
         clientY
       )
     );
+  } else {
+    drag = false;
   }
 };
 export const onMouseUp = (e) => {

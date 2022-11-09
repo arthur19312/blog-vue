@@ -44,8 +44,8 @@ const getColorPass = (renderer) => {
       const vec3 BORDER_COLOR = vec3(.1,.1,.1);
       void main() {
         vec4 preCol = texture2D(tDiffuse, vUv);
-        vec3 col = vec3(.9,.9,.9)*.4+vec3(
-            preCol.rgb * color)*.6;
+        vec3 col = vec3(.9,.9,.9)*.2+vec3(
+            preCol.rgb*.6+color*.4)*.8;
         vec2 invSize = 1. / uSize;
             
             float a0=1.;
