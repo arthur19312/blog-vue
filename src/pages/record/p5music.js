@@ -77,7 +77,18 @@ const s = (sketch) => {
     sketch.audioContext_.resume();
   };
 };
-
 export const p5music = () => {
-  return new p5(s, "sketchRecord");
+  let aniId;
+  return new Promise((resolve) => {
+    if (window.isP5Onload && window.isP5MusicOnload) {
+      resolve(new p5(s, "sketchRecord"));
+    } else {
+      aniId = setInterval(() => {
+        if (isP5Onload && isP5MusicOnload) {
+          clearInterval(aniId);
+          resolve(new p5(s, "sketchRecord"));
+        }
+      }, 500);
+    }
+  });
 };

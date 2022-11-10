@@ -38,8 +38,8 @@ export default {
     },
   },
   mounted: function () {
-    this.$nextTick(function () {
-      this.GLOBAL_P5_AUDIO = p5music();
+    this.$nextTick(async function () {
+      this.GLOBAL_P5_AUDIO = await p5music();
     });
     document.getElementById("audioRecord").volume = 0.5;
     document.getElementById("sketchRecord").innerHTML = "";
@@ -50,7 +50,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.header{
+.header {
   margin-top: 2rem;
 }
 

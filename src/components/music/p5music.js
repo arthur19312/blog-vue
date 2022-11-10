@@ -283,6 +283,17 @@ const s = (sketch) => {
 };
 
 export const p5music = () => {
-  //sketch是要把canvas放在那个div里的id
-  return new p5(s, "sketch");
+  let aniId;
+  return new Promise((resolve) => {
+    if (window.isP5Onload && window.isP5MusicOnload) {
+      resolve(new p5(s, "sketch"));
+    } else {
+      aniId = setInterval(() => {
+        if (isP5Onload && isP5MusicOnload) {
+          clearInterval(aniId);
+          resolve(new p5(s, "sketch"));
+        }
+      }, 500);
+    }
+  });
 };

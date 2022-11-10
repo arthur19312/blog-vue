@@ -15,8 +15,16 @@
 
   <body>
     <div id="app"></div>
-    <script src="/p5/p5.min.js" defer></script>
-    <script src="/p5/p5.sound.min.js" defer></script>
+    <script>
+      function p5Onload() {
+        window.isP5Onload = true;
+      }
+      function p5MusicOnload() {
+        window.isP5MusicOnload = true;
+      }
+    </script>
+    <script src="/p5/p5.min.js" defer onload="p5Onload()"></script>
+    <script src="/p5/p5.sound.min.js" defer onload="p5MusicOnload()"></script>
     <script type="module" src="/src/main.ts"></script>
     <script id="vshader" type="x-shader/x-vertex"></script>
   </body>

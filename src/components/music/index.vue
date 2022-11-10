@@ -104,8 +104,8 @@ export default {
   },
   mounted: function () {
     //this.cursor = new Cursor({ size: 32, blurSize: 10 });
-    this.$nextTick(function () {
-      this.GLOBAL_P5_AUDIO = p5music();
+    this.$nextTick(async function () {
+      this.GLOBAL_P5_AUDIO = await p5music();
       //this.cursor.init();
     });
     document.getElementById("musicAudio").volume = 0.5;
