@@ -55,7 +55,8 @@ export default {
         // },
         {
           route: "brick",
-          desc: "",
+          name: "Sugar Bricks",
+          desc: "可爱捏 喜欢捏",
           img: "",
         },
         {

@@ -21,7 +21,7 @@ const START_Y = 70;
 const STEP_X = 60;
 const STEP_Y = 60;
 const MAX_SCROLL_Y = START_Y - 40;
-const MIN_SCROLL_Y = START_Y - STEP_Y * 7 + 40;
+const MIN_SCROLL_Y = START_Y - STEP_Y * 9 + 40;
 
 var animateId, brickAniId;
 var scene, renderer, camera;
@@ -182,7 +182,7 @@ export const getBrick = () => {
   group.add(cube);
   intersectList.push(cube);
 
-  if (list.children.length === 40 && group.children.length === 5) {
+  if (list.children.length === 50 && group.children.length === 5) {
     clearInterval(brickAniId);
   }
 };
