@@ -219,19 +219,20 @@ export default {
 
   &:hover {
     .num {
-      letter-spacing: 1.2rem;
+      // letter-spacing: 1.2rem;
     }
 
     .title {
-      color: #555;
-      letter-spacing: 0.5rem;
-      &::after {
-        transform: scaleX(1);
-      }
+      color: #333;
+      // letter-spacing: 0.5rem;
+      // &::after {
+      //   transform: scaleX(1);
+      // }
     }
 
     .desc {
-      color: #888;
+      // color: #888;
+      color: #666;
     }
   }
 }
