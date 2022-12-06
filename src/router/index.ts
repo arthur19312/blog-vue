@@ -21,6 +21,7 @@ const noise = () => import("@/pages/noise/index.vue");
 const star = () => import("@/pages/star/index.vue");
 // const decker = () => import("@/pages/decker/index.vue");
 const brick = () => import("@/pages/brick/index.vue");
+const cube = () => import("@/pages/cube/index.vue");
 
 export const routes = [
   {
@@ -112,6 +113,10 @@ export const routes = [
   {
     path: "/brick",
     component: brick,
+  },
+  {
+    path: "/cube",
+    component: cube,
   },
   // {
   //   path: "/decker",

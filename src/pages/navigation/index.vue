@@ -54,6 +54,11 @@ export default {
         //   img: "",
         // },
         {
+          name: "cube",
+          desc: "",
+          img: "",
+        },
+        {
           route: "brick",
           name: "Sugar Bricks",
           desc: "可爱捏 喜欢捏",

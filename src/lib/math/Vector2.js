@@ -1,4 +1,4 @@
-export default class Dot2 {
+export default class Vector2 {
   constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
@@ -16,7 +16,7 @@ export default class Dot2 {
       e = m.elements;
 
     const w = 1 / (e[6] * x + e[7] * y + e[8]);
-    return new this.constructor(
+    return new Vector2(
       (e[0] * x + e[1] * y + e[2]) * w,
       (e[3] * x + e[4] * y + e[5]) * w
     );

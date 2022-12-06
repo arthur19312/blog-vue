@@ -1,5 +1,5 @@
 import { initShaders, createProgram, useBg } from "@/lib/webgl/util";
-import Dot2 from "../../lib/math/Dot2";
+import Vector2 from "../../lib/math/Vector2";
 import Matrix3 from "../../lib/math/Matrix3";
 import { VSHADER_SOURCE, FSHADER_SOURCE } from "./shader";
 
@@ -14,9 +14,9 @@ const originBallsData = new Array(BALL_NUM);
 const originBallsData2 = new Array(BALL_NUM2);
 let angle = 0;
 
-const triv1 = new Dot2(-0.7, 0.6);
-const triv2 = new Dot2(-0.6, 0.5);
-const triv3 = new Dot2(-0.5, 0.7);
+const triv1 = new Vector2(-0.7, 0.6);
+const triv2 = new Vector2(-0.6, 0.5);
+const triv3 = new Vector2(-0.5, 0.7);
 var gl, program;
 let u_balls, u_balls2;
 

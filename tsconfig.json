@@ -11,5 +11,5 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/router/index.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/router/index.ts", "src/lib/math/Vector2.js", "src/lib/math/Vector2.js"]
 }
