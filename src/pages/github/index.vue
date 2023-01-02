@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <BottomTab v-model:activeIndex="activeIndex" />
+    <!-- <BottomTab v-model:activeIndex="activeIndex" /> -->
   </div>
 </template>
 
@@ -139,7 +139,7 @@ export default {
         }
       }
     };
-    this.bindScroll();
+    // this.bindScroll();
   },
   unmounted() {
     document.onkeydown = null;
@@ -149,7 +149,7 @@ export default {
 
 <style lang="less" scoped>
 .git-container {
-  padding: 3rem 2rem 1rem 2rem;
+  padding: 10rem 2rem 1rem 2rem;
   overflow-x: hidden;
 }
 .scroll-container {

@@ -77,4 +77,7 @@ export default class Camera {
     this.matrix = posMatrix.premultiply(rotMatrix);
     return this;
   }
+
+  setOrthoGraphic() {}
+  setPerspective() {}
 }

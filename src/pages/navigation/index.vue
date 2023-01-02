@@ -16,21 +16,24 @@
           @click="closeBachar"
         > -->
         <a
-          class="link"
           v-for="(item, index) in links"
+          class="link"
+          :class="{ disabled: item.disabled }"
           :key="item.name"
           :href="preUrl(item.route || item.name)"
           target="_blank"
           :aria-label="`read more about ${item.name} - ${item.desc}`"
+          :aria-disabled="item.disabled"
         >
           <span class="num">{{ `${addPreZero(index + 1)} / ` }}</span>
           <div class="title">{{ item.name }}</div>
           <div class="desc">{{ item.desc }}</div>
+          <img class="desc-img" :src="getImgName(item.route || item.name)" />
         </a>
         <!-- </router-link> -->
       </div>
     </div>
-    <div>
+    <div class="bottom">
       <a href="https://beian.miit.gov.cn" target="_blank" aria-label="网站备案"
         >—————————— 皖ICP备2022008333号-1 ——————————</a
       >
@@ -54,14 +57,22 @@ export default {
         //   img: "",
         // },
         {
-          name: "cube",
-          desc: "",
+          route: "#",
+          name: "To Be Continued...",
+          desc: "For 2023",
+          img: "",
+          disabled: true,
+        },
+        {
+          route: "lathe",
+          name: "park",
+          desc: "made after playing HatsuneMiku:ColorfulStage!",
           img: "",
         },
         {
           route: "brick",
           name: "Sugar Bricks",
-          desc: "可爱捏 喜欢捏",
+          desc: "可爱捏",
           img: "",
         },
         {
@@ -106,7 +117,11 @@ export default {
         },
 
         { name: "moon", desc: "A practice for Anthony Howe", img: "" },
-        { name: "music", desc: "P5 player for favorite music", img: "" },
+        {
+          name: "music",
+          desc: "P5 player for favorite music playlist",
+          img: "",
+        },
         {
           route: "logicfunc",
           name: "logic Func",
@@ -165,7 +180,12 @@ export default {
     preUrl(str) {
       return str;
     },
+    getImgName(name) {
+      return `/assets/img/navi/${name}.png`;
+    },
   },
+  mounted() {},
+  unmounted() {},
 };
 </script>
 
@@ -178,7 +198,7 @@ export default {
 }
 
 .menu {
-  padding: 6% 15%;
+  padding: 5% 13%;
   // padding: 8% 0 0 8%;
   // position: absolute;
   // z-index: 3;
@@ -211,7 +231,7 @@ export default {
 .link-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 4rem;
 }
 
 .link {
@@ -221,6 +241,8 @@ export default {
   width: 14rem;
   height: 12rem;
   padding: 2rem;
+  position: relative;
+  text-shadow: -1px 1px #fff;
 
   &:hover {
     .num {
@@ -237,7 +259,7 @@ export default {
 
     .desc {
       // color: #888;
-      color: #666;
+      color: #555;
     }
   }
 }
@@ -292,5 +314,20 @@ a {
 .ctn {
   display: flex;
   justify-content: space-between;
+}
+
+.desc-img {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
+}
+.bottom {
+  margin-top: 4rem;
+}
+
+.disabled {
+  pointer-events: none;
 }
 </style>
