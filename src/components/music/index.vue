@@ -58,7 +58,6 @@ export default {
         "city_of_stars",
         "mystery_of_love",
         "yuri_on_ice",
-        "one_last_kiss",
         "fly_me_to_the_moon",
         "moon",
         "cuckoo",
