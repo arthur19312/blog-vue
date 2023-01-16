@@ -144,6 +144,7 @@ void render(float v,float x){
 
 uniform sampler2D u_sampler;
 uniform vec4 u_triangle[3];
+uniform float u_value;
 
 float isInTriangle(vec2 newCoord){
   return (cross(vec3(u_triangle[0].xy-newCoord,0.),vec3(u_triangle[0].xy-u_triangle[1].xy,0.)).z<0.
@@ -159,7 +160,7 @@ vec2 getTexCoord(vec2 newCoord){
 
 void main(){
   
-  float a = -58371.04123;
+  float a = u_value;
   coord = vec2(gl_FragCoord.x,gl_FragCoord.y);
   vec2 normalizedCoord = (coord/scale)*2.-1.;
 
@@ -173,7 +174,7 @@ void main(){
   }
 
   if(coord.x<totalWidth && coord.y<baseHeight) {
-    render(a,coord.x);
+    render(u_value,coord.x);
   }
 }
 `;

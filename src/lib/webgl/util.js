@@ -7,6 +7,7 @@ export const initShaders = (gl, vshader, fshader) => {
 export const createProgram = (gl, vshader, fshader) => {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader);
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fshader);
+  // window.fShader = fragmentShader;
   const program = gl.createProgram();
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);

@@ -6,15 +6,18 @@ import {
   getUniformLoc,
   useBuffer,
 } from "@/lib/webgl/util";
+import Camera from "../../lib/math/Camera/CameraUtils";
+import { OrthographicCamera } from "@/lib/math/Camera";
+import Vector3 from "../../lib/math/Vector3";
 
-const v0 = [-1, 1, 1];
-const v1 = [1, 1, 1];
-const v2 = [-1, -1, 1];
-const v3 = [1, -1, 1];
-const v4 = [-1, 1, -1];
-const v5 = [1, 1, -1];
-const v6 = [-1, -1, -1];
-const v7 = [1, -1, -1];
+const v0 = [-1, 1, -1];
+const v1 = [1, 1, -1];
+const v2 = [-1, -1, -1];
+const v3 = [1, -1, -1];
+const v4 = [-1, 1, 1];
+const v5 = [1, 1, 1];
+const v6 = [-1, -1, 1];
+const v7 = [1, -1, 1];
 
 const getTriArr = (v0, v1, v2) => {
   return [...v0, ...v1, ...v2];
@@ -38,7 +41,7 @@ const getCubeArr = () => {
 };
 
 const useCube = (gl, program) => {
-  const cubePosArr = new Float32Array(getCubeArr());
+  const cubePosArr = new Float32Array(getCubeArr().map((i) => i));
   useBuffer(gl, cubePosArr);
   const SIZE = cubePosArr.BYTES_PER_ELEMENT;
   const posLoc = gl.getAttribLocation(program, "a_position");
@@ -54,16 +57,69 @@ const initFunc = (gl, program) => {
 const updateFunc = (gl, program) => {};
 
 export const main = () => {
+  window.a = { b: { c: "d" } };
+  window.aa = new Proxy(a, {
+    get(target, p) {
+      return target[p];
+    },
+    set(target, p, val) {
+      console.log(target, p);
+      target[p] = val;
+      return true;
+    },
+  });
+  aa.b = 1;
+
   const canvas = document.getElementById("webgl-cube");
   const gl = canvas.getContext("webgl");
+  gl.getExtension("OES_standard_derivatives");
   const program = createProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE);
   gl.useProgram(program);
   useCube(gl, program);
+  /*
+   Camera.setLookAt(
+     new Vector3(0, 0, 10),
+     new Vector3(0, 0, 0),
+     new Vector3(0, 1, 0)
+   ).premultiply(Camera.setPerspectCamera({ theta: 60, near: -10, far: 10 }))
+     .elements;
+
+     */
+
   gl.uniformMatrix4fv(
     getUniformLoc(gl, program, "u_matrix"),
     false,
-    new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1])
+    // new Float32Array([
+    //   1.7320508075688772, 0, 0, 0, 0, 1.7320508075688772, 0, 0, 0, 0, 0, 0.1, 0,
+    //   0, 1, 0,
+    // ])
+
+    new Float32Array(
+      Camera.setLookAt(
+        new Vector3(3, 2, 5),
+        new Vector3(0, 0, 0),
+        new Vector3(0, 1, 0)
+      )
+        .premultiply(
+          Camera.setPerspectCamera({
+            theta: 60,
+            near: 0.1,
+            far: 10,
+          })
+        )
+        .getTransMatrix().elements
+    )
   );
+  // const l = getCubeArr().map((i) => i);
+  // for (let i = 0; i < l.length; i += 3) {
+  //   const v = new Vector3(l[i], l[i + 1], l[i + 2]);
+  //   const r = Camera.setLookAt(
+  //     new Vector3(0, 0, 5),
+  //     new Vector3(0, 0, 0),
+  //     new Vector3(0, 1, 0)
+  //   );
+  //   const o = 0;
+  // }
   gl.clearColor(0, 0, 0, 0);
   gl.enable(gl.DEPTH_TEST);
   gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);

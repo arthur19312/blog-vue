@@ -22,11 +22,13 @@
         <div class="namelist">
           <div
             v-for="(item, indexInList) in nameList"
-            :key="item"
+            :key="item.value"
             @click="checkItem(indexInList)"
             class="nameitem"
           >
-            <span :class="indexInList === index ? 'sign' : ''">{{ item }}</span>
+            <span :class="indexInList === index ? 'sign' : ''">{{
+              item.name
+            }}</span>
           </div>
         </div>
       </div>
@@ -42,29 +44,98 @@ export default {
     return {
       index: 0,
       nameList: [
-        "ninelie",
-        "night_voyager",
-        "nimble_as_lightning",
-        "dance_tonight",
-        "inner_universe",
-        "rise",
-        "bad_apple",
-        "little_princess",
-        "inferno",
-        "lost_in_paradise",
-        "glassy_sky",
-        "sun_also_rises",
-        "una_mattina",
-        "city_of_stars",
-        "mystery_of_love",
-        "yuri_on_ice",
-        "fly_me_to_the_moon",
-        "moon",
-        "cuckoo",
-        "summer_cozy_rock",
-        "zelda_main_title",
-        "great_fairy's_fountain",
-        "the_sixth_station",
+        {
+          value: "ninelie",
+          name: "ninelie",
+        },
+        {
+          value: "night_voyager",
+          name: "夜航星",
+        },
+        {
+          value: "nimble_as_lightning",
+          name: "Nimble as Lightning 霆霓快雨",
+        },
+        {
+          value: "dance_tonight",
+          name: "Dance Tonight",
+        },
+        {
+          value: "inner_universe",
+          name: "inner universe",
+        },
+        {
+          value: "rise",
+          name: "rise",
+        },
+        {
+          value: "bad_apple",
+          name: "Bad Apple!!",
+        },
+        {
+          value: "little_princess",
+          name: "輝く針の小人族 ～ Little Princess",
+        },
+        {
+          value: "inferno",
+          name: "Inferno",
+        },
+        {
+          value: "lost_in_paradise",
+          name: "LOST IN PARADISE",
+        },
+        {
+          value: "glassy_sky",
+          name: "glassy sky",
+        },
+        {
+          value: "sun_also_rises",
+          name: "太阳照常升起",
+        },
+        {
+          value: "una_mattina",
+          name: "Una Mattina",
+        },
+        {
+          value: "city_of_stars",
+          name: "City of Stars",
+        },
+        {
+          value: "mystery_of_love",
+          name: "Mystery of Love",
+        },
+        {
+          value: "yuri_on_ice",
+          name: "Yuri on Ice",
+        },
+        {
+          value: "fly_me_to_the_moon",
+          name: "Fly me to the moon",
+        },
+        {
+          value: "moon",
+          name: "月の繭",
+        },
+        {
+          value: "cuckoo",
+          name: "Кукушка",
+        },
+        {
+          value: "summer_cozy_rock",
+          name: "夏日漱石",
+        },
+        {
+          value: "zelda_main_title",
+          name: "Zelda：Main Title",
+        },
+        {
+          value: "great_fairy's_fountain",
+          name: "大精灵の泉",
+        },
+        {
+          value: "the_sixth_station",
+          name: "6番目の駅",
+        },
       ],
       GLOBAL_P5_AUDIO: {},
       //cursor: {},
@@ -72,10 +143,10 @@ export default {
   },
   computed: {
     imgSrc() {
-      return "/assets/music/" + this.nameList[this.index] + "/index.jpg";
+      return "/assets/music/" + this.nameList[this.index].value + "/index.jpg";
     },
     mp3Src() {
-      return "/assets/music/" + this.nameList[this.index] + "/index.mp3";
+      return "/assets/music/" + this.nameList[this.index].value + "/index.mp3";
     },
   },
   methods: {
@@ -196,17 +267,17 @@ export default {
 }
 .namelist {
   color: #bbb;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 26px;
   width: 30rem;
-  height: 352px;
+  height: 428px;
   overflow-y: scroll;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   .nameitem {
     cursor: pointer;
     padding: 14px;
-    letter-spacing: 8px;
-    font-weight: 500;
+    letter-spacing: 4px;
+    font-weight: 400;
     &:hover {
       color: #666;
       .sign::before {

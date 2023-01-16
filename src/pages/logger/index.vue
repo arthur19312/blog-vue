@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { main } from "./main";
+import { main, mouse } from "./main";
 export default defineComponent({
   name: "logger",
   data() {
@@ -14,8 +14,11 @@ export default defineComponent({
   computed: {},
   mounted() {
     main();
+    window.addEventListener("mousemove", mouse);
   },
-  unmounted() {},
+  unmounted() {
+    window.removeEventListener("mousemove", mouse);
+  },
 });
 </script>
 

@@ -1,6 +1,6 @@
 import { initShaders, useBuffer, initTexture } from "@/lib/webgl/util";
 import { VSHADER_SOURCE, FSHADER_SOURCE } from "./shader";
-var gl;
+var gl, program, u_value;
 export const main = () => {
   const canvas = document.getElementById("webgl-logger");
   gl = canvas.getContext("webgl");
@@ -9,7 +9,7 @@ export const main = () => {
     return;
   }
 
-  const program = initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
+  program = initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
   if (!program) {
     console.log("Failed2init shaders");
     return;
@@ -50,4 +50,14 @@ const initVertexBuffer = (program) => {
   gl.enableVertexAttribArray(a_position);
   const u_triangle = gl.getUniformLocation(program, "u_triangle");
   gl.uniform4fv(u_triangle, triangleData);
+  u_value = gl.getUniformLocation(program, "u_value");
+  gl.uniform1f(u_value, -59909);
+};
+
+export const mouse = (e) => {
+  gl.uniform1f(
+    gl.getUniformLocation(program, "u_value"),
+    (e.clientX - 800) * 500
+  );
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 };

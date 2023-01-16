@@ -67,10 +67,10 @@ export default class Vector3 {
       by = b.y,
       bz = b.z;
 
-    this.x = ay * bz - az * by;
-    this.y = az * bx - ax * bz;
-    this.z = ax * by - ay * bx;
+    const x = ay * bz - az * by;
+    const y = az * bx - ax * bz;
+    const z = ax * by - ay * bx;
 
-    return this;
+    return new this.constructor(x, y, z);
   }
 }
