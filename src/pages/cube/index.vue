@@ -1,5 +1,5 @@
 <template>
-  <canvas id="webgl-cube" width="800" height="600"></canvas>
+  <canvas id="webgl-cube" width="800" height="800"></canvas>
 </template>
 
 <script>

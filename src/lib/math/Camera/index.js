@@ -1,7 +1,7 @@
 import Vector3 from "../Vector3";
 import Matrix4 from "../Matrix4";
 import CameraUtils from "./CameraUtils";
-export class Camera {
+class Camera {
   constructor() {
     this._position = new Vector3();
     this._rotation = new Vector3();
@@ -13,7 +13,7 @@ export class Camera {
   }
 
   set position(val) {
-    this._position = pos;
+    this._position = val;
     this.updateMatrix();
   }
 
@@ -22,7 +22,6 @@ export class Camera {
   }
 
   set rotation(val) {
-    console.log("set");
     this._rotation = val;
     this.updateMatrix();
   }
@@ -47,7 +46,64 @@ export class OrthographicCamera extends Camera {
       n: near,
       f: far,
     });
+    this.lookAtMatrix = CameraUtils.setLookAt(
+      this._position,
+      new Vector3(0, 0, 0),
+      new Vector3(0, 1, 0)
+    );
+    this._position._onChange = this.updateMatrix.bind(this);
+    this._rotation._onChange = this.updateMatrix.bind(this);
   }
 
-  updateMatrix() {}
+  getArray() {
+    return this.lookAtMatrix.premultiply(this.orthoMatrix).getTransMatrix()
+      .elements;
+  }
+
+  updateMatrix() {
+    this.lookAtMatrix = CameraUtils.setTransform(
+      this._position,
+      this._rotation
+    );
+  }
 }
+
+export class PerspectiveCamera extends Camera {
+  constructor({ theta = 60, near = 0.01, far = 1000 } = {}) {
+    super();
+    this.orthoMatrix = CameraUtils.setPerspectCamera({
+      theta,
+      near,
+      far,
+    });
+    this.lookAtMatrix = CameraUtils.setLookAt(
+      this._position,
+      new Vector3(0, 0, 0),
+      new Vector3(0, 1, 0)
+    );
+    this._position._onChange = this.updateMatrix.bind(this);
+    this._rotation._onChange = this.updateMatrix.bind(this);
+  }
+
+  getArray() {
+    return this.lookAtMatrix.premultiply(this.orthoMatrix).getTransMatrix()
+      .elements;
+  }
+
+  updateMatrix() {
+    this.lookAtMatrix = CameraUtils.setTransform(
+      this._position,
+      this._rotation
+    );
+  }
+
+  lookAtOrigin() {
+    this.lookAtMatrix = CameraUtils.setLookAt(
+      this._position,
+      new Vector3(0, 0, 0),
+      new Vector3(0, 1, 0)
+    );
+  }
+}
+
+export default Camera;

@@ -1,21 +1,21 @@
-export default class Vector3 {
+class Vector3 {
   constructor(x = 0, y = 0, z = 0) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this._x = x;
+    this._y = y;
+    this._z = z;
   }
 
   set(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this._x = x;
+    this._y = y;
+    this._z = z;
     return this;
   }
 
   applyMatrix(m) {
-    const x = this.x,
-      y = this.y,
-      z = this.z,
+    const x = this._x,
+      y = this._y,
+      z = this._z,
       e = m.elements;
     const w = 1 / (e[12] * x + e[13] * y + e[14] * z + e[15]);
     return new this.constructor(
@@ -26,14 +26,14 @@ export default class Vector3 {
   }
 
   multiplyScalar(scalar) {
-    this.x *= scalar;
-    this.y *= scalar;
-    this.z *= scalar;
+    this._x *= scalar;
+    this._y *= scalar;
+    this._z *= scalar;
     return this;
   }
 
   lengthSq() {
-    return this.x * this.x + this.y * this.y + this.z * this.z;
+    return this._x * this._x + this._y * this._y + this._z * this._z;
   }
 
   length() {
@@ -49,9 +49,9 @@ export default class Vector3 {
   }
 
   sub(v) {
-    this.x -= v.x;
-    this.y -= v.y;
-    this.z -= v.z;
+    this._x -= v.x;
+    this._y -= v.y;
+    this._z -= v.z;
     return this;
   }
 
@@ -60,12 +60,12 @@ export default class Vector3 {
   }
 
   crossVectors(a, b) {
-    const ax = a.x,
-      ay = a.y,
-      az = a.z;
-    const bx = b.x,
-      by = b.y,
-      bz = b.z;
+    const ax = a._x,
+      ay = a._y,
+      az = a._z;
+    const bx = b._x,
+      by = b._y,
+      bz = b._z;
 
     const x = ay * bz - az * by;
     const y = az * bx - ax * bz;
@@ -74,3 +74,35 @@ export default class Vector3 {
     return new this.constructor(x, y, z);
   }
 }
+
+Object.defineProperties(Vector3.prototype, {
+  x: {
+    get: function () {
+      return this._x;
+    },
+    set: function (x) {
+      this._x = x;
+      this._onChange?.();
+    },
+  },
+  y: {
+    get: function () {
+      return this._y;
+    },
+    set: function (y) {
+      this._y = y;
+      this._onChange?.();
+    },
+  },
+  z: {
+    get: function () {
+      return this._z;
+    },
+    set: function (z) {
+      this._z = z;
+      this._onChange?.();
+    },
+  },
+});
+
+export default Vector3;

@@ -67,6 +67,93 @@ export default class CameraUtils {
     return posMatrix.premultiply(rotMatrix);
   }
 
+  static setTransform(position, rotation) {
+    const sx = Math.sin(rotation.x);
+    const cx = Math.cos(rotation.x);
+    const sy = Math.sin(rotation.y);
+    const cy = Math.cos(rotation.y);
+    const sz = Math.sin(rotation.z);
+    const cz = Math.cos(rotation.z);
+    const Rx = new Matrix4().inset(
+      1,
+      0,
+      0,
+      0,
+      0,
+      cx,
+      -sx,
+      0,
+      0,
+      sx,
+      cx,
+      0,
+      0,
+      0,
+      0,
+      1
+    );
+    const Ry = new Matrix4().inset(
+      cy,
+      0,
+      sy,
+      0,
+      0,
+      1,
+      0,
+      0,
+      -sy,
+      0,
+      cy,
+      0,
+      0,
+      0,
+      0,
+      1
+    );
+
+    const Rz = new Matrix4().inset(
+      cz,
+      -sz,
+      0,
+      0,
+      sz,
+      cz,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    );
+
+    const { x, y, z } = position;
+    const posMatrix = new Matrix4().set(
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -x,
+      -y,
+      -z,
+      1
+    );
+
+    const rotMatrix = Rx.premultiply(Ry).premultiply(Rz);
+    return posMatrix.premultiply(rotMatrix);
+  }
+
   static getOrtho({ l, r, t, b, n, f }) {
     return new Matrix4().inset(
       2 / (r - l),

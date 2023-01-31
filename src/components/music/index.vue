@@ -117,10 +117,6 @@ export default {
           name: "月の繭",
         },
         {
-          value: "cuckoo",
-          name: "Кукушка",
-        },
-        {
           value: "summer_cozy_rock",
           name: "夏日漱石",
         },
@@ -135,6 +131,23 @@ export default {
         {
           value: "the_sixth_station",
           name: "6番目の駅",
+        },
+        {
+          value: "sand",
+          name: "沙滩 Somewhere Over the Rainbow",
+        },
+
+        {
+          value: "spring_coming",
+          name: "春よ、来い",
+        },
+        {
+          value: "museum_warship",
+          name: "博物战舰",
+        },
+        {
+          value: "season_song",
+          name: "四季ノ呗",
         },
       ],
       GLOBAL_P5_AUDIO: {},

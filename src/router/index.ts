@@ -23,6 +23,7 @@ const star = () => import("@/pages/star/index.vue");
 const brick = () => import("@/pages/brick/index.vue");
 const lathe = () => import("@/pages/lathe/index.vue");
 const cube = () => import("@/pages/cube/index.vue");
+const pool = () => import("@/pages/pool/index.vue");
 
 export const routes = [
   {
@@ -122,6 +123,10 @@ export const routes = [
   {
     path: "/cube",
     component: cube,
+  },
+  {
+    path: "/pool",
+    component: pool,
   },
   // {
   //   path: "/decker",

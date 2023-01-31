@@ -7,7 +7,7 @@ import {
   useBuffer,
 } from "@/lib/webgl/util";
 import Camera from "../../lib/math/Camera/CameraUtils";
-import { OrthographicCamera } from "@/lib/math/Camera";
+import { PerspectiveCamera } from "@/lib/math/Camera";
 import Vector3 from "../../lib/math/Vector3";
 
 const v0 = [-1, 1, -1];
@@ -56,73 +56,41 @@ const initFunc = (gl, program) => {
 };
 const updateFunc = (gl, program) => {};
 
+var gl, program;
+var camera;
 export const main = () => {
-  window.a = { b: { c: "d" } };
-  window.aa = new Proxy(a, {
-    get(target, p) {
-      return target[p];
-    },
-    set(target, p, val) {
-      console.log(target, p);
-      target[p] = val;
-      return true;
-    },
-  });
-  aa.b = 1;
-
   const canvas = document.getElementById("webgl-cube");
-  const gl = canvas.getContext("webgl");
+  gl = canvas.getContext("webgl");
   gl.getExtension("OES_standard_derivatives");
-  const program = createProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE);
+  program = createProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE);
   gl.useProgram(program);
   useCube(gl, program);
-  /*
-   Camera.setLookAt(
-     new Vector3(0, 0, 10),
-     new Vector3(0, 0, 0),
-     new Vector3(0, 1, 0)
-   ).premultiply(Camera.setPerspectCamera({ theta: 60, near: -10, far: 10 }))
-     .elements;
-
-     */
-
+  camera = new PerspectiveCamera({ near: 0.1, far: 10 });
+  camera.position.x = 3;
+  camera.position.y = 2;
+  camera.position.z = 5;
+  camera.lookAtOrigin();
   gl.uniformMatrix4fv(
     getUniformLoc(gl, program, "u_matrix"),
     false,
-    // new Float32Array([
-    //   1.7320508075688772, 0, 0, 0, 0, 1.7320508075688772, 0, 0, 0, 0, 0, 0.1, 0,
-    //   0, 1, 0,
-    // ])
-
-    new Float32Array(
-      Camera.setLookAt(
-        new Vector3(3, 2, 5),
-        new Vector3(0, 0, 0),
-        new Vector3(0, 1, 0)
-      )
-        .premultiply(
-          Camera.setPerspectCamera({
-            theta: 60,
-            near: 0.1,
-            far: 10,
-          })
-        )
-        .getTransMatrix().elements
-    )
+    camera.getArray()
   );
-  // const l = getCubeArr().map((i) => i);
-  // for (let i = 0; i < l.length; i += 3) {
-  //   const v = new Vector3(l[i], l[i + 1], l[i + 2]);
-  //   const r = Camera.setLookAt(
-  //     new Vector3(0, 0, 5),
-  //     new Vector3(0, 0, 0),
-  //     new Vector3(0, 1, 0)
-  //   );
-  //   const o = 0;
-  // }
   gl.clearColor(0, 0, 0, 0);
   gl.enable(gl.DEPTH_TEST);
   gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
   gl.drawArrays(gl.TRIANGLES, 0, 36);
+  // raf(gl);
+};
+
+export const raf = () => {
+  camera.rotation.y += 0.01;
+  gl.uniformMatrix4fv(
+    getUniformLoc(gl, program, "u_matrix"),
+    false,
+    camera.getArray()
+  );
+  gl.drawArrays(gl.TRIANGLES, 0, 36);
+
+  setTimeout(raf, 10);
 };
