@@ -84,7 +84,7 @@ export const main = () => {
 };
 
 export const raf = () => {
-  camera.rotation.y += 0.01;
+  camera.rotation.y += 0.0001;
   gl.uniformMatrix4fv(
     getUniformLoc(gl, program, "u_matrix"),
     false,

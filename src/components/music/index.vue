@@ -26,7 +26,7 @@
             @click="checkItem(indexInList)"
             class="nameitem"
           >
-            <span :class="indexInList === index ? 'sign' : ''">{{
+            <span :class="indexInList === index ? 'sign' : 'name'">{{
               item.name
             }}</span>
           </div>
@@ -143,11 +143,27 @@ export default {
         },
         {
           value: "museum_warship",
-          name: "博物战舰",
+          name: "アンブレーカブル 〜博物戦艦 フラクタル・コンティニアム〜",
         },
         {
           value: "season_song",
           name: "四季ノ呗",
+        },
+        {
+          value: "sweet_dream",
+          name: "Sweet Dreams (Are made of This)",
+        },
+        {
+          value: "bethena",
+          name: "bethena",
+        },
+        {
+          value: "wander_earth",
+          name: "开启新征程",
+        },
+        {
+          value: "lovely",
+          name: "lovely",
         },
       ],
       GLOBAL_P5_AUDIO: {},
@@ -267,7 +283,7 @@ export default {
   margin-top: 2rem;
 }
 
-.sign::before {
+.nameitem span::before {
   content: "";
   width: 0;
   height: 0;
@@ -276,27 +292,36 @@ export default {
   border-bottom: 4px solid transparent;
   border-top: 4px solid transparent;
   border-right: 6px solid transparent;
-  border-left: 6px solid #bbb;
+  border-left: 6px solid transparent;
 }
 .namelist {
   color: #bbb;
   font-size: 14px;
   line-height: 26px;
   width: 30rem;
-  height: 428px;
+  height: 40rem;
   overflow-y: scroll;
-  // text-transform: uppercase;
-  .nameitem {
-    cursor: pointer;
-    padding: 14px;
-    letter-spacing: 4px;
-    font-weight: 400;
-    &:hover {
-      color: #666;
-      .sign::before {
-        border-left-color: #666;
-      }
+  text-transform: capitalize;
+}
+
+.nameitem {
+  cursor: pointer;
+  padding: 14px;
+  letter-spacing: 4px;
+  font-weight: 400;
+  &:hover {
+    color: #666;
+    & span::before {
+      border-left-color: #888;
     }
+  }
+}
+
+.namelist .nameitem .sign {
+  color: #7794df;
+  font-weight: 500;
+  &::before {
+    border-left-color: #7794df;
   }
 }
 </style>
