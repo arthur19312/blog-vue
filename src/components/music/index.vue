@@ -165,6 +165,10 @@ export default {
           value: "lovely",
           name: "lovely",
         },
+        {
+          value: "luxiaoyu",
+          name: "不能说的秘密 路小雨",
+        },
       ],
       GLOBAL_P5_AUDIO: {},
       //cursor: {},

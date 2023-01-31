@@ -2,7 +2,8 @@ import * as THREE from "@/lib/ThreeJs/three.module";
 import { Vector3 } from "@/lib/ThreeJs/three.module";
 import { OrbitControls } from "@/lib/ThreeJs/OrbitControls";
 import { getComposer } from "./postprocess";
-
+import { VS as CUBE_VS, FS as CUBE_FS } from "./cubeShader";
+import { VS as PLANE_VS, FS as PLANE_FS } from "./planeShader";
 var controls, cameraHelper;
 var scene, renderer, camera, group1, group2, group3;
 var composer;
@@ -55,10 +56,35 @@ function animate() {
 export const rendererDom = renderer?.domElement;
 
 export const init = () => {
-  const geometry = new THREE.BoxGeometry(15, 10, 15).center();
-  const material = new THREE.MeshBasicMaterial({ color: 0x3366bb });
+  const geometry = new THREE.BoxGeometry(10, 8, 10).center();
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 1.0 },
+      resolution: { value: new THREE.Vector2() },
+    },
+    vertexShader: CUBE_VS,
+    fragmentShader: CUBE_FS,
+    transparent: true,
+    opacity: 0.3,
+  });
   const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
+
+  const g = new THREE.PlaneGeometry(10, 10, 10, 10);
+  const m = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 1.0 },
+      resolution: { value: new THREE.Vector2() },
+    },
+    vertexShader: PLANE_VS,
+    fragmentShader: PLANE_FS,
+    side: THREE.DoubleSide,
+  });
+  const plane = new THREE.Mesh(g, m);
+  plane.rotateX(Math.PI / 2);
+  scene.add(plane);
+
+  window.plane = plane;
 };
 
 export const updateMouse = (e) => {
