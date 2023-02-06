@@ -3,7 +3,13 @@
 </template>
 
 <script>
-import { rendererDom, startAnimate, updateMouse, refresh } from "./3d";
+import {
+  rendererDom,
+  startAnimate,
+  updateMouse,
+  refresh,
+  onMouseDown,
+} from "./3d";
 export default {
   data() {
     return {};
@@ -14,12 +20,13 @@ export default {
       const dom = document.getElementById("pool");
       dom.appendChild(rendererDom);
       startAnimate();
-
+      window.addEventListener("mousedown", onMouseDown);
       // window.addEventListener("mousemove", updateMouse);
       // window.addEventListener("click", refresh);
     }
   },
   unmounted() {
+    window.removeEventListener("mousedown", onMouseDown);
     // window.removeEventListener("mousemove", updateMouse);
     // window.addEventListener("click", refresh);
   },

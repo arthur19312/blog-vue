@@ -5,9 +5,71 @@ import { getComposer } from "./postprocess";
 import { VS as CUBE_VS, FS as CUBE_FS } from "./cubeShader";
 import { VS as PLANE_VS, FS as PLANE_FS } from "./planeShader";
 var controls, cameraHelper;
-var scene, renderer, camera, group1, group2, group3;
+var scene, renderer, camera, plane;
 var composer;
 var MOUSE_X, MOUSE_Y;
+var buffer0,
+  buffer1,
+  buffer2 = [];
+var raycaster = new THREE.Raycaster();
+var pointer = new THREE.Vector2();
+var intersectList = [];
+
+const PLANE_WIDTH = 80;
+const BUFFER_WIDTH = PLANE_WIDTH + 1;
+const BUFFER_AREA = BUFFER_WIDTH * BUFFER_WIDTH - 1;
+const BUFFER_LAST_LINE_START = BUFFER_WIDTH * (BUFFER_WIDTH - 1);
+const BUFFER_LAST_LINE_END = BUFFER_AREA;
+
+// const c = 0.001; // 波速
+// const d = 0.0001; // 距离间隔
+const t = 0.02; //时间间隔
+const miu = 0.08; //粘滞系数
+const c2_d2 = 2500; // c2/d2
+const c2t2_d2 = t * t * c2_d2;
+const miu_t_2 = miu * t + 2;
+const buffer1Param = (4 - 2 * c2t2_d2) / miu_t_2;
+const buffer0Param = (miu * t - 2) / miu_t_2;
+const bufferParam = (0.5 * c2t2_d2) / miu_t_2;
+
+const BIOS = 0.001;
+
+const doIterate = () => {
+  if (buffer2.length) {
+    buffer0 = buffer1;
+    buffer1 = buffer2;
+  }
+
+  let buffer = new Array(BUFFER_WIDTH * BUFFER_WIDTH);
+
+  for (let j = 0; j < BUFFER_WIDTH; j++) {
+    for (let i = 0; i < BUFFER_WIDTH; i++) {
+      const index = j * BUFFER_WIDTH + i;
+      buffer[index] = new THREE.Vector3(buffer1[index].x, buffer1[index].y, 0);
+      let val =
+        buffer1Param * buffer1[index].z +
+        buffer0Param * buffer0[index].z +
+        bufferParam *
+          (buffer1[
+            index + 1 > BUFFER_AREA || (index + 1) % BUFFER_WIDTH === 0
+              ? index
+              : index + 1
+          ].z +
+            buffer1[
+              index - 1 < 0 || index % BUFFER_WIDTH === 0 ? index : index - 1
+            ].z +
+            buffer1[
+              index + BUFFER_WIDTH <= BUFFER_AREA ? index + BUFFER_WIDTH : index
+            ].z +
+            buffer1[index - BUFFER_WIDTH >= 0 ? index - BUFFER_WIDTH : index]
+              .z);
+      buffer[index].z = val * 0.99;
+    }
+  }
+
+  buffer2 = buffer;
+  buffer = null;
+};
 
 if (!import.meta.env.SSR) {
   let SCREEN_WIDTH = window.innerWidth;
@@ -27,9 +89,9 @@ if (!import.meta.env.SSR) {
     0.1,
     1000
   );
-  camera.position.x = -15;
-  camera.position.y = 10;
-  camera.position.z = 15;
+  camera.position.x = -20;
+  camera.position.y = 15;
+  camera.position.z = 20;
   camera.lookAt(new Vector3(0, 0, 0));
 
   scene.add(camera);
@@ -48,8 +110,17 @@ export const startAnimate = () => {
 };
 
 function animate() {
+  doIterate();
+  // plane.geometry.vertices = buffer2;
+
+  for (let i = 0; i < BUFFER_AREA; i++) {
+    plane.geometry.vertices[i] = buffer2[i];
+  }
+  plane.geometry.verticesNeedUpdate = true;
+  plane.geometry.elementsNeedUpdate = true;
   requestAnimationFrame(animate);
-  // renderer.render(scene, camera);
+  // setTimeout(animate, 50);
+  renderer.render(scene, camera);
   composer.render();
 }
 
@@ -61,16 +132,23 @@ export const init = () => {
     uniforms: {
       time: { value: 1.0 },
       resolution: { value: new THREE.Vector2() },
+      edgeT: { value: buffer2.slice(0, BUFFER_WIDTH) },
+      edgeB: { value: buffer2.slice(BUFFER_LAST_LINE_START) },
+      edgeL: { value: buffer2.filter((v, i) => !(i % BUFFER_WIDTH)) },
+      edgeT: { value: buffer2.filter((v, i) => !((i + 1) % BUFFER_WIDTH)) },
     },
     vertexShader: CUBE_VS,
     fragmentShader: CUBE_FS,
     transparent: true,
     opacity: 0.3,
   });
+  material.extensions.derivatives = true;
+  material.extensions.OES_standard_derivatives = true;
   const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
 
-  const g = new THREE.PlaneGeometry(10, 10, 10, 10);
+  const g = new THREE.PlaneGeometry(20, 20, PLANE_WIDTH, PLANE_WIDTH);
+  g.dynamic = true;
   const m = new THREE.ShaderMaterial({
     uniforms: {
       time: { value: 1.0 },
@@ -80,38 +158,77 @@ export const init = () => {
     fragmentShader: PLANE_FS,
     side: THREE.DoubleSide,
   });
-  const plane = new THREE.Mesh(g, m);
+  plane = new THREE.Mesh(g, m);
   plane.rotateX(Math.PI / 2);
   scene.add(plane);
+  intersectList.push(plane);
 
   window.plane = plane;
+  window.cube = cube;
+  updateGeometry({});
 };
 
-export const updateMouse = (e) => {
-  const curX = e.clientX;
-  const curY = e.clientY;
+export const updateGeometry = ({
+  index = BUFFER_AREA / 2,
+  power = 2,
+  area = 5,
+  magicFlag = false,
+}) => {
+  buffer0 = plane.geometry.vertices;
+  plane.geometry.vertices[index].z = power;
 
-  if (typeof MOUSE_X === "undefined") {
-    MOUSE_X = curX;
-    MOUSE_Y = curY;
+  // plane.geometry.vertices[index + 1].z += 2;
+  // plane.geometry.vertices[index - 1].z += 2;
+  // plane.geometry.vertices[index + BUFFER_WIDTH].z += 2;
+  // plane.geometry.vertices[index - BUFFER_WIDTH].z += 2;
+
+  for (let i = -area; i <= area; i++) {
+    for (let j = -area; j <= area; j++) {
+      // if (!i && !j) continue;
+      const dist = i * i + j * j;
+      if (dist > area) {
+        continue;
+      }
+      let pos = index + i * BUFFER_WIDTH + j;
+      if (index % BUFFER_WIDTH < area && j < 0) {
+        pos = 2 * index - pos;
+      } else if (pos % BUFFER_WIDTH < area && j > 0) {
+        pos = 2 * index - pos;
+      }
+      if (index + i * BUFFER_WIDTH >= BUFFER_AREA && i > 0) {
+        pos = index - i * BUFFER_WIDTH + j;
+      } else if (index + i * BUFFER_WIDTH < 0 && i < 0) {
+        pos = index - i * BUFFER_WIDTH + j;
+      }
+
+      if (pos < 0) {
+        pos = 0;
+      }
+      if (pos >= BUFFER_AREA) {
+        pos = BUFFER_AREA - 1;
+      }
+      // if (i > 0 && j > 0 && magicFlag) pos = -1;
+      plane.geometry.vertices[pos].z = power * (1 - dist / (area * area));
+    }
   }
-  group1.rotation.y += (curX - MOUSE_X) * 0.0006;
-  group1.rotation.x += (curY - MOUSE_Y) * 0.0004;
-  group1.position.x -= (curX - MOUSE_X) * 0.08;
-  group1.position.y -= (curY - MOUSE_Y) * 0.06;
-  group2.rotation.y += (curX - MOUSE_X) * 0.00045;
-  group2.rotation.x += (curY - MOUSE_Y) * 0.00035;
-  group2.position.x -= (curX - MOUSE_X) * 0.045;
-  group2.position.y -= (curY - MOUSE_Y) * 0.035;
-  group3.rotation.y += (curX - MOUSE_X) * 0.001;
-  group3.rotation.x += (curY - MOUSE_Y) * 0.0008;
-  group3.position.x -= (curX - MOUSE_X) * 0.1;
-  group3.position.y -= (curY - MOUSE_Y) * 0.06;
-  MOUSE_X = curX;
-  MOUSE_Y = curY;
+  // plane.geometry.verticesNeedUpdate = true;
+  if (!magicFlag) buffer1 = plane.geometry.vertices;
 };
 
-export const refresh = () => {
-  scene.children = scene.children.slice(0, 1);
-  lathe();
+export const updateMouse = (e) => {};
+
+export const refresh = () => {};
+
+export const onMouseDown = (e) => {
+  const { clientX, clientY } = e;
+  pointer.set(
+    (clientX / window.innerWidth) * 2 - 1,
+    -(clientY / window.innerHeight) * 2 + 1
+  );
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(intersectList);
+  if (intersects.length) {
+    const index = intersects[0].face.a;
+    updateGeometry({ index, magicFlag: true });
+  }
 };
