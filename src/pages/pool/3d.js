@@ -4,6 +4,7 @@ import { OrbitControls } from "@/lib/ThreeJs/OrbitControls";
 import { getComposer } from "./postprocess";
 import { VS as CUBE_VS, FS as CUBE_FS } from "./cubeShader";
 import { VS as PLANE_VS, FS as PLANE_FS } from "./planeShader";
+
 var controls, cameraHelper;
 var scene, renderer, camera, plane;
 var composer;
@@ -14,6 +15,8 @@ var buffer0,
 var raycaster = new THREE.Raycaster();
 var pointer = new THREE.Vector2();
 var intersectList = [];
+var filterType = "SWIMMING_POOL",
+  planeGeometry = {};
 
 const PLANE_WIDTH = 80;
 const BUFFER_WIDTH = PLANE_WIDTH + 1;
@@ -21,16 +24,36 @@ const BUFFER_AREA = BUFFER_WIDTH * BUFFER_WIDTH - 1;
 const BUFFER_LAST_LINE_START = BUFFER_WIDTH * (BUFFER_WIDTH - 1);
 const BUFFER_LAST_LINE_END = BUFFER_AREA;
 
+const materialMap = {};
+
+const switchMiu = () => {
+  if (filterType === "SWIMMING_POOL") {
+    return 0.006;
+  } else if (filterType === "SAND") {
+    return 0.0008;
+  } else {
+    return 0.1;
+  }
+};
+
+const switchPower = () => {
+  if (filterType === "SWIMMING_POOL") {
+    return 1.2;
+  } else {
+    return 2;
+  }
+};
+
 // const c = 0.001; // 波速
 // const d = 0.0001; // 距离间隔
 const t = 0.02; //时间间隔
-const miu = 0.08; //粘滞系数
+var miu = switchMiu(); //粘滞系数
 const c2_d2 = 2500; // c2/d2
 const c2t2_d2 = t * t * c2_d2;
-const miu_t_2 = miu * t + 2;
-const buffer1Param = (4 - 2 * c2t2_d2) / miu_t_2;
-const buffer0Param = (miu * t - 2) / miu_t_2;
-const bufferParam = (0.5 * c2t2_d2) / miu_t_2;
+var miu_t_2 = miu * t + 2;
+var buffer1Param = (4 - 2 * c2t2_d2) / miu_t_2;
+var buffer0Param = (miu * t - 2) / miu_t_2;
+var bufferParam = (0.5 * c2t2_d2) / miu_t_2;
 
 const BIOS = 0.001;
 
@@ -90,7 +113,7 @@ if (!import.meta.env.SSR) {
     1000
   );
   camera.position.x = -20;
-  camera.position.y = 15;
+  camera.position.y = 20;
   camera.position.z = 20;
   camera.lookAt(new Vector3(0, 0, 0));
 
@@ -147,25 +170,30 @@ export const init = () => {
   const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
 
-  const g = new THREE.PlaneGeometry(20, 20, PLANE_WIDTH, PLANE_WIDTH);
-  g.dynamic = true;
-  const m = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      resolution: { value: new THREE.Vector2() },
-    },
-    vertexShader: PLANE_VS,
-    fragmentShader: PLANE_FS,
-    side: THREE.DoubleSide,
-  });
-  plane = new THREE.Mesh(g, m);
+  planeGeometry = new THREE.PlaneGeometry(20, 20, PLANE_WIDTH, PLANE_WIDTH);
+  planeGeometry.dynamic = true;
+
+  if (!materialMap[filterType]) {
+    materialMap[filterType] = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 1.0 },
+        resolution: { value: new THREE.Vector2() },
+      },
+      vertexShader: PLANE_VS,
+      fragmentShader: PLANE_FS[filterType],
+      side: THREE.DoubleSide,
+      extensions: { derivatives: true },
+    });
+  }
+  const m = materialMap[filterType];
+  plane = new THREE.Mesh(planeGeometry, m);
   plane.rotateX(Math.PI / 2);
   scene.add(plane);
   intersectList.push(plane);
 
   window.plane = plane;
   window.cube = cube;
-  updateGeometry({});
+  updateGeometry({ power: 5 });
 };
 
 export const updateGeometry = ({
@@ -175,6 +203,7 @@ export const updateGeometry = ({
   magicFlag = false,
 }) => {
   buffer0 = plane.geometry.vertices;
+  if (!magicFlag) buffer1 = plane.geometry.vertices;
   plane.geometry.vertices[index].z = power;
 
   // plane.geometry.vertices[index + 1].z += 2;
@@ -212,7 +241,6 @@ export const updateGeometry = ({
     }
   }
   // plane.geometry.verticesNeedUpdate = true;
-  if (!magicFlag) buffer1 = plane.geometry.vertices;
 };
 
 export const updateMouse = (e) => {};
@@ -229,6 +257,29 @@ export const onMouseDown = (e) => {
   const intersects = raycaster.intersectObjects(intersectList);
   if (intersects.length) {
     const index = intersects[0].face.a;
-    updateGeometry({ index, magicFlag: true });
+    updateGeometry({ index, magicFlag: true, power: switchPower() });
   }
+};
+
+export const updateFilter = (name) => {
+  filterType = name;
+  if (!materialMap[filterType]) {
+    materialMap[filterType] = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 1.0 },
+        resolution: { value: new THREE.Vector2() },
+      },
+      vertexShader: PLANE_VS,
+      fragmentShader: PLANE_FS[filterType],
+      side: THREE.DoubleSide,
+      extensions: { derivatives: true },
+    });
+  }
+  plane.material = materialMap[filterType];
+
+  miu = switchMiu();
+  miu_t_2 = miu * t + 2;
+  buffer1Param = (4 - 2 * c2t2_d2) / miu_t_2;
+  buffer0Param = (miu * t - 2) / miu_t_2;
+  bufferParam = (0.5 * c2t2_d2) / miu_t_2;
 };
