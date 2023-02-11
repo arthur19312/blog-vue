@@ -1,12 +1,12 @@
 <template>
   <div id="pool"></div>
-  <div class="opt">
+  <!-- <div class="opt">
     <select @change="onSelect">
       <option :value="name" v-for="name in filterList" :key="name">
         {{ name }}
       </option>
     </select>
-  </div>
+  </div> -->
 </template>
 
 <script>

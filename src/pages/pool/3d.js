@@ -15,7 +15,7 @@ var buffer0,
 var raycaster = new THREE.Raycaster();
 var pointer = new THREE.Vector2();
 var intersectList = [];
-var filterType = "SWIMMING_POOL",
+var filterType = "SAND",
   planeGeometry = {};
 
 const PLANE_WIDTH = 80;
@@ -86,7 +86,7 @@ const doIterate = () => {
             ].z +
             buffer1[index - BUFFER_WIDTH >= 0 ? index - BUFFER_WIDTH : index]
               .z);
-      buffer[index].z = val * 0.99;
+      buffer[index].z = val * 0.995;
     }
   }
 
@@ -98,6 +98,11 @@ if (!import.meta.env.SSR) {
   let SCREEN_WIDTH = window.innerWidth;
   let SCREEN_HEIGHT = window.innerHeight;
 
+  var textureLoader = new THREE.TextureLoader();
+  var texture = textureLoader.load("assets/img/texture/pool/sky.png");
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(4, 4);
   scene = new THREE.Scene();
   window.scene = scene;
 
@@ -112,14 +117,14 @@ if (!import.meta.env.SSR) {
     0.1,
     1000
   );
-  camera.position.x = -20;
+  camera.position.x = -15;
   camera.position.y = 20;
-  camera.position.z = 20;
+  camera.position.z = 25;
   camera.lookAt(new Vector3(0, 0, 0));
 
   scene.add(camera);
-  // controls = new OrbitControls(camera, renderer.domElement);
-  // controls.autoRotate = true;
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.autoRotate = true;
   // cameraHelper = new THREE.CameraHelper(camera);
   // scene.add(cameraHelper);
 }
@@ -150,34 +155,41 @@ function animate() {
 export const rendererDom = renderer?.domElement;
 
 export const init = () => {
-  const geometry = new THREE.BoxGeometry(10, 8, 10).center();
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      resolution: { value: new THREE.Vector2() },
-      edgeT: { value: buffer2.slice(0, BUFFER_WIDTH) },
-      edgeB: { value: buffer2.slice(BUFFER_LAST_LINE_START) },
-      edgeL: { value: buffer2.filter((v, i) => !(i % BUFFER_WIDTH)) },
-      edgeT: { value: buffer2.filter((v, i) => !((i + 1) % BUFFER_WIDTH)) },
-    },
-    vertexShader: CUBE_VS,
-    fragmentShader: CUBE_FS,
-    transparent: true,
-    opacity: 0.3,
-  });
-  material.extensions.derivatives = true;
-  material.extensions.OES_standard_derivatives = true;
+  const geometry = new THREE.BoxGeometry(20, 20, 20).center();
+  // const material = new THREE.ShaderMaterial({
+  //   uniforms: {
+  //     time: { value: 1.0 },
+  //     resolution: { value: new THREE.Vector2() },
+  //     edgeT: { value: buffer2.slice(0, BUFFER_WIDTH) },
+  //     edgeB: { value: buffer2.slice(BUFFER_LAST_LINE_START) },
+  //     edgeL: { value: buffer2.filter((v, i) => !(i % BUFFER_WIDTH)) },
+  //     edgeT: { value: buffer2.filter((v, i) => !((i + 1) % BUFFER_WIDTH)) },
+  //   },
+  //   vertexShader: CUBE_VS,
+  //   fragmentShader: CUBE_FS,
+  //   transparent: true,
+  //   opacity: 0,
+  // });
+  // material.extensions.derivatives = true;
+  // material.extensions.OES_standard_derivatives = true;
+  const material = new THREE.MeshBasicMaterial({ wireframe: true });
+
   const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
+  // scene.add(cube);
+
+  const edges = new THREE.EdgesHelper(cube, 0x444444);
+  scene.add(edges);
 
   planeGeometry = new THREE.PlaneGeometry(20, 20, PLANE_WIDTH, PLANE_WIDTH);
   planeGeometry.dynamic = true;
 
   if (!materialMap[filterType]) {
+    // skyMap.warpS = skyMap.warpT=THREE.RepeatWrapping
     materialMap[filterType] = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 1.0 },
         resolution: { value: new THREE.Vector2() },
+        skyMap: { value: texture },
       },
       vertexShader: PLANE_VS,
       fragmentShader: PLANE_FS[filterType],
@@ -192,7 +204,6 @@ export const init = () => {
   intersectList.push(plane);
 
   window.plane = plane;
-  window.cube = cube;
   updateGeometry({ power: 5 });
 };
 
@@ -202,9 +213,10 @@ export const updateGeometry = ({
   area = 5,
   magicFlag = false,
 }) => {
-  buffer0 = plane.geometry.vertices;
-  if (!magicFlag) buffer1 = plane.geometry.vertices;
-  plane.geometry.vertices[index].z = power;
+  const vertices = plane.geometry.vertices;
+  buffer0 = vertices;
+  if (!magicFlag) buffer1 = vertices;
+  vertices[index].z = power;
 
   // plane.geometry.vertices[index + 1].z += 2;
   // plane.geometry.vertices[index - 1].z += 2;
@@ -237,9 +249,10 @@ export const updateGeometry = ({
         pos = BUFFER_AREA - 1;
       }
       // if (i > 0 && j > 0 && magicFlag) pos = -1;
-      plane.geometry.vertices[pos].z = power * (1 - dist / (area * area));
+      vertices[pos].z = power * (1 - dist / (area * area));
     }
   }
+  // plane.geometry.mergeVertices();
   // plane.geometry.verticesNeedUpdate = true;
 };
 
@@ -268,6 +281,7 @@ export const updateFilter = (name) => {
       uniforms: {
         time: { value: 1.0 },
         resolution: { value: new THREE.Vector2() },
+        skyMap: { value: texture },
       },
       vertexShader: PLANE_VS,
       fragmentShader: PLANE_FS[filterType],

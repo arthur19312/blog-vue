@@ -240,9 +240,10 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   align-content: center;
+  gap: 2rem;
 }
+
 .left-content {
-  margin-left: -3rem;
 }
 .audio-container {
   position: relative;
@@ -282,9 +283,28 @@ export default {
 }
 .namelist-ctn {
   width: 28rem;
+  height: 36rem;
   overflow: hidden;
-  margin-left: 8rem;
-  margin-top: 2rem;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2rem;
+    background: linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2rem;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  }
 }
 
 .nameitem span::before {
@@ -303,7 +323,7 @@ export default {
   font-size: 14px;
   line-height: 26px;
   width: 30rem;
-  height: 40rem;
+  height: 36rem;
   overflow-y: scroll;
   text-transform: capitalize;
 }
@@ -326,6 +346,28 @@ export default {
   font-weight: 500;
   &::before {
     border-left-color: #7794df;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .music-container {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .namelist-ctn {
+    height: 20rem;
+    width: auto;
+  }
+
+  .namelist {
+    height: 20rem;
+    width: auto;
+  }
+
+  .audio-container {
+    margin-bottom: 0;
+    margin-top: -20rem;
   }
 }
 </style>

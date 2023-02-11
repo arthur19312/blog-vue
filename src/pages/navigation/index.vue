@@ -59,7 +59,7 @@ export default {
         {
           route: "#",
           name: "To Be Continued...",
-          desc: "For 2023",
+          // desc: "For 2023",
           img: "",
           disabled: true,
         },
@@ -68,11 +68,7 @@ export default {
           desc: "",
           img: "",
         },
-        {
-          name: "cube",
-          desc: "I finally finished the war of MVP matrix and get my first cube in 3d. 摄像机的矩阵推导和实现从22年末一直困扰我，我终于在23年开年得到了正确的结果。",
-          img: "",
-        },
+
         {
           route: "lathe",
           name: "park",
@@ -102,18 +98,13 @@ export default {
         //   desc: "-",
         //   img: "",
         // },
+
         {
-          route: "svgDataReducer",
-          name: "毛毛球解开器",
-          desc: "Node reducer for automatically exported svg path data",
+          name: "music",
+          desc: "P5 player for favorite music playlist",
           img: "",
         },
-        {
-          route: "svgPlayground",
-          name: "svg display",
-          desc: "I make some svg drawings using pencil in figma",
-          img: "",
-        },
+
         {
           route: "imgFilter",
           name: "image Filter",
@@ -125,44 +116,56 @@ export default {
           desc: "Memory of IntelliJ's homepage ",
           img: "",
         },
-
-        { name: "moon", desc: "A practice for Anthony Howe", img: "" },
-        {
-          name: "music",
-          desc: "P5 player for favorite music playlist",
-          img: "",
-        },
         {
           route: "logicfunc",
           name: "logic Func",
           desc: "A fractal function by webgl view & svg axis",
           img: "",
         },
+        { name: "moon", desc: "A practice for Anthony Howe", img: "" },
+        {
+          route: "svgDataReducer",
+          name: "毛毛球解开器",
+          desc: "Node reducer for automatically exported svg path data",
+          img: "",
+        },
 
-        { name: "travels", desc: "Waterfall flow for my footprints", img: "" },
+        {
+          route: "svgPlayground",
+          name: "svg display",
+          desc: "I make some svg drawings using pencil in figma",
+          img: "",
+        },
+        {
+          name: "cube",
+          desc: "I finally finished the war of MVP matrix and get my first cube in 3d. 摄像机的矩阵推导和实现从22年末一直困扰我，我终于在23年开年得到了正确的结果。",
+          img: "",
+        },
+
         {
           name: "github",
           desc: "A display of some of my Github project",
           img: "",
         },
-
-        { name: "kaomoji", desc: "诶嘿(>ω･* )ﾉ", img: "" },
         {
           name: "record",
           desc: "A quiet P5 audio recorder for meditation",
           img: "",
         },
-        { name: "potfolio", desc: "Overview of photos", img: "" },
+
+        { name: "kaomoji", desc: "诶嘿(>ω･* )ﾉ", img: "" },
+        { name: "travels", desc: "Waterfall flow for my footprints", img: "" },
+        // { name: "potfolio", desc: "Overview of photos", img: "" },
         {
           name: "logger",
           desc: "Float logger & texture test program in webgl",
           img: "",
         },
-        {
-          name: "points",
-          desc: "First practice in webgl",
-          img: "",
-        },
+        // {
+        //   name: "points",
+        //   desc: "First practice in webgl",
+        //   img: "",
+        // },
       ],
     };
   },
