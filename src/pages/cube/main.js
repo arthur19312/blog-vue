@@ -7,7 +7,7 @@ import {
   useBuffer,
 } from "@/lib/webgl/util";
 import Camera from "../../lib/math/Camera/CameraUtils";
-import { PerspectiveCamera } from "@/lib/math/Camera";
+import { PerspectiveCamera } from "@/lib/math/Camera/index.js";
 import Vector3 from "../../lib/math/Vector3";
 
 const v0 = [-1, 1, -1];

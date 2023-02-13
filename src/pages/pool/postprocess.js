@@ -71,11 +71,11 @@ maxOffset = vec2(x,y);
     }
   }
 
-  if(maxValue.x>.8 && maxValue.y>.8){
+  if(maxValue.x>.7 && maxValue.y>.7){
     float a = smoothstep(1.,2.,length(maxOffset));
 col = a*preCol + (1.-a)* maxValue;
-
   }
+
         
         if(preCol.z <.3 && preCol.x==preCol.y && preCol.y==preCol.z){
           gl_FragColor = preCol;

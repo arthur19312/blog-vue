@@ -106,54 +106,55 @@ const FS = {
   }
   
       void main() {
-        vec4 color =vec4(.32,.72,.9,1.);
+        vec4 color =vec4(.32,.53,.68,1.);
          vec3 normal = normalize(cross(dFdx(v_pos), dFdy(v_pos))*.5);
  normal.z = -normal.z;
  vec3 posBios = cameraPosition-v_pos;
- float fresnel = clamp(1.2-clamp(dot(normalize(posBios),normal),0.,1.),0.,1.);
- fresnel*=fresnel;
+ float fresnel = clamp(.9-clamp(dot(normalize(posBios),normal),0.,1.),0.,1.);
+ fresnel*=fresnel*fresnel;
  vec4 sky = texture2D(skyMap, vUv);
-        if(v_pos.y>-0.2){
-          float a = smoothstep(-.1,1.,v_pos.y);
-          color.x+=a*.2+.01;
-          color.y+=a*.0;
-          color.z+=a*.05;
-        }else if(v_pos.y<.1){
-          float a = smoothstep(-1.,.15,v_pos.y);
-          color.x+=a*.1+.03;
+        if(v_pos.y>-0.5){
+          float a = smoothstep(-.1,2.,v_pos.y);
+          color.x+=a*.2;
+          color.y+=a*.2;
+          color.z+=a*.2;
+        }else if(v_pos.y<0.){
+          float a = smoothstep(.15,-2.,v_pos.y);
+          color.x-=a*.1;
           color.y-=a*.1;
-          color.z+=a*.05;
+          color.z+=a*.08;
         }
 
         if(normal.x<.4 && normal.z<.4 && v_pos.y>-.1){
           color+= .5*smoothstep(.1,1.,v_pos.y)*vec4(.3,.3,-.18,0.);
           //  color.z+=.05;
 
-          if(normal.x<.1 && normal.z<.1 && v_pos.y>.3){
-          color+=  .5*smoothstep(.2,2.,v_pos.y)*vec4(.15,.15,-.05,0.);
+          if(normal.x<.1 && normal.z<.1 && v_pos.y>.5){
+          color+=  .5*smoothstep(.2,2.,v_pos.y)*vec4(.2,.18,.16,0.);
           
         }
         }
 
 
-        if(v_pos.z<.5 && v_pos.z>-.5){
+        if(v_pos.y<.5 && v_pos.y>-.5){
+          color.x+=.02;
           // color.y+=.01;
-          // color.z+=.02;
+          color.z+=.05;
         }
 // color.xyz-=vec3(.1,.09,.09);
 
-color.xyzw*=vec4(1.1,1.07,1.05,1.);
+color.xyzw*=vec4(1.15,1.1,1.05,1.);
 
 if(posBios.y<0.){
-  fresnel=.6*(1.-fresnel);
+  // fresnel=.8*(1.-fresnel);
 }
 color = color*(1.-fresnel)+ fresnel*vec4(fresnel*sky.rgb,1.);
 
 
  if(normal.x<.1 && normal.z<.1 && v_pos.y>.5){
-          color+=.05*fresnel;
+          color+=.08*fresnel;
         }
-color.w-=.1*smoothstep(-1.,1.,v_pos.y);
+color.w-=.1*smoothstep(-5.,5.,v_pos.y);
 
         // normal.z=v_pos.z;
         // color = vec4(vec3(dot(normalize(cameraPosition-v_pos),normal)),1.);

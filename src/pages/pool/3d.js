@@ -10,15 +10,14 @@ var scene, renderer, camera, plane;
 var composer;
 var MOUSE_X, MOUSE_Y;
 var buffer0,
-  buffer1,
-  buffer2 = [];
+  buffer1 = [];
 var raycaster = new THREE.Raycaster();
 var pointer = new THREE.Vector2();
 var intersectList = [];
 var filterType = "SAND",
   planeGeometry = {};
 
-const PLANE_WIDTH = 80;
+const PLANE_WIDTH = 100;
 const BUFFER_WIDTH = PLANE_WIDTH + 1;
 const BUFFER_AREA = BUFFER_WIDTH * BUFFER_WIDTH - 1;
 const BUFFER_LAST_LINE_START = BUFFER_WIDTH * (BUFFER_WIDTH - 1);
@@ -40,29 +39,13 @@ const switchPower = () => {
   if (filterType === "SWIMMING_POOL") {
     return 1.2;
   } else {
-    return 2;
+    return 5;
   }
 };
-
-// const c = 0.001; // 波速
-// const d = 0.0001; // 距离间隔
-const t = 0.02; //时间间隔
-var miu = switchMiu(); //粘滞系数
-const c2_d2 = 2500; // c2/d2
-const c2t2_d2 = t * t * c2_d2;
-var miu_t_2 = miu * t + 2;
-var buffer1Param = (4 - 2 * c2t2_d2) / miu_t_2;
-var buffer0Param = (miu * t - 2) / miu_t_2;
-var bufferParam = (0.5 * c2t2_d2) / miu_t_2;
 
 const BIOS = 0.001;
 
 const doIterate = () => {
-  if (buffer2.length) {
-    buffer0 = buffer1;
-    buffer1 = buffer2;
-  }
-
   let buffer = new Array(BUFFER_WIDTH * BUFFER_WIDTH);
 
   for (let j = 0; j < BUFFER_WIDTH; j++) {
@@ -70,9 +53,8 @@ const doIterate = () => {
       const index = j * BUFFER_WIDTH + i;
       buffer[index] = new THREE.Vector3(buffer1[index].x, buffer1[index].y, 0);
       let val =
-        buffer1Param * buffer1[index].z +
-        buffer0Param * buffer0[index].z +
-        bufferParam *
+        -buffer0[index].z +
+        0.5 *
           (buffer1[
             index + 1 > BUFFER_AREA || (index + 1) % BUFFER_WIDTH === 0
               ? index
@@ -89,8 +71,8 @@ const doIterate = () => {
       buffer[index].z = val * 0.995;
     }
   }
-
-  buffer2 = buffer;
+  buffer0 = buffer1;
+  buffer1 = buffer;
   buffer = null;
 };
 
@@ -117,9 +99,9 @@ if (!import.meta.env.SSR) {
     0.1,
     1000
   );
-  camera.position.x = -15;
-  camera.position.y = 20;
-  camera.position.z = 25;
+  camera.position.x = 30;
+  camera.position.y = 0;
+  camera.position.z = 30;
   camera.lookAt(new Vector3(0, 0, 0));
 
   scene.add(camera);
@@ -139,10 +121,9 @@ export const startAnimate = () => {
 
 function animate() {
   doIterate();
-  // plane.geometry.vertices = buffer2;
 
   for (let i = 0; i < BUFFER_AREA; i++) {
-    plane.geometry.vertices[i] = buffer2[i];
+    plane.geometry.vertices[i] = buffer1[i];
   }
   plane.geometry.verticesNeedUpdate = true;
   plane.geometry.elementsNeedUpdate = true;
@@ -156,22 +137,7 @@ export const rendererDom = renderer?.domElement;
 
 export const init = () => {
   const geometry = new THREE.BoxGeometry(20, 20, 20).center();
-  // const material = new THREE.ShaderMaterial({
-  //   uniforms: {
-  //     time: { value: 1.0 },
-  //     resolution: { value: new THREE.Vector2() },
-  //     edgeT: { value: buffer2.slice(0, BUFFER_WIDTH) },
-  //     edgeB: { value: buffer2.slice(BUFFER_LAST_LINE_START) },
-  //     edgeL: { value: buffer2.filter((v, i) => !(i % BUFFER_WIDTH)) },
-  //     edgeT: { value: buffer2.filter((v, i) => !((i + 1) % BUFFER_WIDTH)) },
-  //   },
-  //   vertexShader: CUBE_VS,
-  //   fragmentShader: CUBE_FS,
-  //   transparent: true,
-  //   opacity: 0,
-  // });
-  // material.extensions.derivatives = true;
-  // material.extensions.OES_standard_derivatives = true;
+
   const material = new THREE.MeshBasicMaterial({ wireframe: true });
 
   const cube = new THREE.Mesh(geometry, material);
@@ -203,8 +169,11 @@ export const init = () => {
   scene.add(plane);
   intersectList.push(plane);
 
+  buffer1 = plane.geometry.vertices;
+  buffer0 = buffer1;
+
   window.plane = plane;
-  updateGeometry({ power: 5 });
+  updateGeometry({ power: 8 });
 };
 
 export const updateGeometry = ({
@@ -213,10 +182,8 @@ export const updateGeometry = ({
   area = 5,
   magicFlag = false,
 }) => {
-  const vertices = plane.geometry.vertices;
-  buffer0 = vertices;
-  if (!magicFlag) buffer1 = vertices;
-  vertices[index].z = power;
+  const vertices = buffer1;
+  vertices[index].z = -power;
 
   // plane.geometry.vertices[index + 1].z += 2;
   // plane.geometry.vertices[index - 1].z += 2;
@@ -290,10 +257,4 @@ export const updateFilter = (name) => {
     });
   }
   plane.material = materialMap[filterType];
-
-  miu = switchMiu();
-  miu_t_2 = miu * t + 2;
-  buffer1Param = (4 - 2 * c2t2_d2) / miu_t_2;
-  buffer0Param = (miu * t - 2) / miu_t_2;
-  bufferParam = (0.5 * c2t2_d2) / miu_t_2;
 };
