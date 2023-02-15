@@ -17,13 +17,21 @@ var intersectList = [];
 var filterType = "SAND",
   planeGeometry = {};
 
-const PLANE_WIDTH = 100;
+const PLANE_WIDTH = 90;
 const BUFFER_WIDTH = PLANE_WIDTH + 1;
 const BUFFER_AREA = BUFFER_WIDTH * BUFFER_WIDTH - 1;
 const BUFFER_LAST_LINE_START = BUFFER_WIDTH * (BUFFER_WIDTH - 1);
 const BUFFER_LAST_LINE_END = BUFFER_AREA;
 
 const materialMap = {};
+var aniId = 0;
+
+export const stopAnimate = () => {
+  cancelAnimationFrame(aniId);
+  renderer.dispose();
+  scene = null;
+  camera = null;
+};
 
 const switchMiu = () => {
   if (filterType === "SWIMMING_POOL") {
@@ -173,7 +181,7 @@ export const init = () => {
   buffer0 = buffer1;
 
   window.plane = plane;
-  updateGeometry({ power: 8 });
+  updateGeometry({ power: 12 });
 };
 
 export const updateGeometry = ({

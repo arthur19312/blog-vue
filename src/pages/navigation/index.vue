@@ -68,6 +68,12 @@ export default {
           desc: "",
           img: "",
         },
+        {
+          route: "brick",
+          name: "Sugar Bricks",
+          desc: "可爱捏",
+          img: "",
+        },
 
         {
           route: "lathe",
@@ -75,12 +81,7 @@ export default {
           desc: "made after playing HatsuneMiku:ColorfulStage!",
           img: "",
         },
-        {
-          route: "brick",
-          name: "Sugar Bricks",
-          desc: "可爱捏",
-          img: "",
-        },
+
         {
           route: "star",
           name: "屏幕指纹检测器",
